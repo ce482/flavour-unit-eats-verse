@@ -1,73 +1,43 @@
-# Welcome to your Lovable project
 
-## Project info
+# The Flavour Unit Corp
 
-**URL**: https://lovable.dev/projects/73e3cdbb-588f-44c3-9da8-8ffacfa824ae
+This repository contains the official website for The Flavour Unit Corporation.
 
-## How can I edit this code?
+## Deployment Instructions
 
-There are several ways of editing your application.
+After cloning this repository, follow these steps to deploy to GitHub Pages:
 
-**Use Lovable**
+1. Make sure you have all dependencies installed:
+   ```
+   npm install
+   ```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/73e3cdbb-588f-44c3-9da8-8ffacfa824ae) and start prompting.
+2. Manually update your package.json file to include these scripts:
+   ```json
+   "scripts": {
+     "dev": "vite",
+     "build": "tsc && vite build",
+     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+     "preview": "vite preview",
+     "predeploy": "npm run build",
+     "deploy": "gh-pages -d dist"
+   }
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
+3. Run the deployment command:
+   ```
+   npm run deploy
+   ```
 
-**Use your preferred IDE**
+4. After deployment, go to your GitHub repository:
+   - Navigate to Settings > Pages
+   - Ensure the "Source" is set to "Deploy from a branch"
+   - Set the branch to "gh-pages" and folder to "/ (root)"
+   - Click Save
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+5. Your site will be available at: https://[your-username].github.io/flavour-unit-eats-verse/
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Development
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/73e3cdbb-588f-44c3-9da8-8ffacfa824ae) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Run `npm run dev` to start the development server
+- Run `npm run build` to build the project for production
