@@ -16,26 +16,12 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Determine the correct basename based on the environment
-const getBasename = () => {
-  // For Lovable deployments or GitHub Pages
-  if (import.meta.env.PROD) {
-    // Extract from the current location to support both Lovable and GitHub Pages
-    const pathSegments = window.location.pathname.split('/');
-    if (pathSegments.length > 1 && pathSegments[1]) {
-      return `/${pathSegments[1]}`;
-    }
-  }
-  // Default for local development
-  return "/";
-};
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={getBasename()}>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/egg-rolls" element={<EggRolls />} />
