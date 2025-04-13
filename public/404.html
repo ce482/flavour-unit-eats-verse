@@ -5,15 +5,22 @@
     <meta charset="utf-8">
     <title>The Flavour Unit Corp</title>
     <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
+      // Single Page Apps for GitHub Pages or Lovable
       // MIT License
       // https://github.com/rafgraph/spa-github-pages
+      // Modified to work with different deployment environments
       
       var pathSegmentsToKeep = 1;
 
       var l = window.location;
+      var origin = l.origin || (l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : ''));
+      
+      // Determine if we're on Lovable or GitHub pages
+      var isLovable = l.hostname.includes('lovable.app') || l.hostname.includes('lovable.dev');
+      var pathSegmentsToKeep = isLovable ? 1 : 1; // Adjust if needed
+      
       l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        origin +
         l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
         l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
         (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
@@ -22,5 +29,9 @@
     </script>
   </head>
   <body>
+    <div style="text-align:center; padding: 40px; font-family: Arial, sans-serif;">
+      <h1>Redirecting...</h1>
+      <p>If you are not redirected automatically, <a href="/">click here</a>.</p>
+    </div>
   </body>
 </html>
