@@ -22,7 +22,7 @@ const HeroBanner = () => {
             Comfort Food, <br />Reimagined
           </h1>
           <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-            The Flavour Unit Corp is the parent company of innovative food brands creating delicious comfort foods with a unique twist.
+            The Flavour Unit Corp is the parent company of innovative food brands creating delicious comfort foods with an unexpected flair.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link to="/egg-rolls" className="btn-primary">
