@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
-import { Star, Truck, ShoppingCart } from 'lucide-react';
+import { Star, Truck, ShoppingCart, ExternalLink } from 'lucide-react';
 
 const EggRolls = () => {
   useEffect(() => {
@@ -13,51 +13,128 @@ const EggRolls = () => {
   const products = [
     {
       id: 1,
-      name: "Classic Egg Rolls",
-      description: "Our signature comfort-filled egg rolls with a savory filling",
-      price: 12.99,
-      image: "https://images.unsplash.com/photo-1515669097368-22e68427d265?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+      name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
+      description: "4 pieces paired with marinara sauce",
+      price: 9.99,
+      image: "/lovable-uploads/7f01597f-44a4-4201-a923-6200a604d63c.png", // Mac and cheese image
       category: "egg-rolls"
     },
     {
       id: 2,
-      name: "Buffalo Chicken Egg Rolls",
-      description: "Spicy buffalo chicken wrapped in a crispy shell",
-      price: 14.99,
-      image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1025&q=80",
+      name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
+      description: "4 pieces with dipping sauce",
+      price: 9.99,
+      image: "/lovable-uploads/e08c1062-1174-4ea9-95e4-c6ee54929059.png", // Philly image
       category: "egg-rolls"
     },
     {
       id: 3,
-      name: "Vegetable Egg Rolls",
-      description: "Fresh vegetables in a delicious, crispy wrapper",
-      price: 11.99,
-      image: "https://images.unsplash.com/photo-1602344912011-9d4313a093de?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80",
-      category: "egg-rolls"
+      name: "APPLE CHEESECAKE RANGOONS",
+      description: "8 pieces with caramel dipping sauce",
+      price: 8.99,
+      image: "/lovable-uploads/a6c8a7ec-1cc1-4552-9f98-683e1f62c935.png", // Rangoon image
+      category: "rangoon"
     },
     {
       id: 4,
-      name: "Pork & Shrimp Potstickers",
-      description: "Traditional dumplings with savory filling",
-      price: 13.99,
-      image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+      name: "ITALIAN BEEF POTSTICKERS",
+      description: "12 pieces with dipping sauce",
+      price: 10.99,
+      image: "/lovable-uploads/bbe68d77-7529-4abc-b7d3-365d8ec4148e.png", // Potstickers image
       category: "potstickers"
     },
     {
       id: 5,
-      name: "Vegetable Potstickers",
-      description: "Vegetarian-friendly dumplings",
-      price: 12.99,
-      image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1129&q=80",
-      category: "potstickers"
+      name: "AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
+      description: "4 pieces",
+      price: 9.99,
+      image: "/lovable-uploads/2114e1c4-58a8-415a-b022-5ae6340eb35a.png", // Peach cobbler image
+      category: "egg-rolls"
     },
     {
       id: 6,
-      name: "Cream Cheese Rangoon",
-      description: "Crispy wontons with creamy filling",
-      price: 10.99,
-      image: "https://images.unsplash.com/photo-1626501094011-bb5ec7b35d16?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-      category: "rangoon"
+      name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
+      description: "4 pieces paired with Ole sauce",
+      price: 9.99,
+      longDescription: "If you love Taco's and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese!",
+      image: "/lovable-uploads/c023a75c-eb39-467c-ad0c-f8de582a9fd3.png", // Taco Ole image
+      category: "egg-rolls"
+    },
+    {
+      id: 7,
+      name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
+      description: "4 pieces paired with dipping sauce",
+      price: 9.99,
+      longDescription: "Our most popular Egg Roll named after our founder's late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton!",
+      image: "/lovable-uploads/6ffebb32-d793-48d4-b000-bd6743b9f338.png", // Gert's image
+      category: "egg-rolls"
+    },
+    {
+      id: 8,
+      name: "MILD BUFFALO CHICKEN EGG ROLL",
+      description: "4 pieces with ranch or bleu cheese dressing",
+      price: 9.99,
+      longDescription: "Don't like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton!",
+      image: "/lovable-uploads/ebd23bef-adfb-49ad-a3a9-2f875e77ec92.png", // Buffalo chicken image
+      category: "egg-rolls"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "HOW DO I COOK THESE?",
+      answer: `Our products are free of preservatives and artificial colors. We do not recommend grilling. Cooking instructions are on the packaging. Thaw products in the microwave from frozen for 2 minutes or in the refrigerator overnight.
+      
+      Air fry - Pre heat air fryer on 400 degrees, poke Egg Roll or Rangoon with a tooth pick in multiple areas, spray or coat with oil of choice and place Egg roll in the air fryer. Cook for 5 minutes and rotate. Apply more oil if needed until golden brown.
+      
+      Deep fryer- Cook in pre- heated oil at 375 degrees F until Egg Roll or Rangoon floats to the top.
+      
+      Oven - Pre heat oven to 375 degrees F. Coat or spray baking sheet with oil of choice and thinly layer product on baking sheet. Cook product on each side, turning in between to ensure an eternal temperature of 165 degrees F or higher and golden brown on the outside.
+      
+      Skillet and Air fry combo - Pre heat air fryer to 400 degrees. Lightly coat oil in a skillet on the stove and turn on the heat. sauté product on each side until lightly golden brown. Transfer product to the Air fryer and cook for 6 to 8 minutes to ensure the eternal temperature reaches 165 degrees F or higher and is golden brown on the outside.`
+    },
+    {
+      question: "IS THERE PORK IN THE EGG ROLLS?",
+      answer: "We are a NO PORK company."
+    },
+    {
+      question: "ARE THESE PRODUCTS MADE OVERSEAS?",
+      answer: "No, these products are made right here in Illinois, United States."
+    },
+    {
+      question: "HOW LONG WILL THE PRODUCTS LAST FROZEN?",
+      answer: "Our products have a 1-year shelf life frozen. and 7 days refrigerated."
+    },
+    {
+      question: "CAN I ORDER EGG ROLLS ETC WHOLESALE FOR MY RESTAURANT, CAFE, CATERING BUSINESS, ETC.?",
+      answer: "Possibly, please fill our online wholesale partner application and let's see if we will be a good match!"
+    },
+    {
+      question: "WHEN I OPENED MY RETAIL PACK FROM THE GROCERY STORE. THE EGG ROLLS WERE STUCK TOGETHER. WHAT SHOULD I DO?",
+      answer: "Because we do not add any artificial waxes or coatings the products can sometimes stick together. Please gently peel apart and continue the cooking process as mentioned on the packaging or above."
+    },
+    {
+      question: "WHAT ARE THE SILVER PACKETS IN THE BAGS WITH THE EGG ROLLS ETC?",
+      answer: "We want everyone to have the ultimate EGG ROLLS ETC experience, so we included a seasoning and sauce pack in each bag. Thaw the sauce in its closed packet in a cup of warm water and use as a dipping sauce if desired."
+    }
+  ];
+
+  const videos = [
+    {
+      title: "Egg Rolls Etc on ABC Windy City Live 2018",
+      url: "https://youtu.be/-GNzE8iIdco"
+    },
+    {
+      title: "Egg Rolls Etc Chicago, IL",
+      url: "https://www.youtube.com/watch?v=5xFOyaJ1qE4"
+    },
+    {
+      title: "How to make 'comfort-filled' egg rolls",
+      url: "https://www.youtube.com/watch?v=r4fPaVk-s9s"
+    },
+    {
+      title: "[Podcast] Influential Women in Food: Javon Nicholas, Egg Rolls Etc.",
+      url: "https://www.youtube.com/watch?v=13zpYEcxwHQ"
     }
   ];
 
@@ -65,26 +142,17 @@ const EggRolls = () => {
     <>
       <Navbar />
       <main>
-        {/* Hero Section with Chicago Skyline */}
-        <section className="relative pt-24 pb-20 bg-flavour-black">
-          <div className="absolute inset-0 opacity-20 bg-cover bg-bottom" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-4.0.3&auto=format&fit=crop&w=2144&q=80')" }}></div>
-          <div className="container-wide relative z-10">
-            <div className="max-w-3xl text-white">
-              <h1 className="text-5xl font-bold mb-6">Chicago's Favorite Comfort-Filled Egg Rolls</h1>
-              <p className="text-xl mb-8">
-                Authentic flavors in every bite, delivered straight to your door. Explore our selection of frozen comfort foods that bring restaurant-quality taste to your home.
+        {/* Hero Section */}
+        <section className="pt-32 pb-16 bg-flavour-black">
+          <div className="container-wide">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">EGG ROLLS ETC</h1>
+              <p className="text-xl text-white/90 mb-8">
+                The first and only Black owned frozen product line of Asian inspired cuisine that are "Comfort Filled"! Our brand unites cultures and differences all inside of a warm wonton- "Lets Chow On"!
               </p>
-              <div className="flex flex-wrap gap-4">
-                <a href="#products" className="btn-secondary">
-                  Shop Now
-                </a>
-                <div className="flex items-center text-yellow-400">
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <span className="ml-2 text-white">5.0 (250+ Reviews)</span>
+              <div className="flex justify-center">
+                <div className="bg-white/10 text-white px-6 py-3 rounded-lg inline-block">
+                  <p className="text-sm">*We are only delivering to Chicago and Close to Chicagoland suburbs for now via a third party delivery platform.</p>
                 </div>
               </div>
             </div>
@@ -95,11 +163,10 @@ const EggRolls = () => {
         <section id="products" className="py-20 bg-white">
           <div className="container-wide">
             <h2 className="section-title text-center mb-12">Our Products</h2>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                  <div className="h-52 overflow-hidden">
+                  <div className="h-64 overflow-hidden">
                     <img 
                       src={product.image} 
                       alt={product.name} 
@@ -111,7 +178,10 @@ const EggRolls = () => {
                       {product.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                     </span>
                     <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-                    <p className="text-gray-600 mb-4">{product.description}</p>
+                    <p className="text-gray-600 mb-2">{product.description}</p>
+                    {product.longDescription && (
+                      <p className="text-gray-600 mb-4 text-sm">{product.longDescription}</p>
+                    )}
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold text-flavour-red">${product.price.toFixed(2)}</span>
                       <button className="bg-flavour-red text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors flex items-center gap-2">
@@ -123,109 +193,58 @@ const EggRolls = () => {
                 </div>
               ))}
             </div>
+
+            <div className="mt-12 text-center">
+              <a 
+                href="https://www.redbubble.com/i/apron/Egg-Rolls-Etc-by-ChowOnEats/54574724.6ZXWR"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary inline-flex items-center gap-2"
+              >
+                Shop Egg Rolls Merchandise
+                <ExternalLink size={16} />
+              </a>
+            </div>
           </div>
         </section>
 
-        {/* Shipping Info */}
+        {/* FAQ Section */}
         <section className="py-16 bg-gray-50">
           <div className="container-wide">
-            <div className="bg-white rounded-xl shadow-md p-8">
-              <div className="flex flex-col md:flex-row items-center">
-                <div className="mb-6 md:mb-0 md:mr-8">
-                  <Truck size={48} className="text-flavour-red" />
+            <h2 className="section-title text-center mb-12">Frequently Asked Questions</h2>
+            <div className="max-w-3xl mx-auto space-y-6">
+              {faqs.map((faq, index) => (
+                <div key={index} className="bg-white rounded-lg shadow-sm p-6">
+                  <h3 className="text-lg font-bold mb-3">{faq.question}</h3>
+                  <p className="text-gray-600 whitespace-pre-wrap">{faq.answer}</p>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold mb-4">Nationwide Shipping</h3>
-                  <p className="text-gray-600 mb-4">
-                    We ship our frozen products anywhere in the continental United States. Our packaging ensures your food arrives safely and still frozen.
-                  </p>
-                  <ul className="space-y-2 text-gray-600">
-                    <li className="flex items-start">
-                      <span className="text-flavour-red mr-2">•</span> 
-                      Standard 2-day shipping: $19 flat rate for small orders
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-flavour-red mr-2">•</span> 
-                      Shipping partners: FedEx
-                    </li>
-                    <li className="flex items-start">
-                      <span className="text-flavour-red mr-2">•</span> 
-                      Subscribe & save options available
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              ))}
+              <p className="text-center text-gray-600 mt-8">
+                If there are any more questions, please feel free to contact us via our website. 
+                We appreciate your business and support! Prices are subject to change without further notice. 
+                No Cash refunds. Do not sell or duplicate our imagery or content.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-20 bg-white">
+        {/* Media Section */}
+        <section className="py-16 bg-white">
           <div className="container-wide">
-            <h2 className="section-title text-center mb-12">What Our Customers Say</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Testimonial 1 */}
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <div className="flex items-center text-yellow-400 mb-4">
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
+            <h2 className="section-title text-center mb-12">Media Coverage</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {videos.map((video, index) => (
+                <div key={index} className="aspect-video">
+                  <iframe
+                    className="w-full h-full rounded-lg"
+                    src={`https://www.youtube.com/embed/${video.url.split('=')[1] || video.url.split('/').pop()}`}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
-                <p className="text-gray-600 mb-4">
-                  "These egg rolls are amazing! They taste just like the ones I get at my favorite restaurant. 
-                  The shipping was fast and they arrived still frozen."
-                </p>
-                <div className="font-semibold">- Sarah J.</div>
-              </div>
-              
-              {/* Testimonial 2 */}
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <div className="flex items-center text-yellow-400 mb-4">
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "The buffalo chicken egg rolls are my new favorite! They're perfect for game days or anytime 
-                  I want something delicious without having to cook from scratch."
-                </p>
-                <div className="font-semibold">- Michael T.</div>
-              </div>
-              
-              {/* Testimonial 3 */}
-              <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                <div className="flex items-center text-yellow-400 mb-4">
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                  <Star fill="currentColor" size={20} />
-                </div>
-                <p className="text-gray-600 mb-4">
-                  "I ordered the variety pack for a family gathering and everyone loved them! 
-                  The rangoon were especially a hit. Will definitely be ordering again."
-                </p>
-                <div className="font-semibold">- Lisa R.</div>
-              </div>
+              ))}
             </div>
-          </div>
-        </section>
-
-        {/* Call to Action */}
-        <section className="py-16 bg-flavour-gold">
-          <div className="container-wide text-center">
-            <h2 className="text-3xl font-bold mb-6 text-flavour-black">Ready to Try Chicago's Favorite Comfort Foods?</h2>
-            <p className="text-xl mb-8 text-flavour-black/80 max-w-2xl mx-auto">
-              Order today and get $5 off your first purchase with code: FLAVOR5
-            </p>
-            <a href="#products" className="bg-flavour-red text-white hover:bg-red-700 font-bold py-3 px-8 rounded-md transition-colors inline-block">
-              Shop Now
-            </a>
           </div>
         </section>
       </main>
