@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -35,6 +36,25 @@ const About = () => {
     }
   ];
 
+  // Adding workshops data that was missing
+  const workshops = [
+    {
+      name: "Community Garden Workshop",
+      description: "Teaching children about healthy eating and entrepreneurship through egg roll making.",
+      image: "https://images.unsplash.com/photo-1464638681273-0962e9b53566?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      name: "Cultural Exchange Program",
+      description: "Introducing children to diverse foods and teaching Mandarin words through cooking.",
+      image: "https://images.unsplash.com/photo-1528712306091-ed0763094c98?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      name: "Youth Entrepreneurship",
+      description: "Mentoring young food entrepreneurs on building successful businesses.",
+      image: "https://images.unsplash.com/photo-1577041677443-8bbdfd8cce62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    }
+  ];
+
   return (
     <>
       <Navbar />
@@ -49,10 +69,13 @@ const About = () => {
                   From living abroad in Taiwan and combining my expertise as a Clinical Nutritionist and caterer, I have created a product that is not only delicious but unites cultures and differences inside of a warm wonton - My Egg Rolls!
                 </p>
                 <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                  After only 1 year in business, I created an initiative for children called "It's What's Inside That Counts!" During the summer months, I create workshops in community gardens and teach children the importance of loving themselves by incorporating healthy foods into their diets (like our Egg Rolls which can be baked), entrepreneurship by creating fillings and sauces for their creations, and diversity by teaching them Mandarin words and exposing them to different fruits, veggies, and treats from around the world.
+                  Egg Rolls Etc is available for wholesale partnerships with other small businesses such as cafes and coffee shops throughout the Chicagoland area. We also partner with many community organizations to teach youth the value and importance of self-love, entrepreneurship and cultural sensitivity.
+                </p>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  After only 1 year in business I have created an initiative for children called "It's What's Inside That Counts!" During the summer months I create workshops in community gardens and teach the children the importance of loving themselves by incorporating healthy foods into their diets (like our Egg Rolls which can be baked), Entrepreneurship by creating fillings and sauces for their creations and diversity by teaching them Mandarin words and exposing them to different fruits, veggies and treats from around the world.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  We partner with community organizations to teach youth the importance of self-love, cultural sensitivity, and entrepreneurship while being proud of the "skin you're in". With over 64 varieties of specialty flavored Egg Rolls that are sweet, savory, and vegan, we're excited to delight your taste buds. So just like an Egg Roll, it's what's inside that counts.
+                  I look forward to delighting your taste buds with over 64 varieties of specialty flavored Egg Rolls that are sweet, savory and vegan! We partner with community organizations to teach youth the importance of self-love, cultural sensitivity and entrepreneurship while being proud of the "skin you're in". So just like an Egg Roll, it's what's inside that counts.
                 </p>
               </div>
               <div className="relative">
