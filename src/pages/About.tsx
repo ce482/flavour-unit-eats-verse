@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -11,46 +10,28 @@ const About = () => {
 
   const mediaAppearances = [
     {
-      name: "Good Morning Chicago",
-      description: "Interview about Egg Rolls Etc. and food entrepreneurship",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      date: "June 15, 2023"
+      name: "Egg Rolls Etc on ABC Windy City Live 2018",
+      description: "Featured on ABC's Windy City Live show",
+      videoUrl: "https://youtu.be/-GNzE8iIdco",
+      date: "2018"
     },
     {
-      name: "Food Network Spotlight",
-      description: "Feature on unique comfort foods across America",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      date: "March 3, 2023"
+      name: "Egg Rolls Etc Chicago, IL",
+      description: "A look into our Chicago operations",
+      videoUrl: "https://www.youtube.com/watch?v=5xFOyaJ1qE4",
+      date: "2022"
     },
     {
-      name: "Entrepreneur Today",
-      description: "How The Flavour Unit Corp is changing the frozen food industry",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      date: "November 12, 2022"
+      name: "How to make 'comfort-filled' egg rolls",
+      description: "Learn how to make our signature comfort-filled egg rolls",
+      videoUrl: "https://www.youtube.com/watch?v=r4fPaVk-s9s",
+      date: "2023"
     },
     {
-      name: "Chicago Food Festival",
-      description: "Live cooking demonstration",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      date: "July 22, 2022"
-    }
-  ];
-
-  const workshops = [
-    {
-      name: "Youth Cooking Workshop",
-      description: "Teaching young people about culinary arts and entrepreneurship",
-      image: "https://images.unsplash.com/photo-1577301656513-3d379a29614c?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80"
-    },
-    {
-      name: "Cultural Food Showcase",
-      description: "Celebrating diverse culinary traditions",
-      image: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
-    },
-    {
-      name: "Business Development Seminar",
-      description: "Helping food entrepreneurs navigate challenges",
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
+      name: "Influential Women in Food: Javon Nicholas",
+      description: "Podcast featuring our founder discussing Egg Rolls Etc.",
+      videoUrl: "https://www.youtube.com/watch?v=13zpYEcxwHQ",
+      date: "2023"
     }
   ];
 
@@ -65,13 +46,13 @@ const About = () => {
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Our Story</h1>
                 <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                  The Flavour Unit Corporation was born from a passion for creating delicious, comforting food that brings people together. As the parent company of Egg Rolls Etc. and Legacy Kitchen Solutions, we're dedicated to sharing our love of food through innovative products and supporting other food entrepreneurs.
+                  From living abroad in Taiwan and combining my expertise as a Clinical Nutritionist and caterer, I have created a product that is not only delicious but unites cultures and differences inside of a warm wonton - My Egg Rolls!
                 </p>
                 <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                  Our journey began in Chicago, where we first introduced our comfort-filled egg rolls. The enthusiastic response inspired us to expand our offerings and share our knowledge with others in the food industry.
+                  After only 1 year in business, I created an initiative for children called "It's What's Inside That Counts!" During the summer months, I create workshops in community gardens and teach children the importance of loving themselves by incorporating healthy foods into their diets (like our Egg Rolls which can be baked), entrepreneurship by creating fillings and sauces for their creations, and diversity by teaching them Mandarin words and exposing them to different fruits, veggies, and treats from around the world.
                 </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  Today, we're proud to offer a range of delicious frozen foods while also providing coaching and consulting services to help other small food businesses grow and thrive.
+                  We partner with community organizations to teach youth the importance of self-love, cultural sensitivity, and entrepreneurship while being proud of the "skin you're in". With over 64 varieties of specialty flavored Egg Rolls that are sweet, savory, and vegan, we're excited to delight your taste buds. So just like an Egg Roll, it's what's inside that counts.
                 </p>
               </div>
               <div className="relative">
@@ -88,6 +69,26 @@ const About = () => {
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Media Section */}
+        <section className="py-16 bg-white">
+          <div className="container-wide">
+            <h2 className="section-title text-center mb-12">Media Coverage</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {mediaAppearances.map((video, index) => (
+                <div key={index} className="aspect-video">
+                  <iframe
+                    className="w-full h-full rounded-lg"
+                    src={`https://www.youtube.com/embed/${video.videoUrl.split('=')[1] || video.videoUrl.split('/').pop()}`}
+                    title={video.name}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -138,34 +139,6 @@ const About = () => {
                   Through Legacy Kitchen Solutions, we provide coaching and consulting to help small food businesses navigate challenges and grow their operations from concept to market.
                 </p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Media Appearances */}
-        <section className="py-20 bg-gray-50">
-          <div className="container-wide">
-            <h2 className="section-title text-center mb-12">Media & Press</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {mediaAppearances.map((item, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-sm flex flex-col">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold">{item.name}</h3>
-                    <span className="text-sm text-gray-500">{item.date}</span>
-                  </div>
-                  <p className="text-gray-600 mb-4 flex-grow">{item.description}</p>
-                  <a 
-                    href={item.videoUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center text-flavour-red font-medium hover:underline"
-                  >
-                    <Play size={16} className="mr-1" />
-                    Watch Video
-                  </a>
-                </div>
-              ))}
             </div>
           </div>
         </section>
