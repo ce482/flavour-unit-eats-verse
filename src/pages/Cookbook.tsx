@@ -53,7 +53,7 @@ const Cookbook = () => {
                 <img 
                   src="/lovable-uploads/cookbook.png" 
                   alt="Legacy Kitchen 1219 Cookbook" 
-                  className="w-2/3 max-w-xs md:max-w-sm object-cover rounded-lg shadow-2xl"
+                  className="w-1/2 max-w-xs md:max-w-xs object-cover rounded-lg shadow-2xl"
                 />
               </div>
             </div>
@@ -66,3 +66,4 @@ const Cookbook = () => {
 };
 
 export default Cookbook;
+

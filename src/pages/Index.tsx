@@ -9,23 +9,23 @@ import { Link } from 'react-router-dom';
 const featuredProducts = [
   {
     id: 1,
-    name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
-    description: "Our signature comfort-filled mac & cheese egg rolls paired with marinara.",
-    image: "/lovable-uploads/7f01597f-44a4-4201-a923-6200a604d63c.png", // From Egg Rolls Etc
+    name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
+    description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
+    image: "/lovable-uploads/e08c1062-1174-4ea9-95e4-c6ee54929059.png",
     link: "/egg-rolls"
   },
   {
     id: 2,
     name: "Potstickers",
     description: "Delicious dumplings filled with savory ingredients, perfect for any occasion.",
-    image: "/lovable-uploads/pot_stickers.png", // Updated path
+    image: "/lovable-uploads/pot_stickers.png",
     link: "/egg-rolls"
   },
   {
     id: 3,
-    name: "APPLE CHEESECAKE RANGOONS",
-    description: "Apple cheesecake rangaons with caramel dipping sauce.",
-    image: "/lovable-uploads/a6c8a7ec-1cc1-4552-9f98-683e1f62c935.png", // From Egg Rolls Etc
+    name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
+    description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EOLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
+    image: "/lovable-uploads/6ffebb32-d793-48d4-b000-bd6743b9f338.png",
     link: "/egg-rolls"
   }
 ];

@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 const BrandShowcase = () => {
@@ -6,7 +5,6 @@ const BrandShowcase = () => {
     {
       name: "Egg Rolls Etc.",
       description: "Chicago's favorite comfort-filled egg rolls, potstickers, and rangoon. Available at grocery stores, online retailers, and through catering services.",
-      // Update to use the uploaded image
       imageSrc: "/lovable-uploads/philly_cheese_steak.png",
       path: "/egg-rolls",
       isActive: true
