@@ -46,7 +46,7 @@ const Index = () => {
         {/* About Section */}
         <section className="py-20 bg-white">
           <div className="container-wide">
-            <div className="flex flex-col items-start max-w-4xl mx-auto">
+            <div className="flex flex-col items-center max-w-4xl mx-auto">
               <h2 className="section-title mb-6">About The Flavour Unit Corp</h2>
               <p className="text-lg text-flavour-gray mb-6">
                 The Flavour Unit Corporation is more than just food—it's a culinary journey that celebrates comfort, culture, and community. As the parent company of our innovative food brands, we're dedicated to bringing exceptional flavors to your table.
@@ -54,7 +54,7 @@ const Index = () => {
               <p className="text-lg text-flavour-gray mb-6">
                 Our mission is to create delicious, high-quality comfort foods while supporting food entrepreneurs through education and resources. We believe food is about bringing people together and preserving cultural traditions.
               </p>
-              <Link to="/about" className="btn-outline inline-block">
+              <Link to="/about" className="btn-outline inline-block mx-auto">
                 Learn Our Story
               </Link>
             </div>

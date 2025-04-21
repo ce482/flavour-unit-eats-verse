@@ -51,7 +51,7 @@ const Cookbook = () => {
               </div>
               <div className="relative flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/50a943e2-acde-40de-8857-84c2a4261c4d.png" 
+                  src="/lovable-uploads/cookbook.png" 
                   alt="Legacy Kitchen 1219 Cookbook" 
                   className="w-1/2 max-w-xs md:max-w-xs object-cover rounded-lg shadow-2xl"
                 />
