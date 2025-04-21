@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -25,7 +24,7 @@ const Cookbook = () => {
                     "An inheritance of recipes from my family to yours"
                   </h2>
                   <p className="text-lg text-gray-700 mb-4">
-                    By Javon McCain-Nicholas (Author)
+                    Paperback – March 15, 2021 by Javon McCain-Nicholas (Author)
                   </p>
                   <p className="text-lg text-gray-700 mb-8">
                     Legacy Kitchen 1219 is a culinary memoir filled with recipes and images dedicated to my family. This book is filled with a variety of traditional American and Island inspired comfort foods that were made with love and are now available for all to enjoy!
@@ -52,7 +51,7 @@ const Cookbook = () => {
               </div>
               <div className="relative">
                 <img 
-                  src="/lovable-uploads/cookbook.jpg" 
+                  src="/lovable-uploads/51f52c02-b70f-48c2-94ec-2c8486e708cd.png" 
                   alt="Legacy Kitchen 1219 Cookbook" 
                   className="w-full h-auto object-cover rounded-lg shadow-2xl"
                 />
@@ -67,4 +66,3 @@ const Cookbook = () => {
 };
 
 export default Cookbook;
-

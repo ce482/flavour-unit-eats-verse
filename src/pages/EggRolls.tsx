@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -14,127 +13,69 @@ const EggRolls = () => {
     {
       id: 1,
       name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
-      description: "4 pieces paired with marinara sauce",
+      description: "(4 PIECES) KINGSTON'S MAC AND CHEESE EGG ROLL PAIRED WITH MARINARA",
       price: 9.99,
-      image: "/lovable-uploads/7f01597f-44a4-4201-a923-6200a604d63c.png", // Mac and cheese image
+      image: "/lovable-uploads/7f01597f-44a4-4201-a923-6200a604d63c.png",
       category: "egg-rolls"
     },
     {
       id: 2,
       name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
-      description: "4 pieces with dipping sauce",
+      description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
       price: 9.99,
-      image: "/lovable-uploads/e08c1062-1174-4ea9-95e4-c6ee54929059.png", // Philly image
+      image: "/lovable-uploads/e08c1062-1174-4ea9-95e4-c6ee54929059.png",
       category: "egg-rolls"
     },
     {
       id: 3,
       name: "APPLE CHEESECAKE RANGOONS",
-      description: "8 pieces with caramel dipping sauce",
+      description: "8 PIECES OF APPLE CHEESECAKE RANGOONS WITH CARAMEL DIPPING SAUCE",
       price: 8.99,
-      image: "/lovable-uploads/a6c8a7ec-1cc1-4552-9f98-683e1f62c935.png", // Rangoon image
+      image: "/lovable-uploads/a6c8a7ec-1cc1-4552-9f98-683e1f62c935.png",
       category: "rangoon"
     },
     {
       id: 4,
       name: "ITALIAN BEEF POTSTICKERS",
-      description: "12 pieces with dipping sauce",
+      description: "(12 PIECES) ITALIAN BEEF POTSTICKERS WITH DIPPING SAUCE",
       price: 10.99,
-      image: "/lovable-uploads/bbe68d77-7529-4abc-b7d3-365d8ec4148e.png", // Potstickers image
+      image: "/lovable-uploads/bbe68d77-7529-4abc-b7d3-365d8ec4148e.png",
       category: "potstickers"
     },
     {
       id: 5,
       name: "AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
-      description: "4 pieces",
+      description: "(4 PIECES OF) AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
       price: 9.99,
-      image: "/lovable-uploads/2114e1c4-58a8-415a-b022-5ae6340eb35a.png", // Peach cobbler image
+      image: "/lovable-uploads/2114e1c4-58a8-415a-b022-5ae6340eb35a.png",
       category: "egg-rolls"
     },
     {
       id: 6,
       name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
-      description: "4 pieces paired with Ole sauce",
+      description: "(4 PIECES OF ) TACO OLE WITH GROUND CHICKEN EGG ROLL PAIRED WITH OLE SAUCE",
       price: 9.99,
-      longDescription: "If you love Taco's and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese!",
-      image: "/lovable-uploads/c023a75c-eb39-467c-ad0c-f8de582a9fd3.png", // Taco Ole image
+      longDescription: "Taco Ole ™ Egg Roll - If you love Taco’s and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it’s your Egg Roll please choose a method from our packaging on how to cook the outer layer",
+      image: "/lovable-uploads/9a3c41f7-3b75-45ad-81be-796d7640a92f.png",
       category: "egg-rolls"
     },
     {
       id: 7,
       name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
-      description: "4 pieces paired with dipping sauce",
+      description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EOLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
       price: 9.99,
-      longDescription: "Our most popular Egg Roll named after our founder's late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton!",
-      image: "/lovable-uploads/6ffebb32-d793-48d4-b000-bd6743b9f338.png", // Gert's image
+      longDescription: "Gert’s Collard Greens Egg Rolls ™ - Our most popular Egg Roll named after our founder’s late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton! We pair this Egg Roll with classic sweet and sour sauce and because its your Egg Roll please choose a method from our packaging on how to cook the outer layer.",
+      image: "/lovable-uploads/6ffebb32-d793-48d4-b000-bd6743b9f338.png",
       category: "egg-rolls"
     },
     {
       id: 8,
       name: "MILD BUFFALO CHICKEN EGG ROLL",
-      description: "4 pieces with ranch or bleu cheese dressing",
+      description: "(4 PIECES) MILD BUFFALO CHICKEN EGG ROLL",
       price: 9.99,
-      longDescription: "Don't like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton!",
-      image: "/lovable-uploads/ebd23bef-adfb-49ad-a3a9-2f875e77ec92.png", // Buffalo chicken image
+      longDescription: "Mild Buffalo Chicken Egg Rolls - Don’t like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton! Because it’s your Egg Roll please choose a method from our packaging on how to cook the outer layer and grab your ranch or bleu cheese dressing to dip these delicious Egg Rolls in!",
+      image: "/lovable-uploads/ebd23bef-adfb-49ad-a3a9-2f875e77ec92.png",
       category: "egg-rolls"
-    }
-  ];
-
-  const faqs = [
-    {
-      question: "HOW DO I COOK THESE?",
-      answer: `Our products are free of preservatives and artificial colors. We do not recommend grilling. Cooking instructions are on the packaging. Thaw products in the microwave from frozen for 2 minutes or in the refrigerator overnight.
-      
-      Air fry - Pre heat air fryer on 400 degrees, poke Egg Roll or Rangoon with a tooth pick in multiple areas, spray or coat with oil of choice and place Egg roll in the air fryer. Cook for 5 minutes and rotate. Apply more oil if needed until golden brown.
-      
-      Deep fryer- Cook in pre- heated oil at 375 degrees F until Egg Roll or Rangoon floats to the top.
-      
-      Oven - Pre heat oven to 375 degrees F. Coat or spray baking sheet with oil of choice and thinly layer product on baking sheet. Cook product on each side, turning in between to ensure an eternal temperature of 165 degrees F or higher and golden brown on the outside.
-      
-      Skillet and Air fry combo - Pre heat air fryer to 400 degrees. Lightly coat oil in a skillet on the stove and turn on the heat. sauté product on each side until lightly golden brown. Transfer product to the Air fryer and cook for 6 to 8 minutes to ensure the eternal temperature reaches 165 degrees F or higher and is golden brown on the outside.`
-    },
-    {
-      question: "IS THERE PORK IN THE EGG ROLLS?",
-      answer: "We are a NO PORK company."
-    },
-    {
-      question: "ARE THESE PRODUCTS MADE OVERSEAS?",
-      answer: "No, these products are made right here in Illinois, United States."
-    },
-    {
-      question: "HOW LONG WILL THE PRODUCTS LAST FROZEN?",
-      answer: "Our products have a 1-year shelf life frozen. and 7 days refrigerated."
-    },
-    {
-      question: "CAN I ORDER EGG ROLLS ETC WHOLESALE FOR MY RESTAURANT, CAFE, CATERING BUSINESS, ETC.?",
-      answer: "Possibly, please fill our online wholesale partner application and let's see if we will be a good match!"
-    },
-    {
-      question: "WHEN I OPENED MY RETAIL PACK FROM THE GROCERY STORE. THE EGG ROLLS WERE STUCK TOGETHER. WHAT SHOULD I DO?",
-      answer: "Because we do not add any artificial waxes or coatings the products can sometimes stick together. Please gently peel apart and continue the cooking process as mentioned on the packaging or above."
-    },
-    {
-      question: "WHAT ARE THE SILVER PACKETS IN THE BAGS WITH THE EGG ROLLS ETC?",
-      answer: "We want everyone to have the ultimate EGG ROLLS ETC experience, so we included a seasoning and sauce pack in each bag. Thaw the sauce in its closed packet in a cup of warm water and use as a dipping sauce if desired."
-    }
-  ];
-
-  const videos = [
-    {
-      title: "Egg Rolls Etc on ABC Windy City Live 2018",
-      url: "https://youtu.be/-GNzE8iIdco"
-    },
-    {
-      title: "Egg Rolls Etc Chicago, IL",
-      url: "https://www.youtube.com/watch?v=5xFOyaJ1qE4"
-    },
-    {
-      title: "How to make 'comfort-filled' egg rolls",
-      url: "https://www.youtube.com/watch?v=r4fPaVk-s9s"
-    },
-    {
-      title: "[Podcast] Influential Women in Food: Javon Nicholas, Egg Rolls Etc.",
-      url: "https://www.youtube.com/watch?v=13zpYEcxwHQ"
     }
   ];
 
@@ -204,46 +145,6 @@ const EggRolls = () => {
                 Shop Egg Rolls Merchandise
                 <ExternalLink size={16} />
               </a>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container-wide">
-            <h2 className="section-title text-center mb-12">Frequently Asked Questions</h2>
-            <div className="max-w-3xl mx-auto space-y-6">
-              {faqs.map((faq, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-sm p-6">
-                  <h3 className="text-lg font-bold mb-3">{faq.question}</h3>
-                  <p className="text-gray-600 whitespace-pre-wrap">{faq.answer}</p>
-                </div>
-              ))}
-              <p className="text-center text-gray-600 mt-8">
-                If there are any more questions, please feel free to contact us via our website. 
-                We appreciate your business and support! Prices are subject to change without further notice. 
-                No Cash refunds. Do not sell or duplicate our imagery or content.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Media Section */}
-        <section className="py-16 bg-white">
-          <div className="container-wide">
-            <h2 className="section-title text-center mb-12">Media Coverage</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {videos.map((video, index) => (
-                <div key={index} className="aspect-video">
-                  <iframe
-                    className="w-full h-full rounded-lg"
-                    src={`https://www.youtube.com/embed/${video.url.split('=')[1] || video.url.split('/').pop()}`}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              ))}
             </div>
           </div>
         </section>
