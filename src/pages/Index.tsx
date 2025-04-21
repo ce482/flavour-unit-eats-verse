@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import HeroBanner from '../components/home/HeroBanner';
 import BrandShowcase from '../components/home/BrandShowcase';
@@ -11,21 +12,21 @@ const featuredProducts = [
     id: 1,
     name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
     description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
-    image: "/lovable-uploads/e08c1062-1174-4ea9-95e4-c6ee54929059.png",
+    image: "/lovable-uploads/283ac46a-c5ba-456c-929d-ca75f501b055.png", // Updated philly_cheese_steak image
     link: "/egg-rolls"
   },
   {
     id: 2,
     name: "Potstickers",
     description: "Delicious dumplings filled with savory ingredients, perfect for any occasion.",
-    image: "/lovable-uploads/pot_stickers.png",
+    image: "/lovable-uploads/759d43b6-694e-4d26-a7f8-7e6762338e17.png", // Updated pot_stickers image
     link: "/egg-rolls"
   },
   {
     id: 3,
     name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
     description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EOLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
-    image: "/lovable-uploads/6ffebb32-d793-48d4-b000-bd6743b9f338.png",
+    image: "/lovable-uploads/50a943e2-acde-40de-8857-84c2a4261c4d.png", // Updated collard_greens image
     link: "/egg-rolls"
   }
 ];
