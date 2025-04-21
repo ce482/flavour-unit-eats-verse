@@ -6,7 +6,7 @@ const BrandShowcase = () => {
     {
       name: "Egg Rolls Etc.",
       description: "Chicago's favorite comfort-filled egg rolls, potstickers, and rangoon. Available at grocery stores, online retailers, and through catering services.",
-      imageSrc: "/lovable-uploads/philly_cheese_steak.png",
+      imageSrc: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=964&q=80",
       path: "/egg-rolls",
       isActive: true
     },
@@ -76,4 +76,3 @@ const BrandShowcase = () => {
 };
 
 export default BrandShowcase;
-

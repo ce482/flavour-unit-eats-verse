@@ -12,22 +12,6 @@ const Index = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Select two real products from EggRolls page to display
-  const featuredEggRolls = [
-    {
-      name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
-      description: "KINGSTON'S MAC AND CHEESE EGG ROLL PAIRED WITH MARINARA",
-      image: "/lovable-uploads/7f01597f-44a4-4201-a923-6200a604d63c.png",
-      link: "/egg-rolls"
-    },
-    {
-      name: "AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
-      description: "AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
-      image: "/lovable-uploads/2114e1c4-58a8-415a-b022-5ae6340eb35a.png",
-      link: "/egg-rolls"
-    }
-  ];
-
   return (
     <>
       <Navbar />
@@ -76,51 +60,34 @@ const Index = () => {
                 Discover our most popular comfort-filled creations
               </p>
             </div>
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Featured Product 1: Kingston's Mac and Cheese Egg Roll */}
+              {/* Product 1 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
                 <div className="h-64 overflow-hidden">
                   <img 
-                    src={featuredEggRolls[0].image}
-                    alt={featuredEggRolls[0].name}
+                    src="https://images.unsplash.com/photo-1515669097368-22e68427d265?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
+                    alt="Classic Egg Rolls" 
                     className="w-full h-full object-cover transition-transform hover:scale-105"
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{featuredEggRolls[0].name}</h3>
+                  <h3 className="text-xl font-bold mb-2">Classic Egg Rolls</h3>
                   <p className="text-flavour-gray mb-4">
-                    {featuredEggRolls[0].description}
+                    Our signature comfort-filled egg rolls made with premium ingredients and authentic flavors.
                   </p>
-                  <Link to={featuredEggRolls[0].link} className="text-flavour-red font-medium hover:underline">
+                  <Link to="/egg-rolls" className="text-flavour-red font-medium hover:underline">
                     View Details
                   </Link>
                 </div>
               </div>
-              {/* Featured Product 2: Auntie Kathy's Peach Cobbler Dessert Egg Rolls */}
+              
+              {/* Product 2 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
                 <div className="h-64 overflow-hidden">
                   <img 
-                    src={featuredEggRolls[1].image}
-                    alt={featuredEggRolls[1].name}
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{featuredEggRolls[1].name}</h3>
-                  <p className="text-flavour-gray mb-4">
-                    {featuredEggRolls[1].description}
-                  </p>
-                  <Link to={featuredEggRolls[1].link} className="text-flavour-red font-medium hover:underline">
-                    View Details
-                  </Link>
-                </div>
-              </div>
-              {/* Product 3: Potstickers with pot_stickers image */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/pot_stickers.png"
-                    alt="Potstickers"
+                    src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
+                    alt="Potstickers" 
                     className="w-full h-full object-cover transition-transform hover:scale-105"
                   />
                 </div>
@@ -134,7 +101,28 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
+              
+              {/* Product 3 */}
+              <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
+                <div className="h-64 overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1626501094011-bb5ec7b35d16?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
+                    alt="Cream Cheese Rangoon" 
+                    className="w-full h-full object-cover transition-transform hover:scale-105"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">Cream Cheese Rangoon</h3>
+                  <p className="text-flavour-gray mb-4">
+                    Crispy wontons filled with creamy cheese filling. An irresistible appetizer or snack.
+                  </p>
+                  <Link to="/egg-rolls" className="text-flavour-red font-medium hover:underline">
+                    View Details
+                  </Link>
+                </div>
+              </div>
             </div>
+            
             <div className="text-center mt-12">
               <Link to="/egg-rolls" className="btn-primary inline-block">
                 Shop All Products
@@ -168,4 +156,3 @@ const Index = () => {
 };
 
 export default Index;
-
