@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { ShoppingCart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const Cookbook = () => {
   useEffect(() => {
@@ -25,7 +24,7 @@ const Cookbook = () => {
                     "An inheritance of recipes from my family to yours"
                   </h2>
                   <p className="text-lg text-gray-700 mb-4">
-                    Paperback – March 15, 2021 by Javon McCain-Nicholas (Author)
+                    Paperback – March 15, 2021 by Javon McCain-Nicholas 
                   </p>
                   <p className="text-lg text-gray-700 mb-8">
                     Legacy Kitchen 1219 is a culinary memoir filled with recipes and images dedicated to my family. This book is filled with a variety of traditional American and Island inspired comfort foods that were made with love and are now available for all to enjoy!
@@ -51,9 +50,8 @@ const Cookbook = () => {
                 </div>
               </div>
               <div className="relative flex items-center justify-center">
-                {/* Using an image already known to work */}
                 <img 
-                  src="/lovable-uploads/c3469d4f-a927-4afd-bf30-23a849419f1c.png" 
+                  src="/lovable-uploads/466e680b-6902-40f0-a0cc-0abe3f1c2601.png" 
                   alt="Legacy Kitchen 1219 Cookbook" 
                   className="w-1/2 max-w-xs md:max-w-xs object-cover rounded-lg shadow-2xl"
                 />
