@@ -54,9 +54,9 @@ const EggRolls = () => {
       id: 6,
       name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
       description: "(4 PIECES OF ) TACO OLE WITH GROUND CHICKEN EGG ROLL PAIRED WITH OLE SAUCE",
-      price: 9.99,
       longDescription: "Taco Ole ™ Egg Roll - If you love Taco’s and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it’s your Egg Roll please choose a method from our packaging on how to cook the outer layer",
-      image: "/lovable-uploads/9a3c41f7-3b75-45ad-81be-796d7640a92f.png",
+      price: 9.99,
+      image: "/lovable-uploads/taco_ole.png",
       category: "egg-rolls"
     },
     {
@@ -84,7 +84,7 @@ const EggRolls = () => {
       <Navbar />
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-flavour-black">
+        <section className="pt-32 pb-16" style={{ backgroundColor: "#ea384c" }}>
           <div className="container-wide">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">EGG ROLLS ETC</h1>

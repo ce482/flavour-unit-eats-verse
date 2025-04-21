@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -162,39 +161,6 @@ const About = () => {
                   Through Legacy Kitchen Solutions, we provide coaching and consulting to help small food businesses navigate challenges and grow their operations from concept to market.
                 </p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Community Engagement */}
-        <section className="py-20 bg-white">
-          <div className="container-wide">
-            <div className="text-center mb-12">
-              <h2 className="section-title">Community Engagement</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                We partner with non-profit organizations to conduct cooking demonstrations, workshops, and sponsorships.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {workshops.map((workshop, index) => (
-                <div 
-                  key={index} 
-                  className="overflow-hidden rounded-lg shadow-md group"
-                >
-                  <div className="h-56 overflow-hidden">
-                    <img 
-                      src={workshop.image} 
-                      alt={workshop.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-6 bg-white">
-                    <h3 className="text-xl font-bold mb-2">{workshop.name}</h3>
-                    <p className="text-gray-600">{workshop.description}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
