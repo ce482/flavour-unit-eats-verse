@@ -1,8 +1,8 @@
+
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { BookOpen, ShoppingCart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingCart } from 'lucide-react';
 
 const Cookbook = () => {
   useEffect(() => {
@@ -49,11 +49,11 @@ const Cookbook = () => {
                   </div>
                 </div>
               </div>
-              <div className="relative">
+              <div className="relative flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/51f52c02-b70f-48c2-94ec-2c8486e708cd.png" 
+                  src="/lovable-uploads/cookbook.png" 
                   alt="Legacy Kitchen 1219 Cookbook" 
-                  className="w-full h-auto object-cover rounded-lg shadow-2xl"
+                  className="w-2/3 max-w-xs md:max-w-sm object-cover rounded-lg shadow-2xl"
                 />
               </div>
             </div>

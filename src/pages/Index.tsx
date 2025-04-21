@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import HeroBanner from '../components/home/HeroBanner';
 import BrandShowcase from '../components/home/BrandShowcase';
@@ -6,6 +5,30 @@ import OrderPopup from '../components/ui/OrderPopup';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
+
+const featuredProducts = [
+  {
+    id: 1,
+    name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
+    description: "Our signature comfort-filled mac & cheese egg rolls paired with marinara.",
+    image: "/lovable-uploads/7f01597f-44a4-4201-a923-6200a604d63c.png", // From Egg Rolls Etc
+    link: "/egg-rolls"
+  },
+  {
+    id: 2,
+    name: "Potstickers",
+    description: "Delicious dumplings filled with savory ingredients, perfect for any occasion.",
+    image: "/lovable-uploads/pot_stickers.png", // Updated path
+    link: "/egg-rolls"
+  },
+  {
+    id: 3,
+    name: "APPLE CHEESECAKE RANGOONS",
+    description: "Apple cheesecake rangaons with caramel dipping sauce.",
+    image: "/lovable-uploads/a6c8a7ec-1cc1-4552-9f98-683e1f62c935.png", // From Egg Rolls Etc
+    link: "/egg-rolls"
+  }
+];
 
 const Index = () => {
   useEffect(() => {
@@ -22,31 +45,17 @@ const Index = () => {
         {/* About Section */}
         <section className="py-20 bg-white">
           <div className="container-wide">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="section-title mb-6">About The Flavour Unit Corp</h2>
-                <p className="text-lg text-flavour-gray mb-6">
-                  The Flavour Unit Corporation is more than just food—it's a culinary journey that celebrates comfort, culture, and community. As the parent company of our innovative food brands, we're dedicated to bringing exceptional flavors to your table.
-                </p>
-                <p className="text-lg text-flavour-gray mb-6">
-                  Our mission is to create delicious, high-quality comfort foods while supporting food entrepreneurs through education and resources. We believe food is about bringing people together and preserving cultural traditions.
-                </p>
-                <Link to="/about" className="btn-outline inline-block">
-                  Learn Our Story
-                </Link>
-              </div>
-              <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1561339429-d5da4e6e9105?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
-                  alt="Cooking experience" 
-                  className="rounded-lg shadow-xl"
-                />
-                <div className="absolute -bottom-6 -left-6 bg-flavour-gold p-4 rounded-lg shadow-lg">
-                  <p className="text-xl font-bold text-flavour-black">
-                    Passion for Flavor
-                  </p>
-                </div>
-              </div>
+            <div className="flex flex-col items-start max-w-4xl mx-auto">
+              <h2 className="section-title mb-6">About The Flavour Unit Corp</h2>
+              <p className="text-lg text-flavour-gray mb-6">
+                The Flavour Unit Corporation is more than just food—it's a culinary journey that celebrates comfort, culture, and community. As the parent company of our innovative food brands, we're dedicated to bringing exceptional flavors to your table.
+              </p>
+              <p className="text-lg text-flavour-gray mb-6">
+                Our mission is to create delicious, high-quality comfort foods while supporting food entrepreneurs through education and resources. We believe food is about bringing people together and preserving cultural traditions.
+              </p>
+              <Link to="/about" className="btn-outline inline-block">
+                Learn Our Story
+              </Link>
             </div>
           </div>
         </section>
@@ -62,65 +71,26 @@ const Index = () => {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Product 1 */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1515669097368-22e68427d265?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
-                    alt="Classic Egg Rolls" 
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
-                  />
+              {featuredProducts.map(product => (
+                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
+                  <div className="h-64 overflow-hidden">
+                    <img 
+                      src={product.image}
+                      alt={product.name} 
+                      className="w-full h-full object-cover transition-transform hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                    <p className="text-flavour-gray mb-4">
+                      {product.description}
+                    </p>
+                    <Link to={product.link} className="text-flavour-red font-medium hover:underline">
+                      View Details
+                    </Link>
+                  </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">Classic Egg Rolls</h3>
-                  <p className="text-flavour-gray mb-4">
-                    Our signature comfort-filled egg rolls made with premium ingredients and authentic flavors.
-                  </p>
-                  <Link to="/egg-rolls" className="text-flavour-red font-medium hover:underline">
-                    View Details
-                  </Link>
-                </div>
-              </div>
-              
-              {/* Product 2 */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
-                    alt="Potstickers" 
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">Potstickers</h3>
-                  <p className="text-flavour-gray mb-4">
-                    Delicious dumplings filled with savory ingredients, perfect for any occasion.
-                  </p>
-                  <Link to="/egg-rolls" className="text-flavour-red font-medium hover:underline">
-                    View Details
-                  </Link>
-                </div>
-              </div>
-              
-              {/* Product 3 */}
-              <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                <div className="h-64 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1626501094011-bb5ec7b35d16?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" 
-                    alt="Cream Cheese Rangoon" 
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">Cream Cheese Rangoon</h3>
-                  <p className="text-flavour-gray mb-4">
-                    Crispy wontons filled with creamy cheese filling. An irresistible appetizer or snack.
-                  </p>
-                  <Link to="/egg-rolls" className="text-flavour-red font-medium hover:underline">
-                    View Details
-                  </Link>
-                </div>
-              </div>
+              ))}
             </div>
             
             <div className="text-center mt-12">

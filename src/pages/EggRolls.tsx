@@ -84,7 +84,7 @@ const EggRolls = () => {
       <Navbar />
       <main>
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-flavour-black">
+        <section className="pt-32 pb-16 bg-flavour-red">
           <div className="container-wide">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">EGG ROLLS ETC</h1>
