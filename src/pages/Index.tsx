@@ -12,21 +12,21 @@ const featuredProducts = [
     id: 1,
     name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
     description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
-    image: "/lovable-uploads/283ac46a-c5ba-456c-929d-ca75f501b055.png", // Updated philly_cheese_steak image
+    image: "/lovable-uploads/283ac46a-c5ba-456c-929d-ca75f501b055.png",
     link: "/egg-rolls"
   },
   {
     id: 2,
     name: "Potstickers",
     description: "Delicious dumplings filled with savory ingredients, perfect for any occasion.",
-    image: "/lovable-uploads/759d43b6-694e-4d26-a7f8-7e6762338e17.png", // Updated pot_stickers image
+    image: "/lovable-uploads/759d43b6-694e-4d26-a7f8-7e6762338e17.png",
     link: "/egg-rolls"
   },
   {
     id: 3,
     name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
     description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EOLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
-    image: "/lovable-uploads/50a943e2-acde-40de-8857-84c2a4261c4d.png", // Updated collard_greens image
+    image: "/lovable-uploads/50a943e2-acde-40de-8857-84c2a4261c4d.png",
     link: "/egg-rolls"
   }
 ];
@@ -46,7 +46,7 @@ const Index = () => {
         {/* About Section */}
         <section className="py-20 bg-white">
           <div className="container-wide">
-            <div className="flex flex-col items-center max-w-4xl mx-auto">
+            <div className="flex flex-col items-center max-w-4xl mx-auto text-center">
               <h2 className="section-title mb-6">About The Flavour Unit Corp</h2>
               <p className="text-lg text-flavour-gray mb-6">
                 The Flavour Unit Corporation is more than just food—it's a culinary journey that celebrates comfort, culture, and community. As the parent company of our innovative food brands, we're dedicated to bringing exceptional flavors to your table.
@@ -54,9 +54,11 @@ const Index = () => {
               <p className="text-lg text-flavour-gray mb-6">
                 Our mission is to create delicious, high-quality comfort foods while supporting food entrepreneurs through education and resources. We believe food is about bringing people together and preserving cultural traditions.
               </p>
-              <Link to="/about" className="btn-outline inline-block mx-auto">
-                Learn Our Story
-              </Link>
+              <div className="flex justify-center">
+                <Link to="/about" className="btn-outline inline-block">
+                  Learn Our Story
+                </Link>
+              </div>
             </div>
           </div>
         </section>

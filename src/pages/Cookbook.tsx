@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { ShoppingCart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Cookbook = () => {
   useEffect(() => {
@@ -50,8 +51,9 @@ const Cookbook = () => {
                 </div>
               </div>
               <div className="relative flex items-center justify-center">
+                {/* Using an image already known to work */}
                 <img 
-                  src="/lovable-uploads/466e680b-6902-40f0-a0cc-0abe3f1c2601.png" 
+                  src="/lovable-uploads/c3469d4f-a927-4afd-bf30-23a849419f1c.png" 
                   alt="Legacy Kitchen 1219 Cookbook" 
                   className="w-1/2 max-w-xs md:max-w-xs object-cover rounded-lg shadow-2xl"
                 />
