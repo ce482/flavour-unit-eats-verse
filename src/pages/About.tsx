@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -36,25 +35,6 @@ const About = () => {
     }
   ];
 
-  // Adding workshops data that was missing
-  const workshops = [
-    {
-      name: "Community Garden Workshop",
-      description: "Teaching children about healthy eating and entrepreneurship through egg roll making.",
-      image: "https://images.unsplash.com/photo-1464638681273-0962e9b53566?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      name: "Cultural Exchange Program",
-      description: "Introducing children to diverse foods and teaching Mandarin words through cooking.",
-      image: "https://images.unsplash.com/photo-1528712306091-ed0763094c98?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      name: "Youth Entrepreneurship",
-      description: "Mentoring young food entrepreneurs on building successful businesses.",
-      image: "https://images.unsplash.com/photo-1577041677443-8bbdfd8cce62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    }
-  ];
-
   return (
     <>
       <Navbar />
@@ -65,18 +45,54 @@ const About = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Our Story</h1>
-                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                  From living abroad in Taiwan and combining my expertise as a Clinical Nutritionist and caterer, I have created a product that is not only delicious but unites cultures and differences inside of a warm wonton - My Egg Rolls!
-                </p>
-                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                  Egg Rolls Etc is available for wholesale partnerships with other small businesses such as cafes and coffee shops throughout the Chicagoland area. We also partner with many community organizations to teach youth the value and importance of self-love, entrepreneurship and cultural sensitivity.
-                </p>
-                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                  After only 1 year in business I have created an initiative for children called "It's What's Inside That Counts!" During the summer months I create workshops in community gardens and teach the children the importance of loving themselves by incorporating healthy foods into their diets (like our Egg Rolls which can be baked), Entrepreneurship by creating fillings and sauces for their creations and diversity by teaching them Mandarin words and exposing them to different fruits, veggies and treats from around the world.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  I look forward to delighting your taste buds with over 64 varieties of specialty flavored Egg Rolls that are sweet, savory and vegan! We partner with community organizations to teach youth the importance of self-love, cultural sensitivity and entrepreneurship while being proud of the "skin you're in". So just like an Egg Roll, it's what's inside that counts.
-                </p>
+                <div className="space-y-6 text-lg text-gray-700">
+                  <p>
+                    At The Flavour Unit Corporation, we believe great food does more than nourish — it brings people together, 
+                    tells stories, and uplifts communities. We are the proud parent company of two purpose-driven brands: 
+                    Egg Rolls Etc. and Legacy Kitchen Solutions, each blending culinary creativity with cultural celebration.
+                  </p>
+                  
+                  <div>
+                    <h2 className="text-2xl font-bold mb-3 flex items-center gap-2">
+                      🍳 Egg Rolls Etc.
+                    </h2>
+                    <p className="mb-4">
+                      Our flagship frozen food line features bold, comfort-filled classics: egg rolls, potstickers, and Rangoon. 
+                      Designed to satisfy and inspire, these crowd-pleasers are available through:
+                    </p>
+                    <ul className="list-disc pl-6 mb-4 space-y-2">
+                      <li>Local grocery stores & catering companies</li>
+                      <li>Ghost kitchens & online retailers</li>
+                      <li>B2B & B2C wholesale platforms</li>
+                      <li>Community partnerships and pop-ups</li>
+                    </ul>
+                    <p>
+                      We're more than just food — we're flavor with a mission. Through youth workshops, nonprofit collaborations, 
+                      and cultural cooking demos, Egg Rolls Etc. teaches self-love, entrepreneurship, and cultural pride.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h2 className="text-2xl font-bold mb-3">
+                      🥣 Legacy Kitchen Solutions
+                    </h2>
+                    <p>
+                      Through one-on-one coaching and strategic consulting, we help small food businesses scale with soul. 
+                      Whether you're launching a pop-up, navigating operations, or dreaming up the next big thing — we're 
+                      your kitchen confidantes.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h2 className="text-2xl font-bold mb-3">
+                      🍴 Coming Soon: Petit Déjeuner
+                    </h2>
+                    <p>
+                      Stay tuned for our savory spin on the most important meal of the day. Our Petit Déjeuner breakfast 
+                      line will bring globally-inspired comfort foods to your morning routine — one crave-worthy bite at a time.
+                    </p>
+                  </div>
+                </div>
               </div>
               <div className="relative">
                 <div className="relative rounded-lg overflow-hidden shadow-xl h-full">
@@ -99,7 +115,10 @@ const About = () => {
         {/* Media Section */}
         <section className="py-16 bg-white">
           <div className="container-wide">
-            <h2 className="section-title text-center mb-12">Media Coverage</h2>
+            <h2 className="section-title text-center mb-4">As Seen On</h2>
+            <p className="text-center text-lg text-gray-600 mb-12">
+              The Great Food Truck Race | WGN Chicago's Best | Chicago's Very Own | ABC7 Windy City Live
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {mediaAppearances.map((video, index) => (
                 <div key={index} className="aspect-video">
@@ -162,39 +181,6 @@ const About = () => {
                   Through Legacy Kitchen Solutions, we provide coaching and consulting to help small food businesses navigate challenges and grow their operations from concept to market.
                 </p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Community Engagement */}
-        <section className="py-20 bg-white">
-          <div className="container-wide">
-            <div className="text-center mb-12">
-              <h2 className="section-title">Community Engagement</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                We partner with non-profit organizations to conduct cooking demonstrations, workshops, and sponsorships.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {workshops.map((workshop, index) => (
-                <div 
-                  key={index} 
-                  className="overflow-hidden rounded-lg shadow-md group"
-                >
-                  <div className="h-56 overflow-hidden">
-                    <img 
-                      src={workshop.image} 
-                      alt={workshop.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-6 bg-white">
-                    <h3 className="text-xl font-bold mb-2">{workshop.name}</h3>
-                    <p className="text-gray-600">{workshop.description}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
