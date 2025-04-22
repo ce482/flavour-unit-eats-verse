@@ -47,58 +47,28 @@ const About = () => {
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Our Story</h1>
                 <div className="space-y-6 text-lg text-gray-700">
                   <p>
-                    At The Flavour Unit Corporation, we believe great food does more than nourish — it brings people together, 
-                    tells stories, and uplifts communities. We are the proud parent company of two purpose-driven brands: 
-                    Egg Rolls Etc. and Legacy Kitchen Solutions, each blending culinary creativity with cultural celebration.
+                    At The Flavour Unit Corporation, we don't just make food — we make meaning. As the parent company of 
+                    Egg Rolls Etc. and Legacy Kitchen Solutions, we blend tradition, flavor, and entrepreneurial spirit 
+                    to create comfort foods that tell a story and inspire community.
                   </p>
-                  
-                  <div>
-                    <h2 className="text-2xl font-bold mb-3 flex items-center gap-2">
-                      🍳 Egg Rolls Etc.
-                    </h2>
-                    <p className="mb-4">
-                      Our flagship frozen food line features bold, comfort-filled classics: egg rolls, potstickers, and Rangoon. 
-                      Designed to satisfy and inspire, these crowd-pleasers are available through:
-                    </p>
-                    <ul className="list-disc pl-6 mb-4 space-y-2">
-                      <li>Local grocery stores & catering companies</li>
-                      <li>Ghost kitchens & online retailers</li>
-                      <li>B2B & B2C wholesale platforms</li>
-                      <li>Community partnerships and pop-ups</li>
-                    </ul>
-                    <p>
-                      We're more than just food — we're flavor with a mission. Through youth workshops, nonprofit collaborations, 
-                      and cultural cooking demos, Egg Rolls Etc. teaches self-love, entrepreneurship, and cultural pride.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h2 className="text-2xl font-bold mb-3">
-                      🥣 Legacy Kitchen Solutions
-                    </h2>
-                    <p>
-                      Through one-on-one coaching and strategic consulting, we help small food businesses scale with soul. 
-                      Whether you're launching a pop-up, navigating operations, or dreaming up the next big thing — we're 
-                      your kitchen confidantes.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h2 className="text-2xl font-bold mb-3">
-                      🍴 Coming Soon: Petit Déjeuner
-                    </h2>
-                    <p>
-                      Stay tuned for our savory spin on the most important meal of the day. Our Petit Déjeuner breakfast 
-                      line will bring globally-inspired comfort foods to your morning routine — one crave-worthy bite at a time.
-                    </p>
-                  </div>
+                  <p>
+                    In 2010, founder Javon McCain Nicholas took a leap of faith — or rather, a dare. Grieving the loss 
+                    of her mother, she enrolled in a two-year language program in Taiwan, despite not speaking a word of 
+                    Mandarin. Landing in Kaohsiung City, she was welcomed by a warm, tight-knit community that nurtured 
+                    her through the healing process. It was there she was given a Chinese name: Chow On (巧安) — meaning 
+                    "skillful" and "peace."
+                  </p>
+                  <p>
+                    That experience — the kindness, the culture, the food — became the seed for what would become 
+                    Egg Rolls Etc.™, a frozen product line that merges Asian comfort with soulful American roots.
+                  </p>
                 </div>
               </div>
               <div className="relative">
                 <div className="relative rounded-lg overflow-hidden shadow-xl h-full">
                   <img 
-                    src="https://images.unsplash.com/photo-1590330297626-d7b6477c3c69?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80" 
-                    alt="Kitchen preparation" 
+                    src="/lovable-uploads/dfb4e75b-d200-4d07-8f9f-37d84513b50d.png" 
+                    alt="Egg Rolls Etc. Product Line" 
                     className="w-full h-full object-cover"
                   />
                 </div>
