@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { useAdmin } from '@/hooks/useAdmin';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  const { isAdmin } = useAdmin();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +50,12 @@ const Auth = () => {
       <Navbar />
       <main className="min-h-screen py-20">
         <div className="container-wide max-w-md mx-auto">
+          {isAdmin && (
+            <div className="mb-8 p-4 bg-green-100 text-green-800 rounded-md">
+              You are logged in as an administrator
+            </div>
+          )}
+          
           <h1 className="text-4xl font-bold mb-8 text-center">
             {isSignUp ? 'Create an Account' : 'Welcome Back'}
           </h1>

@@ -1,6 +1,8 @@
 
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useOrders } from '../hooks/useOrders';
+import { useAdmin } from '../hooks/useAdmin';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import {
@@ -14,18 +16,30 @@ import {
 import { formatDistance } from 'date-fns';
 
 const Orders = () => {
+  const navigate = useNavigate();
+  const { isAdmin, isLoading: isLoadingAdmin } = useAdmin();
+  const { orders, isLoadingOrders } = useOrders();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { orders, isLoadingOrders } = useOrders();
+  useEffect(() => {
+    if (!isLoadingAdmin && !isAdmin) {
+      navigate('/auth');
+    }
+  }, [isAdmin, isLoadingAdmin, navigate]);
+
+  if (isLoadingAdmin || !isAdmin) {
+    return null;
+  }
 
   return (
     <>
       <Navbar />
       <main className="min-h-screen py-20">
         <div className="container-wide">
-          <h1 className="text-4xl font-bold mb-8">Your Orders</h1>
+          <h1 className="text-4xl font-bold mb-8">Admin Orders Dashboard</h1>
           
           {isLoadingOrders ? (
             <p>Loading orders...</p>
@@ -37,6 +51,8 @@ const Orders = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Order ID</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Email</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Items</TableHead>
@@ -49,6 +65,8 @@ const Orders = () => {
                       <TableCell className="font-medium">
                         {order.id.slice(0, 8)}...
                       </TableCell>
+                      <TableCell>{order.customer_name}</TableCell>
+                      <TableCell>{order.customer_email}</TableCell>
                       <TableCell>
                         {formatDistance(new Date(order.created_at), new Date(), { addSuffix: true })}
                       </TableCell>
