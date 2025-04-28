@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -6,10 +5,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-// Define the navItems array that was missing
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Egg Rolls', path: '/egg-rolls' },
+  { name: 'Orders', path: '/orders' },
   { name: 'About', path: '/about' },
   { name: 'FAQ', path: '/faq' },
   { name: 'Cookbook', path: '/cookbook' },

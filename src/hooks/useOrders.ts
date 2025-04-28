@@ -49,7 +49,7 @@ export const useOrders = () => {
       orderData: Omit<Order, 'id' | 'created_at' | 'updated_at'>, 
       items: Omit<OrderItem, 'id' | 'order_id' | 'created_at'>[] 
     }) => {
-      // First create the order
+      // Create the order without requiring user_id
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert(orderData)
@@ -58,7 +58,7 @@ export const useOrders = () => {
 
       if (orderError) throw orderError;
 
-      // Then create the order items
+      // Create the order items
       const orderItems = items.map(item => ({
         ...item,
         order_id: order.id
