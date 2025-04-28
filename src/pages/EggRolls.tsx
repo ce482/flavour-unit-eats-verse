@@ -1,10 +1,18 @@
-import { useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
 import { Star, Truck, ShoppingCart, ExternalLink } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
+import ProductDetail, { Product } from '@/components/product/ProductDetail';
+import { toast } from 'sonner';
 
 const EggRolls = () => {
+  const { addItem } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -55,7 +63,7 @@ const EggRolls = () => {
       name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
       description: "(4 PIECES OF ) TACO OLE WITH GROUND CHICKEN EGG ROLL PAIRED WITH OLE SAUCE",
       price: 9.99,
-      longDescription: "Taco Ole ™ Egg Roll - If you love Taco’s and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it’s your Egg Roll please choose a method from our packaging on how to cook the outer layer",
+      longDescription: "Taco Ole ™ Egg Roll - If you love Taco's and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer",
       image: "/lovable-uploads/9a3c41f7-3b75-45ad-81be-796d7640a92f.png",
       category: "egg-rolls"
     },
@@ -64,7 +72,7 @@ const EggRolls = () => {
       name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
       description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EOLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
       price: 9.99,
-      longDescription: "Gert’s Collard Greens Egg Rolls ™ - Our most popular Egg Roll named after our founder’s late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton! We pair this Egg Roll with classic sweet and sour sauce and because its your Egg Roll please choose a method from our packaging on how to cook the outer layer.",
+      longDescription: "Gert's Collard Greens Egg Rolls ™ - Our most popular Egg Roll named after our founder's late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton! We pair this Egg Roll with classic sweet and sour sauce and because its your Egg Roll please choose a method from our packaging on how to cook the outer layer.",
       image: "/lovable-uploads/6ffebb32-d793-48d4-b000-bd6743b9f338.png",
       category: "egg-rolls"
     },
@@ -73,11 +81,30 @@ const EggRolls = () => {
       name: "MILD BUFFALO CHICKEN EGG ROLL",
       description: "(4 PIECES) MILD BUFFALO CHICKEN EGG ROLL",
       price: 9.99,
-      longDescription: "Mild Buffalo Chicken Egg Rolls - Don’t like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton! Because it’s your Egg Roll please choose a method from our packaging on how to cook the outer layer and grab your ranch or bleu cheese dressing to dip these delicious Egg Rolls in!",
+      longDescription: "Mild Buffalo Chicken Egg Rolls - Don't like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer and grab your ranch or bleu cheese dressing to dip these delicious Egg Rolls in!",
       image: "/lovable-uploads/ebd23bef-adfb-49ad-a3a9-2f875e77ec92.png",
       category: "egg-rolls"
     }
   ];
+
+  const handleAddToCart = (product: Product) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+    toast.success(`Added ${product.name} to cart`);
+  };
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -107,7 +134,10 @@ const EggRolls = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                  <div className="h-64 overflow-hidden">
+                  <div 
+                    className="h-64 overflow-hidden cursor-pointer"
+                    onClick={() => handleProductClick(product)}
+                  >
                     <img 
                       src={product.image} 
                       alt={product.name} 
@@ -118,14 +148,19 @@ const EggRolls = () => {
                     <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 block">
                       {product.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                     </span>
-                    <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                    <h3 
+                      className="text-xl font-bold mb-2 cursor-pointer hover:text-flavour-red"
+                      onClick={() => handleProductClick(product)}
+                    >
+                      {product.name}
+                    </h3>
                     <p className="text-gray-600 mb-2">{product.description}</p>
-                    {product.longDescription && (
-                      <p className="text-gray-600 mb-4 text-sm">{product.longDescription}</p>
-                    )}
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold text-flavour-red">${product.price.toFixed(2)}</span>
-                      <button className="bg-flavour-red text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors flex items-center gap-2">
+                      <button 
+                        className="bg-flavour-red text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors flex items-center gap-2"
+                        onClick={() => handleAddToCart(product)}
+                      >
                         <ShoppingCart size={16} />
                         Add to Cart
                       </button>
@@ -150,6 +185,12 @@ const EggRolls = () => {
         </section>
       </main>
       <Footer />
+      
+      <ProductDetail 
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
     </>
   );
 };
