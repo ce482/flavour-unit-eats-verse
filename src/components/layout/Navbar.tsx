@@ -18,12 +18,13 @@ const navItems = [
   { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
   { name: 'Contact', path: '/contact' },
   { name: 'Petit Dejeuner', path: '/petit-dejeuner' },
-  // We'll handle the Orders separately below with conditional rendering
+  // Orders link is handled separately with conditional rendering
 ];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -38,11 +39,26 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
+    if (isLoggingOut) return; // Prevent multiple logout attempts
+    
+    setIsLoggingOut(true);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error signing out:', error);
+        toast.error('Error signing out');
+        
+        // Force clear local session as a fallback
+        localStorage.removeItem('supabase.auth.token');
+        window.location.reload(); // Force refresh as a last resort
+      } else {
+        toast.success('Signed out successfully');
+      }
+    } catch (err) {
+      console.error('Exception signing out:', err);
       toast.error('Error signing out');
-    } else {
-      toast.success('Signed out successfully');
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -131,6 +147,7 @@ const Navbar = () => {
           {user ? (
             <button
               onClick={handleLogout}
+              disabled={isLoggingOut}
               className={`text-sm font-medium transition-colors hover:text-flavour-red ${
                 isScrolled 
                   ? 'text-flavour-black' 
@@ -139,7 +156,7 @@ const Navbar = () => {
                     : 'text-white'
               }`}
             >
-              Sign Out
+              {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
             </button>
           ) : (
             <Link
@@ -247,9 +264,10 @@ const Navbar = () => {
             {user ? (
               <button
                 onClick={handleLogout}
+                disabled={isLoggingOut}
                 className="px-4 py-2 text-base font-medium text-flavour-black transition-colors hover:bg-gray-100 rounded text-left"
               >
-                Sign Out
+                {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
               </button>
             ) : (
               <Link
