@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const darkTextRoutes = ['/about', '/faq', '/cookbook', '/legacy-kitchen', '/contact'];
   const shouldUseDarkText = darkTextRoutes.includes(location.pathname);
@@ -14,15 +18,14 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Egg Rolls Etc.", path: "/egg-rolls" },
-    { name: "About", path: "/about" },
-    { name: "FAQ", path: "/faq" },
-    { name: "Cookbook", path: "/cookbook" },
-    { name: "Legacy Kitchen", path: "/legacy-kitchen" },
-    { name: "Contact", path: "/contact" },
-  ];
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error('Error signing out');
+    } else {
+      toast.success('Signed out successfully');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,7 +61,6 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center space-x-8">
           {navItems.map((item) => (
             <Link
@@ -77,9 +79,53 @@ const Navbar = () => {
               {item.name}
             </Link>
           ))}
+          {user ? (
+            <>
+              <Link
+                to="/orders"
+                className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                  isScrolled 
+                    ? location.pathname === '/orders'
+                      ? 'text-flavour-red' 
+                      : 'text-flavour-black'
+                    : shouldUseDarkText
+                      ? 'text-flavour-black hover:text-flavour-red'
+                      : 'text-white hover:text-white/80'
+                }`}
+              >
+                Orders
+              </Link>
+              <button
+                onClick={handleLogout}
+                className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                  isScrolled 
+                    ? 'text-flavour-black' 
+                    : shouldUseDarkText
+                      ? 'text-flavour-black'
+                      : 'text-white'
+                }`}
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/auth"
+              className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                isScrolled 
+                  ? location.pathname === '/auth'
+                    ? 'text-flavour-red' 
+                    : 'text-flavour-black'
+                  : shouldUseDarkText
+                    ? 'text-flavour-black hover:text-flavour-red'
+                    : 'text-white hover:text-white/80'
+              }`}
+            >
+              Sign In
+            </Link>
+          )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className={`lg:hidden ${
             isScrolled 
@@ -95,7 +141,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 animate-fade-in shadow-lg">
           <div className="container py-4 flex flex-col space-y-4">
@@ -110,6 +155,33 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            {user ? (
+              <>
+                <Link
+                  to="/orders"
+                  className={`px-4 py-2 text-base font-medium transition-colors hover:bg-gray-100 rounded ${
+                    location.pathname === '/orders' ? 'text-flavour-red' : 'text-flavour-black'
+                  }`}
+                >
+                  Orders
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-base font-medium text-flavour-black transition-colors hover:bg-gray-100 rounded text-left"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                className={`px-4 py-2 text-base font-medium transition-colors hover:bg-gray-100 rounded ${
+                  location.pathname === '/auth' ? 'text-flavour-red' : 'text-flavour-black'
+                }`}
+              >
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}
