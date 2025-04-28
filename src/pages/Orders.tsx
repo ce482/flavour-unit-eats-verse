@@ -3,8 +3,10 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOrders } from '../hooks/useOrders';
 import { useAdmin } from '../hooks/useAdmin';
+import { useAuth } from '@/hooks/useAuth';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -17,7 +19,8 @@ import { formatDistance } from 'date-fns';
 
 const Orders = () => {
   const navigate = useNavigate();
-  const { isAdmin, isLoading: isLoadingAdmin } = useAdmin();
+  const { user, isLoading: isLoadingAuth } = useAuth();
+  const { isAdmin, isLoading: isLoadingAdmin, error: adminError } = useAdmin();
   const { orders, isLoadingOrders } = useOrders();
 
   useEffect(() => {
@@ -25,12 +28,42 @@ const Orders = () => {
   }, []);
 
   useEffect(() => {
-    if (!isLoadingAdmin && !isAdmin) {
+    // First check if auth is loaded and user is authenticated
+    if (!isLoadingAuth && !user) {
+      toast.error('Please sign in to access this page');
+      navigate('/auth');
+      return;
+    }
+
+    // Then check if admin status is loaded and user is not admin
+    if (!isLoadingAuth && !isLoadingAdmin && !isAdmin) {
+      toast.error('You need administrator access for this page');
       navigate('/auth');
     }
-  }, [isAdmin, isLoadingAdmin, navigate]);
 
-  if (isLoadingAdmin || !isAdmin) {
+    // Show admin errors if any
+    if (adminError) {
+      console.error('Admin check error:', adminError);
+    }
+  }, [isAdmin, isLoadingAdmin, isLoadingAuth, user, adminError, navigate]);
+
+  // Show loading until both auth and admin status are confirmed
+  if (isLoadingAuth || isLoadingAdmin) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen py-20">
+          <div className="container-wide">
+            <p>Loading authentication status...</p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // Don't render anything if not admin
+  if (!isAdmin) {
     return null;
   }
 
