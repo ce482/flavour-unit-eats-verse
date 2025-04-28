@@ -12,6 +12,7 @@ import Cookbook from "./pages/Cookbook";
 import LegacyKitchen from "./pages/LegacyKitchen";
 import Contact from "./pages/Contact";
 import PetitDejeuner from "./pages/PetitDejeuner";
+import Orders from "./pages/Orders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/legacy-kitchen" element={<LegacyKitchen />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/petit-dejeuner" element={<PetitDejeuner />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
