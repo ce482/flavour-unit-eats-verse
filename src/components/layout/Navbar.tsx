@@ -18,6 +18,7 @@ const navItems = [
   { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
   { name: 'Contact', path: '/contact' },
   { name: 'Petit Dejeuner', path: '/petit-dejeuner' },
+  // Removed duplicate Orders item from here - it's conditionally rendered below
 ];
 
 const Navbar = () => {

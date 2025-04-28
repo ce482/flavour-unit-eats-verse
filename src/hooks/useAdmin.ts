@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from './useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 
 export const useAdmin = () => {
   const { user, isLoading: isLoadingAuth } = useAuth();
@@ -11,17 +10,17 @@ export const useAdmin = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Don't check admin status until auth is loaded
-    if (isLoadingAuth) return;
-    
-    const checkAdminStatus = async () => {
-      if (!user) {
+    // Don't check admin status until auth is loaded and we have a user
+    if (isLoadingAuth || !user) {
+      if (!isLoadingAuth && !user) {
+        // If auth is loaded but no user, we know they're not admin
         setIsAdmin(false);
         setIsLoading(false);
-        setError('Not authenticated');
-        return;
       }
+      return;
+    }
 
+    const checkAdminStatus = async () => {
       try {
         const { data, error } = await supabase.rpc('is_admin');
         
