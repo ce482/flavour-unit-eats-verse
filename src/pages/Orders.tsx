@@ -28,17 +28,22 @@ const Orders = () => {
   }, []);
 
   useEffect(() => {
-    // First check if auth is loaded and user is authenticated
-    if (!isLoadingAuth && !user) {
+    // Wait until both auth and admin checks are complete
+    if (isLoadingAuth || isLoadingAdmin) {
+      return;
+    }
+
+    // Check if user is authenticated
+    if (!user) {
       toast.error('Please sign in to access this page');
       navigate('/auth');
       return;
     }
 
-    // Then check if admin status is loaded and user is not admin
-    if (!isLoadingAuth && !isLoadingAdmin && !isAdmin) {
+    // If authenticated but not admin, redirect
+    if (!isAdmin) {
       toast.error('You need administrator access for this page');
-      navigate('/auth');
+      navigate('/');
     }
 
     // Show admin errors if any
@@ -62,9 +67,19 @@ const Orders = () => {
     );
   }
 
-  // Don't render anything if not admin
+  // Don't render orders content if not admin
   if (!isAdmin) {
-    return null;
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen py-20">
+          <div className="container-wide">
+            <p>You need administrator access to view this page.</p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
   }
 
   return (

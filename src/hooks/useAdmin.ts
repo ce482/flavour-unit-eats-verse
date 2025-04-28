@@ -8,15 +8,19 @@ export const useAdmin = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasChecked, setHasChecked] = useState(false); // Flag to prevent multiple checks
 
   useEffect(() => {
-    // Don't check admin status until auth is loaded and we have a user
-    if (isLoadingAuth || !user) {
-      if (!isLoadingAuth && !user) {
-        // If auth is loaded but no user, we know they're not admin
-        setIsAdmin(false);
-        setIsLoading(false);
-      }
+    // Skip if we've already checked or if auth is still loading
+    if (hasChecked || isLoadingAuth) {
+      return;
+    }
+    
+    // If auth is loaded but no user, we know they're not admin
+    if (!user) {
+      setIsAdmin(false);
+      setIsLoading(false);
+      setHasChecked(true);
       return;
     }
 
@@ -38,11 +42,19 @@ export const useAdmin = () => {
         setIsAdmin(false);
       } finally {
         setIsLoading(false);
+        setHasChecked(true);
       }
     };
 
     checkAdminStatus();
-  }, [user, isLoadingAuth]);
+  }, [user, isLoadingAuth, hasChecked]);
+
+  // Reset the check flag when the user changes
+  useEffect(() => {
+    if (!isLoadingAuth) {
+      setHasChecked(false);
+    }
+  }, [user?.id]);
 
   return { isAdmin, isLoading, error };
 };

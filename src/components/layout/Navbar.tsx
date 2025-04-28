@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart as CartIcon } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -18,15 +18,16 @@ const navItems = [
   { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
   { name: 'Contact', path: '/contact' },
   { name: 'Petit Dejeuner', path: '/petit-dejeuner' },
-  // Removed duplicate Orders item from here - it's conditionally rendered below
+  // We'll handle the Orders separately below with conditional rendering
 ];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
-  const { isAdmin } = useAdmin();
+  const { isAdmin, isLoading: isAdminLoading } = useAdmin();
   const { openCart, totalItems } = useCart();
 
   const darkTextRoutes = ['/about', '/faq', '/cookbook', '/legacy-kitchen', '/contact'];
@@ -42,6 +43,14 @@ const Navbar = () => {
       toast.error('Error signing out');
     } else {
       toast.success('Signed out successfully');
+    }
+  };
+
+  const handleOrdersClick = (e) => {
+    if (!user) {
+      e.preventDefault();
+      toast.error('Please sign in to access orders');
+      navigate('/auth');
     }
   };
 
@@ -63,6 +72,8 @@ const Navbar = () => {
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
+
+  const showOrdersTab = user && isAdmin && !isAdminLoading;
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
@@ -99,7 +110,7 @@ const Navbar = () => {
           ))}
           
           {/* Only show Orders tab if user is admin */}
-          {user && isAdmin && (
+          {showOrdersTab && (
             <Link
               to="/orders"
               className={`text-sm font-medium transition-colors hover:text-flavour-red ${
@@ -111,6 +122,7 @@ const Navbar = () => {
                     ? 'text-flavour-black hover:text-flavour-red'
                     : 'text-white hover:text-white/80'
               }`}
+              onClick={handleOrdersClick}
             >
               Orders
             </Link>
@@ -219,13 +231,14 @@ const Navbar = () => {
               </Link>
             ))}
             
-            {/* Only show Orders tab if user is admin */}
-            {user && isAdmin && (
+            {/* Only show Orders tab in mobile menu if user is admin */}
+            {showOrdersTab && (
               <Link
                 to="/orders"
                 className={`px-4 py-2 text-base font-medium transition-colors hover:bg-gray-100 rounded ${
                   location.pathname === '/orders' ? 'text-flavour-red' : 'text-flavour-black'
                 }`}
+                onClick={handleOrdersClick}
               >
                 Orders
               </Link>
