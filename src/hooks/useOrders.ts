@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -93,54 +92,69 @@ export const useOrders = () => {
 
   const updateOrderStatus = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
-      console.log(`⚙️ Starting to update order ${orderId} to status "${status}"`);
+      console.log(`⚙️ DEBUG: Starting to update order ${orderId} to status "${status}"`);
       
-      // Perform the update with explicit fields to ensure they're set correctly
-      const { data: updateData, error } = await supabase
-        .from('orders')
-        .update({ 
-          order_status: status,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', orderId)
-        .select('*');  // Make sure we get the updated data back
-      
-      if (error) {
-        console.error('❌ Error updating order status:', error);
+      try {
+        // Step 1: Directly perform the update with explicit fields
+        console.log(`Updating order in database...`);
+        const { data: updateData, error: updateError } = await supabase
+          .from('orders')
+          .update({ 
+            order_status: status,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', orderId)
+          .select();
+        
+        if (updateError) {
+          console.error('❌ ERROR: Update failed:', updateError);
+          throw updateError;
+        }
+        
+        console.log('✅ DEBUG: Database update response:', updateData);
+        
+        if (!updateData || updateData.length === 0) {
+          console.error('❌ ERROR: No data returned after update');
+          throw new Error('No data returned after update');
+        }
+        
+        // Step 2: Make a separate fetch to get the complete updated order with items
+        console.log(`Fetching complete updated order...`);
+        const { data: fetchedOrder, error: fetchError } = await supabase
+          .from('orders')
+          .select('*, order_items(*)')
+          .eq('id', orderId)
+          .single();
+        
+        if (fetchError) {
+          console.error('❌ ERROR: Error fetching updated order:', fetchError);
+          throw fetchError;
+        }
+        
+        console.log('📦 DEBUG: Complete updated order data:', fetchedOrder);
+        
+        if (fetchedOrder.order_status !== status) {
+          console.error(`❌ ERROR: Updated status mismatch! Expected: ${status}, Got: ${fetchedOrder.order_status}`);
+        }
+        
+        return fetchedOrder;
+      } catch (error) {
+        console.error('❌ ERROR: Exception during order update:', error);
         throw error;
       }
-      
-      console.log('✅ Database update successful, response:', updateData);
-      
-      if (!updateData || updateData.length === 0) {
-        throw new Error('No data returned after update');
-      }
-      
-      // Make a separate direct fetch for the complete order with items
-      // This ensures we get fresh data directly from the database
-      const { data, error: fetchError } = await supabase
-        .from('orders')
-        .select('*, order_items(*)')
-        .eq('id', orderId)
-        .single();
-      
-      if (fetchError) {
-        console.error('❌ Error fetching updated order:', fetchError);
-        throw fetchError;
-      }
-      
-      console.log('📦 Complete updated order from database:', data);
-      return data;
     },
     onSuccess: (updatedOrder) => {
-      console.log('✅ Order status update mutation complete with data:', updatedOrder);
+      console.log('✅ DEBUG: Order status update mutation succeeded with data:', updatedOrder);
       
-      // IMPORTANT: Clear the entire cache and refetch fresh data
+      // Approach 1: Force complete cache invalidation
       queryClient.invalidateQueries({ queryKey: ['orders'] });
       
-      // Also manually update the cache to ensure immediate UI update
+      // Approach 2: Also manually update the cache to ensure immediate UI update
       queryClient.setQueryData(['orders'], (oldData: Order[] | undefined) => {
-        if (!oldData) return [updatedOrder];
+        if (!oldData) {
+          console.log('No existing orders in cache, returning array with just the updated order');
+          return [updatedOrder];
+        }
         
         console.log('Current orders in cache before update:', oldData.map(o => ({
           id: o.id.slice(0,8), 
@@ -149,7 +163,7 @@ export const useOrders = () => {
         
         const newData = oldData.map(order => {
           if (order.id === updatedOrder.id) {
-            console.log(`🔄 Replacing order ${order.id.slice(0,8)} in cache:`);
+            console.log(`🔄 DEBUG: Replacing order ${order.id.slice(0,8)} in cache:`);
             console.log(`   OLD STATUS = "${order.order_status}", NEW STATUS = "${updatedOrder.order_status}"`);
             // Return the complete updated order object
             return updatedOrder;

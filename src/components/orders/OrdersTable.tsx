@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface OrdersTableProps {
   orders: Order[] | null;
@@ -36,11 +37,16 @@ const OrdersTable = ({
     return <p>No orders found.</p>;
   }
 
-  console.log("🔍 Orders in OrdersTable (refreshKey:", refreshKey, "):", orders.map(o => ({ 
+  console.log("🔍 DEBUG: Orders in OrdersTable (refreshKey:", refreshKey, "):", orders.map(o => ({ 
     id: o.id.slice(0, 8), 
     status: o.order_status,
     customer: o.customer_name
   })));
+
+  const handleMarkCompleted = (orderId: string) => {
+    console.log(`🔍 DEBUG: OrdersTable - Mark completed clicked for order: ${orderId.slice(0, 8)}`);
+    onMarkCompleted(orderId);
+  };
 
   return (
     <div className="rounded-md border">
@@ -62,7 +68,7 @@ const OrdersTable = ({
             console.log(`Rendering order row ${order.id.slice(0, 8)} with status: ${order.order_status}`);
             return (
               <TableRow 
-                key={`${order.id}-${order.order_status}-${refreshKey}`} // Add refreshKey to force re-render
+                key={`${order.id}-${order.order_status}-${refreshKey || 0}`} // Add refreshKey to force re-render
                 className={order.order_status === 'completed' ? 'bg-gray-50' : ''}
               >
                 <TableCell className="font-medium">
@@ -96,7 +102,7 @@ const OrdersTable = ({
                         variant="outline" 
                         size="sm"
                         className="bg-green-50 text-green-700 hover:bg-green-100"
-                        onClick={() => onMarkCompleted(order.id)}
+                        onClick={() => handleMarkCompleted(order.id)}
                         disabled={isPendingUpdate}
                       >
                         {isPendingUpdate ? 'Updating...' : 'Mark Completed'}
@@ -115,22 +121,21 @@ const OrdersTable = ({
 
 // Helper component for order status badge
 const OrderStatusBadge = ({ status }: { status: string }) => {
-  console.log(`🏷️ Rendering badge for status: "${status}"`);
-  const getStatusStyle = () => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
+  console.log(`🏷️ DEBUG: Rendering badge for status: "${status}"`);
+  
   return (
-    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusStyle()}`}>
+    <Badge
+      variant="outline"
+      className={`${
+        status === 'pending' 
+          ? 'bg-yellow-100 text-yellow-800 border-yellow-200' 
+          : status === 'completed'
+          ? 'bg-green-100 text-green-800 border-green-200'
+          : 'bg-gray-100 text-gray-800 border-gray-200'
+      }`}
+    >
       {status}
-    </span>
+    </Badge>
   );
 };
 

@@ -42,26 +42,36 @@ const Orders = () => {
 
   const handleMarkAsCompleted = async (orderId: string) => {
     try {
-      console.log('⚙️ Marking order as completed:', orderId);
+      console.log('⚙️ DEBUG: Marking order as completed in Orders.tsx:', orderId);
+      
+      // Display an immediate feedback toast
+      toast.loading('Updating order status...');
+      
       const updatedOrder = await updateOrderStatus.mutateAsync({ 
         orderId, 
         status: 'completed' 
       });
       
-      console.log('✅ Order marked as completed, response:', updatedOrder);
+      console.log('✅ DEBUG: Order mutation completed, response:', updatedOrder);
       
       // Force update the selected order if it's the one being updated
       if (selectedOrder?.id === orderId) {
-        console.log('🔄 Updating selected order state with new data:', updatedOrder);
+        console.log('🔄 DEBUG: Updating selected order state with new data:', updatedOrder);
         setSelectedOrder(updatedOrder);
       }
       
       // Force a refresh by incrementing the trigger counter
+      console.log('🔄 DEBUG: Triggering UI refresh');
       setRefreshTrigger(prev => prev + 1);
+      
+      // Show success toast
       toast.success('Order marked as completed!');
       
+      // Log final confirmation
+      console.log('✅ DEBUG: Update process completed successfully');
+      
     } catch (error) {
-      console.error('❌ Error updating order status:', error);
+      console.error('❌ ERROR: Error updating order status:', error);
       toast.error('Failed to update order status');
     }
   };
@@ -69,7 +79,7 @@ const Orders = () => {
   // Debug the current orders data
   useEffect(() => {
     if (orders) {
-      console.log('🔍 Current orders in Orders component:', orders.map(o => ({
+      console.log('🔍 DEBUG: Current orders in Orders component:', orders.map(o => ({
         id: o.id.slice(0, 8),
         status: o.order_status,
         customer: o.customer_name
@@ -85,6 +95,13 @@ const Orders = () => {
           <h1 className="text-4xl font-bold mb-8">Admin Orders Dashboard</h1>
           
           <AdminCheck>
+            <button 
+              onClick={() => console.log('🔍 DEBUG: Manual refresh check - Current orders:', orders)}
+              className="text-sm text-gray-500 mb-4"
+            >
+              Debug: Check Orders State
+            </button>
+            
             <OrdersTable 
               orders={orders} 
               isLoading={isLoadingOrders}
