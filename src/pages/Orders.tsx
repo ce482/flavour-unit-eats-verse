@@ -33,10 +33,13 @@ const Orders = () => {
 
   const handleMarkAsCompleted = async (orderId: string) => {
     try {
+      console.log('Marking order as completed:', orderId);
       const updatedOrder = await updateOrderStatus.mutateAsync({ 
         orderId, 
         status: 'completed' 
       });
+      
+      console.log('Order marked as completed:', updatedOrder);
       
       // If the selected order is the one being updated, update it in the state
       if (selectedOrder?.id === orderId) {

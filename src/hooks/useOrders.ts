@@ -87,6 +87,8 @@ export const useOrders = () => {
 
   const updateOrderStatus = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
+      console.log(`Updating order ${orderId} to status ${status}`);
+      
       // Update the order status
       const { error } = await supabase
         .from('orders')
@@ -96,7 +98,10 @@ export const useOrders = () => {
         })
         .eq('id', orderId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating order status:', error);
+        throw error;
+      }
       
       // Fetch the updated order with its items to return
       const { data, error: fetchError } = await supabase
@@ -105,17 +110,27 @@ export const useOrders = () => {
         .eq('id', orderId)
         .single();
       
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        console.error('Error fetching updated order:', fetchError);
+        throw fetchError;
+      }
+      
+      console.log('Updated order:', data);
       return data;
     },
     onSuccess: (updatedOrder) => {
+      console.log('Order status update successful:', updatedOrder);
+      
       // Optimistically update the cache instead of just invalidating
       queryClient.setQueryData(['orders'], (oldData: Order[] | undefined) => {
         if (!oldData) return oldData;
         
-        return oldData.map(order => 
+        const newData = oldData.map(order => 
           order.id === updatedOrder.id ? updatedOrder : order
         );
+        
+        console.log('Updated order list in cache:', newData);
+        return newData;
       });
       
       toast.success('Order status updated successfully');
