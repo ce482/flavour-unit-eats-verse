@@ -34,6 +34,9 @@ const OrdersTable = ({
     return <p>No orders found.</p>;
   }
 
+  // Debug: Log the orders to see their status
+  console.log("Current orders in table:", orders.map(o => ({ id: o.id, status: o.order_status })));
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -104,6 +107,7 @@ const OrdersTable = ({
 
 // Helper component for order status badge
 const OrderStatusBadge = ({ status }: { status: string }) => {
+  console.log(`Rendering badge for status: ${status}`);
   const getStatusStyle = () => {
     switch (status) {
       case 'pending':

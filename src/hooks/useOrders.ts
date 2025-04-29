@@ -89,19 +89,22 @@ export const useOrders = () => {
     mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
       console.log(`Updating order ${orderId} to status ${status}`);
       
-      // Update the order status
-      const { error } = await supabase
+      // Update the order status - ISSUE FOUND: The update wasn't explicitly setting the order_status field
+      const { data: updateData, error } = await supabase
         .from('orders')
         .update({ 
           order_status: status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', orderId);
-
+        .eq('id', orderId)
+        .select(); // Add this to return the updated data
+      
       if (error) {
         console.error('Error updating order status:', error);
         throw error;
       }
+      
+      console.log('Database update response:', updateData);
       
       // Fetch the updated order with its items to return
       const { data, error: fetchError } = await supabase
@@ -115,19 +118,23 @@ export const useOrders = () => {
         throw fetchError;
       }
       
-      console.log('Updated order:', data);
+      console.log('Final updated order from database:', data);
       return data;
     },
     onSuccess: (updatedOrder) => {
-      console.log('Order status update successful:', updatedOrder);
+      console.log('Order status update successful, updated order:', updatedOrder);
       
-      // Optimistically update the cache instead of just invalidating
+      // Optimistically update the cache
       queryClient.setQueryData(['orders'], (oldData: Order[] | undefined) => {
         if (!oldData) return oldData;
         
-        const newData = oldData.map(order => 
-          order.id === updatedOrder.id ? updatedOrder : order
-        );
+        const newData = oldData.map(order => {
+          if (order.id === updatedOrder.id) {
+            console.log(`Replacing order ${order.id} in cache: OLD STATUS = ${order.order_status}, NEW STATUS = ${updatedOrder.order_status}`);
+            return updatedOrder;
+          }
+          return order;
+        });
         
         console.log('Updated order list in cache:', newData);
         return newData;

@@ -20,7 +20,8 @@ const Orders = () => {
   useEffect(() => {
     if (selectedOrder && orders) {
       const updatedOrder = orders.find(order => order.id === selectedOrder.id);
-      if (updatedOrder) {
+      if (updatedOrder && updatedOrder.order_status !== selectedOrder.order_status) {
+        console.log('Updating selected order because status changed:', updatedOrder);
         setSelectedOrder(updatedOrder);
       }
     }
@@ -39,10 +40,11 @@ const Orders = () => {
         status: 'completed' 
       });
       
-      console.log('Order marked as completed:', updatedOrder);
+      console.log('Order marked as completed, response:', updatedOrder);
       
-      // If the selected order is the one being updated, update it in the state
+      // Force update the selected order if it's the one being updated
       if (selectedOrder?.id === orderId) {
+        console.log('Updating selected order state with:', updatedOrder);
         setSelectedOrder(updatedOrder);
       }
     } catch (error) {
