@@ -9,15 +9,16 @@ import { useAdmin } from '@/hooks/useAdmin';
 import { useCart } from '@/contexts/CartContext';
 import { Badge } from '@/components/ui/badge';
 
+// Reordered navigation items as requested
 const navItems = [
   { name: 'Home', path: '/' },
-  { name: 'Egg Rolls', path: '/egg-rolls' },
   { name: 'About', path: '/about' },
-  { name: 'FAQ', path: '/faq' },
-  { name: 'Cookbook', path: '/cookbook' },
-  { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
-  { name: 'Contact', path: '/contact' },
+  { name: 'Egg Rolls', path: '/egg-rolls' },
   { name: 'Petit Dejeuner', path: '/petit-dejeuner' },
+  { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
+  { name: 'Cookbook', path: '/cookbook' },
+  { name: 'FAQ', path: '/faq' },
+  { name: 'Contact', path: '/contact' },
   // Orders link is handled separately with conditional rendering
 ];
 
@@ -106,94 +107,98 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <div className="hidden lg:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`text-sm font-medium transition-colors hover:text-flavour-red ${
-                isScrolled 
-                  ? location.pathname === item.path 
-                    ? 'text-flavour-red' 
-                    : 'text-flavour-black'
-                  : shouldUseDarkText
-                    ? 'text-flavour-black hover:text-flavour-red'
-                    : 'text-white hover:text-white/80'
-              }`}
-            >
-              {item.name}
-            </Link>
-          ))}
-          
-          {/* Only show Orders tab if user is admin */}
-          {showOrdersTab && (
-            <Link
-              to="/orders"
-              className={`text-sm font-medium transition-colors hover:text-flavour-red ${
-                isScrolled 
-                  ? location.pathname === '/orders'
-                    ? 'text-flavour-red' 
-                    : 'text-flavour-black'
-                  : shouldUseDarkText
-                    ? 'text-flavour-black hover:text-flavour-red'
-                    : 'text-white hover:text-white/80'
-              }`}
-              onClick={handleOrdersClick}
-            >
-              Orders
-            </Link>
-          )}
-          
-          {user ? (
-            <button
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-              className={`text-sm font-medium transition-colors hover:text-flavour-red ${
-                isScrolled 
-                  ? 'text-flavour-black' 
-                  : shouldUseDarkText
-                    ? 'text-flavour-black'
-                    : 'text-white'
-              }`}
-            >
-              {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
-            </button>
-          ) : (
-            <Link
-              to="/auth"
-              className={`text-sm font-medium transition-colors hover:text-flavour-red ${
-                isScrolled 
-                  ? location.pathname === '/auth'
-                    ? 'text-flavour-red' 
-                    : 'text-flavour-black'
-                  : shouldUseDarkText
-                    ? 'text-flavour-black hover:text-flavour-red'
-                    : 'text-white hover:text-white/80'
-              }`}
-            >
-              Sign In
-            </Link>
-          )}
-          
-          {/* Cart Button */}
-          <button
-            onClick={openCart}
-            className={`relative p-2 rounded-full transition-colors ${
-              isScrolled 
-                ? 'text-flavour-black hover:bg-gray-100' 
-                : shouldUseDarkText
-                  ? 'text-flavour-black hover:bg-gray-100/50'
-                  : 'text-white hover:bg-white/10'
-            }`}
-            aria-label="Open cart"
-          >
-            <CartIcon size={20} />
-            {totalItems > 0 && (
-              <Badge className="absolute -top-1 -right-1 bg-flavour-red text-white text-xs min-w-5 h-5 flex items-center justify-center rounded-full p-0">
-                {totalItems}
-              </Badge>
+        <div className="hidden lg:flex items-center">
+          <div className="flex items-center space-x-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                  isScrolled 
+                    ? location.pathname === item.path 
+                      ? 'text-flavour-red' 
+                      : 'text-flavour-black'
+                    : shouldUseDarkText
+                      ? 'text-flavour-black hover:text-flavour-red'
+                      : 'text-white hover:text-white/80'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+            
+            {/* Only show Orders tab if user is admin */}
+            {showOrdersTab && (
+              <Link
+                to="/orders"
+                className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                  isScrolled 
+                    ? location.pathname === '/orders'
+                      ? 'text-flavour-red' 
+                      : 'text-flavour-black'
+                    : shouldUseDarkText
+                      ? 'text-flavour-black hover:text-flavour-red'
+                      : 'text-white hover:text-white/80'
+                }`}
+                onClick={handleOrdersClick}
+              >
+                Orders
+              </Link>
             )}
-          </button>
+            
+            <div className="pl-6 flex items-center space-x-6">
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                    isScrolled 
+                      ? 'text-flavour-black' 
+                      : shouldUseDarkText
+                        ? 'text-flavour-black'
+                        : 'text-white'
+                  }`}
+                >
+                  {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
+                </button>
+              ) : (
+                <Link
+                  to="/auth"
+                  className={`text-sm font-medium transition-colors hover:text-flavour-red ${
+                    isScrolled 
+                      ? location.pathname === '/auth'
+                        ? 'text-flavour-red' 
+                        : 'text-flavour-black'
+                      : shouldUseDarkText
+                        ? 'text-flavour-black hover:text-flavour-red'
+                        : 'text-white hover:text-white/80'
+                  }`}
+                >
+                  Sign In
+                </Link>
+              )}
+              
+              {/* Cart Button */}
+              <button
+                onClick={openCart}
+                className={`relative p-2 rounded-full transition-colors ${
+                  isScrolled 
+                    ? 'text-flavour-black hover:bg-gray-100' 
+                    : shouldUseDarkText
+                      ? 'text-flavour-black hover:bg-gray-100/50'
+                      : 'text-white hover:bg-white/10'
+                }`}
+                aria-label="Open cart"
+              >
+                <CartIcon size={20} />
+                {totalItems > 0 && (
+                  <Badge className="absolute -top-1 -right-1 bg-flavour-red text-white text-xs min-w-5 h-5 flex items-center justify-center rounded-full p-0">
+                    {totalItems}
+                  </Badge>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="lg:hidden flex items-center space-x-4">
