@@ -126,8 +126,9 @@ export const useOrders = () => {
           console.error('❌ ERROR: Update failed:', updateError);
           throw updateError;
         }
-        
-        console.log('✅ DEBUG: Database update successful, response:', updateData);
+
+        // Important: Log the update response to confirm it worked
+        console.log('✅ DEBUG: Database update response:', updateData);
         
         if (!updateData || updateData.length === 0) {
           console.error('❌ ERROR: No data returned after update');
@@ -151,6 +152,24 @@ export const useOrders = () => {
         
         if (fetchedOrder.order_status !== status) {
           console.error(`❌ ERROR: Updated status mismatch! Expected: ${status}, Got: ${fetchedOrder.order_status}`);
+        }
+        
+        // Important extra verification - make sure we have the order items
+        if (!fetchedOrder.order_items || fetchedOrder.order_items.length === 0) {
+          console.warn('⚠️ WARNING: Updated order has no order items, trying to fetch them separately');
+          
+          // Try to fetch order items separately
+          const { data: itemsData, error: itemsError } = await supabase
+            .from('order_items')
+            .select('*')
+            .eq('order_id', orderId);
+            
+          if (!itemsError && itemsData && itemsData.length > 0) {
+            fetchedOrder.order_items = itemsData;
+            console.log('📦 DEBUG: Separately fetched order items:', itemsData);
+          } else if (itemsError) {
+            console.error('❌ ERROR fetching order items:', itemsError);
+          }
         }
         
         return fetchedOrder;

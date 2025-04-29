@@ -7,12 +7,14 @@ import AdminCheck from '../components/orders/AdminCheck';
 import OrdersTable from '../components/orders/OrdersTable';
 import OrderDetails from '../components/orders/OrderDetails';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 const Orders = () => {
   const { orders, isLoadingOrders, updateOrderStatus } = useOrders();
   const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0); // Add refresh trigger
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [orderBeingUpdated, setOrderBeingUpdated] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,8 +46,11 @@ const Orders = () => {
     try {
       console.log('⚙️ DEBUG: Marking order as completed in Orders.tsx:', orderId.slice(0, 8));
       
+      // Track which order is being updated to show UI feedback
+      setOrderBeingUpdated(orderId);
+      
       // Display an immediate feedback toast
-      toast.loading('Updating order status...');
+      const loadingToast = toast.loading('Updating order status...');
       
       const updatedOrder = await updateOrderStatus.mutateAsync({ 
         orderId, 
@@ -53,6 +58,7 @@ const Orders = () => {
       });
       
       console.log('✅ DEBUG: Order mutation completed, response:', updatedOrder);
+      toast.dismiss(loadingToast);
       
       // Force update the selected order if it's the one being updated
       if (selectedOrder?.id === orderId) {
@@ -73,6 +79,9 @@ const Orders = () => {
     } catch (error) {
       console.error('❌ ERROR: Error updating order status:', error);
       toast.error('Failed to update order status');
+    } finally {
+      // Ensure we always clear the updating state
+      setOrderBeingUpdated(null);
     }
   };
 
@@ -85,7 +94,7 @@ const Orders = () => {
         customer: o.customer_name
       })));
     }
-  }, [orders, refreshTrigger]); // Add refreshTrigger as a dependency
+  }, [orders, refreshTrigger]);
 
   // Debug helper function - this button lets you check the current state
   const debugCheckState = () => {
@@ -95,6 +104,7 @@ const Orders = () => {
     console.log('Is pending update:', updateOrderStatus.isPending);
     console.log('Selected order:', selectedOrder);
     console.log('Refresh trigger:', refreshTrigger);
+    console.log('Order being updated:', orderBeingUpdated);
     console.log('------------------------------------------');
     toast.info('State checked - see console logs');
   };
@@ -108,19 +118,25 @@ const Orders = () => {
           
           <AdminCheck>
             <div className="mb-4 flex justify-between items-center">
-              <button 
-                onClick={debugCheckState}
-                className="text-sm px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-              >
-                Debug: Check Orders State
-              </button>
-              
-              <button 
-                onClick={() => setRefreshTrigger(prev => prev + 1)}
-                className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
-              >
-                Force UI Refresh
-              </button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={debugCheckState}
+                  size="sm"
+                  variant="outline"
+                  className="text-sm px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                >
+                  Debug: Check Orders State
+                </Button>
+                
+                <Button 
+                  onClick={() => setRefreshTrigger(prev => prev + 1)}
+                  size="sm"
+                  variant="outline"
+                  className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                >
+                  Force UI Refresh
+                </Button>
+              </div>
             </div>
             
             <OrdersTable 
@@ -129,7 +145,8 @@ const Orders = () => {
               onViewDetails={handleViewOrderDetails}
               onMarkCompleted={handleMarkAsCompleted}
               isPendingUpdate={updateOrderStatus.isPending}
-              refreshKey={refreshTrigger} // Add refresh key prop
+              refreshKey={refreshTrigger}
+              orderBeingUpdated={orderBeingUpdated}
             />
             
             <OrderDetails
@@ -138,6 +155,7 @@ const Orders = () => {
               onOpenChange={setIsDialogOpen}
               onMarkCompleted={handleMarkAsCompleted}
               isPendingUpdate={updateOrderStatus.isPending}
+              orderBeingUpdated={orderBeingUpdated}
             />
           </AdminCheck>
         </div>

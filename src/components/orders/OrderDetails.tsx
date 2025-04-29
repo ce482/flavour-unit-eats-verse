@@ -1,6 +1,7 @@
 
 import { Order, OrderItem } from '@/hooks/useOrders';
 import { Button } from "@/components/ui/button";
+import { Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ interface OrderDetailsProps {
   onOpenChange: (open: boolean) => void;
   onMarkCompleted: (orderId: string) => void;
   isPendingUpdate: boolean;
+  orderBeingUpdated: string | null;
 }
 
 const OrderDetails = ({
@@ -23,8 +25,11 @@ const OrderDetails = ({
   onOpenChange,
   onMarkCompleted,
   isPendingUpdate,
+  orderBeingUpdated,
 }: OrderDetailsProps) => {
   if (!order) return null;
+  
+  const isUpdatingThisOrder = order && orderBeingUpdated === order.id;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -92,9 +97,16 @@ const OrderDetails = ({
                     onMarkCompleted(order.id);
                   }
                 }}
-                disabled={isPendingUpdate}
+                disabled={isPendingUpdate || isUpdatingThisOrder}
               >
-                {isPendingUpdate ? 'Updating...' : 'Mark as Completed'}
+                {isUpdatingThisOrder ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  'Mark as Completed'
+                )}
               </Button>
             </div>
           )}
