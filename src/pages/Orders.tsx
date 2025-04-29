@@ -65,6 +65,11 @@ const Orders = () => {
   const handleMarkAsCompleted = async (orderId: string) => {
     try {
       await updateOrderStatus.mutateAsync({ orderId, status: 'completed' });
+      
+      // If the selected order is the one being updated, close the dialog
+      if (selectedOrder?.id === orderId) {
+        setIsDialogOpen(false);
+      }
     } catch (error) {
       console.error('Error updating order status:', error);
     }
@@ -109,7 +114,7 @@ const Orders = () => {
           
           {isLoadingOrders ? (
             <p>Loading orders...</p>
-          ) : orders?.length === 0 ? (
+          ) : !orders || orders.length === 0 ? (
             <p>No orders found.</p>
           ) : (
             <div className="rounded-md border">
@@ -169,8 +174,9 @@ const Orders = () => {
                               size="sm"
                               className="bg-green-50 text-green-700 hover:bg-green-100"
                               onClick={() => handleMarkAsCompleted(order.id)}
+                              disabled={updateOrderStatus.isPending}
                             >
-                              Mark Completed
+                              {updateOrderStatus.isPending ? 'Updating...' : 'Mark Completed'}
                             </Button>
                           )}
                         </div>
@@ -247,11 +253,11 @@ const Orders = () => {
                   onClick={() => {
                     if (selectedOrder) {
                       handleMarkAsCompleted(selectedOrder.id);
-                      setIsDialogOpen(false);
                     }
                   }}
+                  disabled={updateOrderStatus.isPending}
                 >
-                  Mark as Completed
+                  {updateOrderStatus.isPending ? 'Updating...' : 'Mark as Completed'}
                 </Button>
               </div>
             )}

@@ -87,17 +87,25 @@ export const useOrders = () => {
 
   const updateOrderStatus = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
-      const { data, error } = await supabase
+      // Update the order status
+      const { error } = await supabase
         .from('orders')
         .update({ 
           order_status: status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', orderId)
-        .select()
-        .single();
+        .eq('id', orderId);
 
       if (error) throw error;
+      
+      // Fetch the updated order with its items to return
+      const { data, error: fetchError } = await supabase
+        .from('orders')
+        .select('*, order_items(*)')
+        .eq('id', orderId)
+        .single();
+      
+      if (fetchError) throw fetchError;
       return data;
     },
     onSuccess: () => {
