@@ -34,8 +34,11 @@ const OrdersTable = ({
     return <p>No orders found.</p>;
   }
 
-  // Debug: Log the orders to see their status
-  console.log("Current orders in table:", orders.map(o => ({ id: o.id, status: o.order_status })));
+  console.log("🔍 Orders in OrdersTable:", orders.map(o => ({ 
+    id: o.id.slice(0, 8), 
+    status: o.order_status,
+    customer: o.customer_name
+  })));
 
   return (
     <div className="rounded-md border">
@@ -53,52 +56,55 @@ const OrdersTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
-            <TableRow 
-              key={order.id}
-              className={order.order_status === 'completed' ? 'bg-gray-50' : ''}
-            >
-              <TableCell className="font-medium">
-                {order.id.slice(0, 8)}...
-              </TableCell>
-              <TableCell>{order.customer_name}</TableCell>
-              <TableCell>{order.customer_email}</TableCell>
-              <TableCell>
-                {formatDistance(new Date(order.created_at), new Date(), { addSuffix: true })}
-              </TableCell>
-              <TableCell>
-                <OrderStatusBadge status={order.order_status} />
-              </TableCell>
-              <TableCell>
-                {order.order_items?.length || 0} items
-              </TableCell>
-              <TableCell className="text-right">
-                ${order.total_amount.toFixed(2)}
-              </TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => onViewDetails(order)}
-                  >
-                    View Details
-                  </Button>
-                  {order.order_status !== 'completed' && (
+          {orders.map((order) => {
+            console.log(`Rendering order row ${order.id.slice(0, 8)} with status: ${order.order_status}`);
+            return (
+              <TableRow 
+                key={order.id}
+                className={order.order_status === 'completed' ? 'bg-gray-50' : ''}
+              >
+                <TableCell className="font-medium">
+                  {order.id.slice(0, 8)}...
+                </TableCell>
+                <TableCell>{order.customer_name}</TableCell>
+                <TableCell>{order.customer_email}</TableCell>
+                <TableCell>
+                  {formatDistance(new Date(order.created_at), new Date(), { addSuffix: true })}
+                </TableCell>
+                <TableCell>
+                  <OrderStatusBadge status={order.order_status} />
+                </TableCell>
+                <TableCell>
+                  {order.order_items?.length || 0} items
+                </TableCell>
+                <TableCell className="text-right">
+                  ${order.total_amount.toFixed(2)}
+                </TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
                     <Button 
                       variant="outline" 
-                      size="sm"
-                      className="bg-green-50 text-green-700 hover:bg-green-100"
-                      onClick={() => onMarkCompleted(order.id)}
-                      disabled={isPendingUpdate}
+                      size="sm" 
+                      onClick={() => onViewDetails(order)}
                     >
-                      {isPendingUpdate ? 'Updating...' : 'Mark Completed'}
+                      View Details
                     </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                    {order.order_status !== 'completed' && (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="bg-green-50 text-green-700 hover:bg-green-100"
+                        onClick={() => onMarkCompleted(order.id)}
+                        disabled={isPendingUpdate}
+                      >
+                        {isPendingUpdate ? 'Updating...' : 'Mark Completed'}
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
@@ -107,7 +113,7 @@ const OrdersTable = ({
 
 // Helper component for order status badge
 const OrderStatusBadge = ({ status }: { status: string }) => {
-  console.log(`Rendering badge for status: ${status}`);
+  console.log(`🏷️ Rendering badge for status: "${status}"`);
   const getStatusStyle = () => {
     switch (status) {
       case 'pending':

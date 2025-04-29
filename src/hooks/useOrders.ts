@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -33,6 +32,7 @@ export const useOrders = () => {
   const { data: orders, isLoading: isLoadingOrders } = useQuery({
     queryKey: ['orders'],
     queryFn: async () => {
+      console.log('Fetching orders from database...');
       const { data, error } = await supabase
         .from('orders')
         .select('*, order_items(*)')
@@ -43,6 +43,8 @@ export const useOrders = () => {
         toast.error('Failed to fetch orders');
         throw error;
       }
+      
+      console.log('Orders fetched successfully:', data);
       return data;
     },
   });
@@ -87,9 +89,9 @@ export const useOrders = () => {
 
   const updateOrderStatus = useMutation({
     mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
-      console.log(`Updating order ${orderId} to status ${status}`);
+      console.log(`⚙️ Starting to update order ${orderId} to status "${status}"`);
       
-      // Update the order status - ISSUE FOUND: The update wasn't explicitly setting the order_status field
+      // CRITICAL FIX: Make sure we're explicitly setting order_status and using .select()
       const { data: updateData, error } = await supabase
         .from('orders')
         .update({ 
@@ -97,16 +99,16 @@ export const useOrders = () => {
           updated_at: new Date().toISOString()
         })
         .eq('id', orderId)
-        .select(); // Add this to return the updated data
+        .select('*');  // Make sure we get the updated data back
       
       if (error) {
-        console.error('Error updating order status:', error);
+        console.error('❌ Error updating order status:', error);
         throw error;
       }
       
-      console.log('Database update response:', updateData);
+      console.log('✅ Database update successful, response:', updateData);
       
-      // Fetch the updated order with its items to return
+      // Fetch the full updated order with its items
       const { data, error: fetchError } = await supabase
         .from('orders')
         .select('*, order_items(*)')
@@ -114,33 +116,39 @@ export const useOrders = () => {
         .single();
       
       if (fetchError) {
-        console.error('Error fetching updated order:', fetchError);
+        console.error('❌ Error fetching updated order:', fetchError);
         throw fetchError;
       }
       
-      console.log('Final updated order from database:', data);
+      console.log('📦 Complete updated order from database:', data);
       return data;
     },
     onSuccess: (updatedOrder) => {
-      console.log('Order status update successful, updated order:', updatedOrder);
+      console.log('✅ Order status update mutation complete with data:', updatedOrder);
       
-      // Optimistically update the cache
+      // CRITICAL FIX: Properly update the cache with the new order data
       queryClient.setQueryData(['orders'], (oldData: Order[] | undefined) => {
-        if (!oldData) return oldData;
+        if (!oldData) return [];
+        
+        console.log('Current orders in cache before update:', oldData.map(o => ({id: o.id.slice(0,8), status: o.order_status})));
         
         const newData = oldData.map(order => {
           if (order.id === updatedOrder.id) {
-            console.log(`Replacing order ${order.id} in cache: OLD STATUS = ${order.order_status}, NEW STATUS = ${updatedOrder.order_status}`);
+            console.log(`🔄 Replacing order ${order.id.slice(0,8)} in cache: OLD STATUS = "${order.order_status}", NEW STATUS = "${updatedOrder.order_status}"`);
+            // Return the complete updated order object
             return updatedOrder;
           }
           return order;
         });
         
-        console.log('Updated order list in cache:', newData);
+        console.log('Updated orders in cache after update:', newData.map(o => ({id: o.id.slice(0,8), status: o.order_status})));
         return newData;
       });
       
-      toast.success('Order status updated successfully');
+      // CRITICAL FIX: Force invalidate and refetch to ensure UI is updated
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      
+      toast.success(`Order marked as ${updatedOrder.order_status}`);
     },
     onError: (error) => {
       toast.error('Failed to update order status');

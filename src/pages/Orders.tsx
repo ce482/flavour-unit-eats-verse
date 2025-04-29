@@ -20,35 +20,41 @@ const Orders = () => {
   useEffect(() => {
     if (selectedOrder && orders) {
       const updatedOrder = orders.find(order => order.id === selectedOrder.id);
-      if (updatedOrder && updatedOrder.order_status !== selectedOrder.order_status) {
-        console.log('Updating selected order because status changed:', updatedOrder);
-        setSelectedOrder(updatedOrder);
+      if (updatedOrder) {
+        console.log(`Checking selected order ${selectedOrder.id.slice(0, 8)}:`);
+        console.log(`Current status: ${selectedOrder.order_status}, New status: ${updatedOrder.order_status}`);
+        
+        if (updatedOrder.order_status !== selectedOrder.order_status) {
+          console.log('🔄 Updating selected order with new status:', updatedOrder);
+          setSelectedOrder(updatedOrder);
+        }
       }
     }
   }, [orders, selectedOrder]);
 
   const handleViewOrderDetails = (order: OrderType) => {
+    console.log('Opening order details for:', order.id.slice(0, 8), 'status:', order.order_status);
     setSelectedOrder(order);
     setIsDialogOpen(true);
   };
 
   const handleMarkAsCompleted = async (orderId: string) => {
     try {
-      console.log('Marking order as completed:', orderId);
+      console.log('⚙️ Marking order as completed:', orderId);
       const updatedOrder = await updateOrderStatus.mutateAsync({ 
         orderId, 
         status: 'completed' 
       });
       
-      console.log('Order marked as completed, response:', updatedOrder);
+      console.log('✅ Order marked as completed, response:', updatedOrder);
       
       // Force update the selected order if it's the one being updated
       if (selectedOrder?.id === orderId) {
-        console.log('Updating selected order state with:', updatedOrder);
+        console.log('🔄 Updating selected order state with new data:', updatedOrder);
         setSelectedOrder(updatedOrder);
       }
     } catch (error) {
-      console.error('Error updating order status:', error);
+      console.error('❌ Error updating order status:', error);
     }
   };
 
