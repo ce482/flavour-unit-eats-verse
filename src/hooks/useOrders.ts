@@ -3,6 +3,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+export type OrderItem = {
+  id: string;
+  order_id: string;
+  product_id: number;
+  product_name: string;
+  quantity: number;
+  price: number;
+  created_at: string;
+};
+
 export type Order = {
   id: string;
   customer_name: string;
@@ -14,16 +24,7 @@ export type Order = {
   total_amount: number;
   created_at: string;
   updated_at: string;
-};
-
-export type OrderItem = {
-  id: string;
-  order_id: string;
-  product_id: number;
-  product_name: string;
-  quantity: number;
-  price: number;
-  created_at: string;
+  order_items?: OrderItem[]; // Added order_items property
 };
 
 export const useOrders = () => {
