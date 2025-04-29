@@ -17,6 +17,7 @@ interface OrdersTableProps {
   onViewDetails: (order: Order) => void;
   onMarkCompleted: (orderId: string) => void;
   isPendingUpdate: boolean;
+  refreshKey?: number; // Add refresh key prop
 }
 
 const OrdersTable = ({ 
@@ -24,7 +25,8 @@ const OrdersTable = ({
   isLoading, 
   onViewDetails, 
   onMarkCompleted,
-  isPendingUpdate
+  isPendingUpdate,
+  refreshKey // Add to props
 }: OrdersTableProps) => {
   if (isLoading) {
     return <p>Loading orders...</p>;
@@ -34,7 +36,7 @@ const OrdersTable = ({
     return <p>No orders found.</p>;
   }
 
-  console.log("🔍 Orders in OrdersTable:", orders.map(o => ({ 
+  console.log("🔍 Orders in OrdersTable (refreshKey:", refreshKey, "):", orders.map(o => ({ 
     id: o.id.slice(0, 8), 
     status: o.order_status,
     customer: o.customer_name
@@ -60,7 +62,7 @@ const OrdersTable = ({
             console.log(`Rendering order row ${order.id.slice(0, 8)} with status: ${order.order_status}`);
             return (
               <TableRow 
-                key={order.id}
+                key={`${order.id}-${order.order_status}-${refreshKey}`} // Add refreshKey to force re-render
                 className={order.order_status === 'completed' ? 'bg-gray-50' : ''}
               >
                 <TableCell className="font-medium">

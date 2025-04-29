@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -47,6 +48,9 @@ export const useOrders = () => {
       console.log('Orders fetched successfully:', data);
       return data;
     },
+    // Force refetch on focus to ensure we always have the latest data
+    refetchOnWindowFocus: true,
+    staleTime: 0, // Consider data always stale to encourage refetching
   });
 
   const createOrder = useMutation({
@@ -91,7 +95,7 @@ export const useOrders = () => {
     mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
       console.log(`⚙️ Starting to update order ${orderId} to status "${status}"`);
       
-      // CRITICAL FIX: Make sure we're explicitly setting order_status and using .select()
+      // Perform the update with explicit fields to ensure they're set correctly
       const { data: updateData, error } = await supabase
         .from('orders')
         .update({ 
@@ -108,7 +112,12 @@ export const useOrders = () => {
       
       console.log('✅ Database update successful, response:', updateData);
       
-      // Fetch the full updated order with its items
+      if (!updateData || updateData.length === 0) {
+        throw new Error('No data returned after update');
+      }
+      
+      // Make a separate direct fetch for the complete order with items
+      // This ensures we get fresh data directly from the database
       const { data, error: fetchError } = await supabase
         .from('orders')
         .select('*, order_items(*)')
@@ -126,27 +135,35 @@ export const useOrders = () => {
     onSuccess: (updatedOrder) => {
       console.log('✅ Order status update mutation complete with data:', updatedOrder);
       
-      // CRITICAL FIX: Properly update the cache with the new order data
+      // IMPORTANT: Clear the entire cache and refetch fresh data
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      
+      // Also manually update the cache to ensure immediate UI update
       queryClient.setQueryData(['orders'], (oldData: Order[] | undefined) => {
-        if (!oldData) return [];
+        if (!oldData) return [updatedOrder];
         
-        console.log('Current orders in cache before update:', oldData.map(o => ({id: o.id.slice(0,8), status: o.order_status})));
+        console.log('Current orders in cache before update:', oldData.map(o => ({
+          id: o.id.slice(0,8), 
+          status: o.order_status
+        })));
         
         const newData = oldData.map(order => {
           if (order.id === updatedOrder.id) {
-            console.log(`🔄 Replacing order ${order.id.slice(0,8)} in cache: OLD STATUS = "${order.order_status}", NEW STATUS = "${updatedOrder.order_status}"`);
+            console.log(`🔄 Replacing order ${order.id.slice(0,8)} in cache:`);
+            console.log(`   OLD STATUS = "${order.order_status}", NEW STATUS = "${updatedOrder.order_status}"`);
             // Return the complete updated order object
             return updatedOrder;
           }
           return order;
         });
         
-        console.log('Updated orders in cache after update:', newData.map(o => ({id: o.id.slice(0,8), status: o.order_status})));
+        console.log('Updated orders in cache after update:', newData.map(o => ({
+          id: o.id.slice(0,8), 
+          status: o.order_status
+        })));
+        
         return newData;
       });
-      
-      // CRITICAL FIX: Force invalidate and refetch to ensure UI is updated
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
       
       toast.success(`Order marked as ${updatedOrder.order_status}`);
     },

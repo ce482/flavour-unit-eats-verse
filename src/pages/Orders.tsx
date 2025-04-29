@@ -6,11 +6,13 @@ import Footer from '../components/layout/Footer';
 import AdminCheck from '../components/orders/AdminCheck';
 import OrdersTable from '../components/orders/OrdersTable';
 import OrderDetails from '../components/orders/OrderDetails';
+import { toast } from 'sonner';
 
 const Orders = () => {
   const { orders, isLoadingOrders, updateOrderStatus } = useOrders();
   const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // Add refresh trigger
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,10 +55,27 @@ const Orders = () => {
         console.log('🔄 Updating selected order state with new data:', updatedOrder);
         setSelectedOrder(updatedOrder);
       }
+      
+      // Force a refresh by incrementing the trigger counter
+      setRefreshTrigger(prev => prev + 1);
+      toast.success('Order marked as completed!');
+      
     } catch (error) {
       console.error('❌ Error updating order status:', error);
+      toast.error('Failed to update order status');
     }
   };
+
+  // Debug the current orders data
+  useEffect(() => {
+    if (orders) {
+      console.log('🔍 Current orders in Orders component:', orders.map(o => ({
+        id: o.id.slice(0, 8),
+        status: o.order_status,
+        customer: o.customer_name
+      })));
+    }
+  }, [orders, refreshTrigger]); // Add refreshTrigger as a dependency
 
   return (
     <>
@@ -72,6 +91,7 @@ const Orders = () => {
               onViewDetails={handleViewOrderDetails}
               onMarkCompleted={handleMarkAsCompleted}
               isPendingUpdate={updateOrderStatus.isPending}
+              refreshKey={refreshTrigger} // Add refresh key prop
             />
             
             <OrderDetails
