@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -40,6 +41,7 @@ export const useOrders = () => {
         .order('created_at', { ascending: false });
       
       if (error) {
+        console.error('Error fetching orders:', error);
         toast.error('Failed to fetch orders');
         throw error;
       }
@@ -95,8 +97,22 @@ export const useOrders = () => {
       console.log(`⚙️ DEBUG: Starting to update order ${orderId} to status "${status}"`);
       
       try {
+        // First, verify the order exists
+        const { data: orderCheck, error: checkError } = await supabase
+          .from('orders')
+          .select('id, order_status')
+          .eq('id', orderId)
+          .single();
+          
+        if (checkError) {
+          console.error('❌ ERROR: Failed to find order:', checkError);
+          throw new Error(`Order not found: ${checkError.message}`);
+        }
+        
+        console.log('✓ Order exists with current status:', orderCheck?.order_status);
+        
         // Step 1: Directly perform the update with explicit fields
-        console.log(`Updating order in database...`);
+        console.log(`Updating order ${orderId} in database to status ${status}...`);
         const { data: updateData, error: updateError } = await supabase
           .from('orders')
           .update({ 
@@ -104,14 +120,14 @@ export const useOrders = () => {
             updated_at: new Date().toISOString()
           })
           .eq('id', orderId)
-          .select();
+          .select('*');
         
         if (updateError) {
           console.error('❌ ERROR: Update failed:', updateError);
           throw updateError;
         }
         
-        console.log('✅ DEBUG: Database update response:', updateData);
+        console.log('✅ DEBUG: Database update successful, response:', updateData);
         
         if (!updateData || updateData.length === 0) {
           console.error('❌ ERROR: No data returned after update');
@@ -119,7 +135,7 @@ export const useOrders = () => {
         }
         
         // Step 2: Make a separate fetch to get the complete updated order with items
-        console.log(`Fetching complete updated order...`);
+        console.log(`Fetching complete updated order data...`);
         const { data: fetchedOrder, error: fetchError } = await supabase
           .from('orders')
           .select('*, order_items(*)')
@@ -131,7 +147,7 @@ export const useOrders = () => {
           throw fetchError;
         }
         
-        console.log('📦 DEBUG: Complete updated order data:', fetchedOrder);
+        console.log('📦 DEBUG: Complete updated order from database:', fetchedOrder);
         
         if (fetchedOrder.order_status !== status) {
           console.error(`❌ ERROR: Updated status mismatch! Expected: ${status}, Got: ${fetchedOrder.order_status}`);
@@ -182,8 +198,8 @@ export const useOrders = () => {
       toast.success(`Order marked as ${updatedOrder.order_status}`);
     },
     onError: (error) => {
+      console.error('❌ ERROR: Order status update mutation failed:', error);
       toast.error('Failed to update order status');
-      console.error('Order status update error:', error);
     }
   });
 

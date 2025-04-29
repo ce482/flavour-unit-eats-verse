@@ -42,7 +42,7 @@ const Orders = () => {
 
   const handleMarkAsCompleted = async (orderId: string) => {
     try {
-      console.log('⚙️ DEBUG: Marking order as completed in Orders.tsx:', orderId);
+      console.log('⚙️ DEBUG: Marking order as completed in Orders.tsx:', orderId.slice(0, 8));
       
       // Display an immediate feedback toast
       toast.loading('Updating order status...');
@@ -87,6 +87,18 @@ const Orders = () => {
     }
   }, [orders, refreshTrigger]); // Add refreshTrigger as a dependency
 
+  // Debug helper function - this button lets you check the current state
+  const debugCheckState = () => {
+    console.log('------------- DEBUG STATE CHECK -------------');
+    console.log('Current orders:', orders);
+    console.log('Is loading orders:', isLoadingOrders);
+    console.log('Is pending update:', updateOrderStatus.isPending);
+    console.log('Selected order:', selectedOrder);
+    console.log('Refresh trigger:', refreshTrigger);
+    console.log('------------------------------------------');
+    toast.info('State checked - see console logs');
+  };
+
   return (
     <>
       <Navbar />
@@ -95,12 +107,21 @@ const Orders = () => {
           <h1 className="text-4xl font-bold mb-8">Admin Orders Dashboard</h1>
           
           <AdminCheck>
-            <button 
-              onClick={() => console.log('🔍 DEBUG: Manual refresh check - Current orders:', orders)}
-              className="text-sm text-gray-500 mb-4"
-            >
-              Debug: Check Orders State
-            </button>
+            <div className="mb-4 flex justify-between items-center">
+              <button 
+                onClick={debugCheckState}
+                className="text-sm px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+              >
+                Debug: Check Orders State
+              </button>
+              
+              <button 
+                onClick={() => setRefreshTrigger(prev => prev + 1)}
+                className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+              >
+                Force UI Refresh
+              </button>
+            </div>
             
             <OrdersTable 
               orders={orders} 
