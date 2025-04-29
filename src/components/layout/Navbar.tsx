@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart as CartIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -9,7 +8,6 @@ import { useAdmin } from '@/hooks/useAdmin';
 import { useCart } from '@/contexts/CartContext';
 import { Badge } from '@/components/ui/badge';
 
-// Reordered navigation items as requested
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
@@ -19,7 +17,6 @@ const navItems = [
   { name: 'Cookbook', path: '/cookbook' },
   { name: 'FAQ', path: '/faq' },
   { name: 'Contact', path: '/contact' },
-  // Orders link is handled separately with conditional rendering
 ];
 
 const Navbar = () => {
@@ -32,7 +29,7 @@ const Navbar = () => {
   const { isAdmin, isLoading: isAdminLoading } = useAdmin();
   const { openCart, totalItems } = useCart();
 
-  const darkTextRoutes = ['/about', '/faq', '/cookbook', '/legacy-kitchen', '/contact'];
+  const darkTextRoutes = ['/about', '/faq', '/cookbook', '/legacy-kitchen', '/contact', '/petit-dejeuner'];
   const shouldUseDarkText = darkTextRoutes.includes(location.pathname);
 
   const toggleMenu = () => {
@@ -40,7 +37,7 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
-    if (isLoggingOut) return; // Prevent multiple logout attempts
+    if (isLoggingOut) return;
     
     setIsLoggingOut(true);
     try {
@@ -49,9 +46,8 @@ const Navbar = () => {
         console.error('Error signing out:', error);
         toast.error('Error signing out');
         
-        // Force clear local session as a fallback
         localStorage.removeItem('supabase.auth.token');
-        window.location.reload(); // Force refresh as a last resort
+        window.location.reload();
       } else {
         toast.success('Signed out successfully');
       }
@@ -127,7 +123,6 @@ const Navbar = () => {
               </Link>
             ))}
             
-            {/* Only show Orders tab if user is admin */}
             {showOrdersTab && (
               <Link
                 to="/orders"
@@ -178,7 +173,6 @@ const Navbar = () => {
                 </Link>
               )}
               
-              {/* Cart Button */}
               <button
                 onClick={openCart}
                 className={`relative p-2 rounded-full transition-colors ${
@@ -202,7 +196,6 @@ const Navbar = () => {
         </div>
 
         <div className="lg:hidden flex items-center space-x-4">
-          {/* Cart Button for Mobile */}
           <button
             onClick={openCart}
             className={`relative p-2 rounded-full transition-colors ${
@@ -253,7 +246,6 @@ const Navbar = () => {
               </Link>
             ))}
             
-            {/* Only show Orders tab in mobile menu if user is admin */}
             {showOrdersTab && (
               <Link
                 to="/orders"
