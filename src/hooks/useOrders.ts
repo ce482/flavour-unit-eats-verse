@@ -34,7 +34,9 @@ export const useOrders = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('orders')
-        .select('*, order_items(*)');
+        .select('*, order_items(*)')
+        .order('order_status', { ascending: false })
+        .order('created_at', { ascending: false });
       
       if (error) {
         toast.error('Failed to fetch orders');
@@ -82,9 +84,35 @@ export const useOrders = () => {
     }
   });
 
+  const updateOrderStatus = useMutation({
+    mutationFn: async ({ orderId, status }: { orderId: string, status: string }) => {
+      const { data, error } = await supabase
+        .from('orders')
+        .update({ 
+          order_status: status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', orderId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      toast.success('Order status updated successfully');
+    },
+    onError: (error) => {
+      toast.error('Failed to update order status');
+      console.error('Order status update error:', error);
+    }
+  });
+
   return {
     orders,
     isLoadingOrders,
-    createOrder
+    createOrder,
+    updateOrderStatus
   };
 };

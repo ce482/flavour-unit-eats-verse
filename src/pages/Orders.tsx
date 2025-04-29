@@ -1,7 +1,7 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useOrders } from '../hooks/useOrders';
+import { useOrders, Order as OrderType, OrderItem } from '../hooks/useOrders';
 import { useAdmin } from '../hooks/useAdmin';
 import { useAuth } from '@/hooks/useAuth';
 import Navbar from '../components/layout/Navbar';
@@ -15,13 +15,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { formatDistance } from 'date-fns';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const Orders = () => {
   const navigate = useNavigate();
   const { user, isLoading: isLoadingAuth } = useAuth();
   const { isAdmin, isLoading: isLoadingAdmin, error: adminError } = useAdmin();
-  const { orders, isLoadingOrders } = useOrders();
+  const { orders, isLoadingOrders, updateOrderStatus } = useOrders();
+  
+  const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -51,6 +56,19 @@ const Orders = () => {
       console.error('Admin check error:', adminError);
     }
   }, [isAdmin, isLoadingAdmin, isLoadingAuth, user, adminError, navigate]);
+
+  const handleViewOrderDetails = (order: OrderType) => {
+    setSelectedOrder(order);
+    setIsDialogOpen(true);
+  };
+
+  const handleMarkAsCompleted = async (orderId: string) => {
+    try {
+      await updateOrderStatus.mutateAsync({ orderId, status: 'completed' });
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    }
+  };
 
   // Show loading until both auth and admin status are confirmed
   if (isLoadingAuth || isLoadingAdmin) {
@@ -105,11 +123,15 @@ const Orders = () => {
                     <TableHead>Status</TableHead>
                     <TableHead>Items</TableHead>
                     <TableHead className="text-right">Total</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {orders?.map((order) => (
-                    <TableRow key={order.id}>
+                    <TableRow 
+                      key={order.id}
+                      className={order.order_status === 'completed' ? 'bg-gray-50' : ''}
+                    >
                       <TableCell className="font-medium">
                         {order.id.slice(0, 8)}...
                       </TableCell>
@@ -132,6 +154,27 @@ const Orders = () => {
                       <TableCell className="text-right">
                         ${order.total_amount.toFixed(2)}
                       </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handleViewOrderDetails(order)}
+                          >
+                            View Details
+                          </Button>
+                          {order.order_status !== 'completed' && (
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              className="bg-green-50 text-green-700 hover:bg-green-100"
+                              onClick={() => handleMarkAsCompleted(order.id)}
+                            >
+                              Mark Completed
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -140,6 +183,82 @@ const Orders = () => {
           )}
         </div>
       </main>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Order Details</DialogTitle>
+            <DialogDescription>
+              Order ID: {selectedOrder?.id}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 mt-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">Customer</h3>
+                <p>{selectedOrder?.customer_name}</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">Email</h3>
+                <p>{selectedOrder?.customer_email}</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">Phone</h3>
+                <p>{selectedOrder?.customer_phone || 'N/A'}</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">Date</h3>
+                <p>{selectedOrder?.created_at ? new Date(selectedOrder.created_at).toLocaleDateString() : 'N/A'}</p>
+              </div>
+              <div className="col-span-2">
+                <h3 className="font-semibold text-sm text-gray-500">Shipping Address</h3>
+                <p>{selectedOrder?.shipping_address}</p>
+              </div>
+            </div>
+
+            <div className="border-t pt-4">
+              <h3 className="font-semibold mb-2">Order Items</h3>
+              <ul className="divide-y">
+                {selectedOrder?.order_items?.map((item: OrderItem) => (
+                  <li key={item.id} className="py-2 flex justify-between">
+                    <div>
+                      <p className="font-medium">{item.product_name}</p>
+                      <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                    </div>
+                    <div className="text-right">
+                      <p>${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-sm text-gray-500">${item.price.toFixed(2)} each</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="border-t pt-4 flex justify-between items-center">
+              <p className="font-semibold">Total</p>
+              <p className="font-semibold">${selectedOrder?.total_amount.toFixed(2)}</p>
+            </div>
+            
+            {selectedOrder?.order_status !== 'completed' && (
+              <div className="pt-2">
+                <Button 
+                  className="w-full bg-green-600 hover:bg-green-700"
+                  onClick={() => {
+                    if (selectedOrder) {
+                      handleMarkAsCompleted(selectedOrder.id);
+                      setIsDialogOpen(false);
+                    }
+                  }}
+                >
+                  Mark as Completed
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </>
   );
