@@ -36,12 +36,9 @@ const PetitDejeuner = () => {
                   international flavors to your morning routine. Convenient,
                   delicious, and ready in minutes.
                 </p>
-                <div className="flex flex-wrap gap-4 justify-center">
+                <div className="flex justify-center">
                   <Button variant="destructive" className="bg-flavour-red hover:bg-flavour-red/90">
                     Coming Soon
-                  </Button>
-                  <Button variant="outline" className="border-flavour-red text-flavour-red hover:bg-flavour-red/10">
-                    Get Notified
                   </Button>
                 </div>
               </div>
