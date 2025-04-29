@@ -24,7 +24,7 @@ export type Order = {
   total_amount: number;
   created_at: string;
   updated_at: string;
-  order_items?: OrderItem[]; // Added order_items property
+  order_items?: OrderItem[]; 
 };
 
 export const useOrders = () => {
@@ -108,8 +108,16 @@ export const useOrders = () => {
       if (fetchError) throw fetchError;
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+    onSuccess: (updatedOrder) => {
+      // Optimistically update the cache instead of just invalidating
+      queryClient.setQueryData(['orders'], (oldData: Order[] | undefined) => {
+        if (!oldData) return oldData;
+        
+        return oldData.map(order => 
+          order.id === updatedOrder.id ? updatedOrder : order
+        );
+      });
+      
       toast.success('Order status updated successfully');
     },
     onError: (error) => {

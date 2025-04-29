@@ -16,6 +16,16 @@ const Orders = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Update selectedOrder if it's in view and has been updated
+  useEffect(() => {
+    if (selectedOrder && orders) {
+      const updatedOrder = orders.find(order => order.id === selectedOrder.id);
+      if (updatedOrder) {
+        setSelectedOrder(updatedOrder);
+      }
+    }
+  }, [orders, selectedOrder]);
+
   const handleViewOrderDetails = (order: OrderType) => {
     setSelectedOrder(order);
     setIsDialogOpen(true);
@@ -23,11 +33,14 @@ const Orders = () => {
 
   const handleMarkAsCompleted = async (orderId: string) => {
     try {
-      await updateOrderStatus.mutateAsync({ orderId, status: 'completed' });
+      const updatedOrder = await updateOrderStatus.mutateAsync({ 
+        orderId, 
+        status: 'completed' 
+      });
       
-      // If the selected order is the one being updated, close the dialog
+      // If the selected order is the one being updated, update it in the state
       if (selectedOrder?.id === orderId) {
-        setIsDialogOpen(false);
+        setSelectedOrder(updatedOrder);
       }
     } catch (error) {
       console.error('Error updating order status:', error);
