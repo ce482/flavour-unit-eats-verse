@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const PetitDejeuner = () => {
   useEffect(() => {
@@ -13,27 +14,49 @@ const PetitDejeuner = () => {
     <>
       <Navbar />
       <main>
-        {/* Coming Soon Banner */}
-        <div className="bg-flavour-gold text-center py-3 font-semibold text-flavour-black">
-          <div className="container-wide">
-            <p className="flex items-center justify-center gap-2">
-              <Sparkles size={18} />
-              Coming Soon - This product line is not yet available for purchase
-            </p>
-          </div>
-        </div>
-
-        {/* Simple Header */}
-        <section className="pt-24 pb-20 bg-gray-50">
-          <div className="container-wide">
-            <div className="text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Petit Déjeuner</h1>
-              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-                Our upcoming savory breakfast line, bringing international flavors to your morning routine.
+        {/* Add padding to push content below navbar */}
+        <div className="pt-16 md:pt-20">
+          {/* Coming Soon Banner */}
+          <div className="bg-flavour-gold text-center py-3 font-semibold text-flavour-black">
+            <div className="container-wide">
+              <p className="flex items-center justify-center gap-2">
+                <Sparkles size={18} />
+                Coming Soon - This product line is not yet available for purchase
               </p>
             </div>
           </div>
-        </section>
+
+          {/* Product Information */}
+          <section className="py-20">
+            <div className="container-wide">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Petit Déjeuner</h1>
+                  <p className="text-xl text-gray-700 mb-8">
+                    Introducing our upcoming savory breakfast line, bringing
+                    international flavors to your morning routine. Convenient,
+                    delicious, and ready in minutes.
+                  </p>
+                  <div className="flex flex-wrap gap-4">
+                    <Button variant="destructive" className="bg-flavour-red hover:bg-flavour-red/90">
+                      Coming Soon
+                    </Button>
+                    <Button variant="outline" className="border-flavour-red text-flavour-red hover:bg-flavour-red/10">
+                      Get Notified
+                    </Button>
+                  </div>
+                </div>
+                <div className="rounded-xl overflow-hidden shadow-xl">
+                  <img 
+                    src="/lovable-uploads/7007a267-bc2e-4f8b-a678-0bf4225fbc9c.png" 
+                    alt="Breakfast with toast and egg" 
+                    className="w-full h-auto" 
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </main>
       <Footer />
     </>
