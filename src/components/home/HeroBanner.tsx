@@ -10,6 +10,8 @@ const HeroBanner = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ 
           backgroundImage: "url('/lovable-uploads/5fe3c549-7c1e-4e4d-a76f-3cb60386a6b8.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
