@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import Cart from "./components/cart/Cart";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/petit-dejeuner" element={<PetitDejeuner />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

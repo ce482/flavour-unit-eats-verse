@@ -1,14 +1,76 @@
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const LegacyKitchen = () => {
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [customerName, setCustomerName] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handlePayment = async () => {
+    if (!customerName || !customerEmail) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    if (!customerEmail.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+
+    setIsProcessing(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          service: 'Legacy Kitchen Solutions - Full Semester',
+          customerName,
+          customerEmail,
+          amount: 770000, // $7,700.00 in cents
+        },
+      });
+
+      if (error) {
+        console.error('Payment error:', error);
+        toast.error('Payment could not be processed');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error('Payment could not be processed');
+        setIsProcessing(false);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast.error('Payment could not be processed');
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <>
@@ -135,6 +197,13 @@ const LegacyKitchen = () => {
                         </li>
                       ))}
                     </ul>
+                    
+                    <Button 
+                      onClick={() => setIsPaymentModalOpen(true)}
+                      className="mt-8 bg-flavour-red hover:bg-red-700 w-full"
+                    >
+                      Pay Now - $7,700
+                    </Button>
                   </CardContent>
                 </Card>
                 
@@ -148,6 +217,20 @@ const LegacyKitchen = () => {
                       <p className="text-lg">
                         Payment- Bi- Weekly via check, Square, Quickbooks payable to The Flavour Unit Corp or Javon McCain Nicholas.
                       </p>
+                    </div>
+                    
+                    <div className="mt-8 p-4 border border-dashed border-gray-300 rounded-lg">
+                      <h4 className="font-bold mb-2">Secure Online Payment</h4>
+                      <p className="text-sm text-gray-600 mb-4">
+                        You can now pay securely online with credit card. All payments are processed through Stripe, a secure payment processor.
+                      </p>
+                      <Button 
+                        onClick={() => setIsPaymentModalOpen(true)} 
+                        variant="outline"
+                        className="w-full"
+                      >
+                        Pay with Card
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -182,6 +265,64 @@ const LegacyKitchen = () => {
             </Card>
           </div>
         </section>
+
+        {/* Payment Modal */}
+        <Dialog open={isPaymentModalOpen} onOpenChange={setIsPaymentModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Complete Your Payment</DialogTitle>
+              <DialogDescription>
+                Enter your details below to proceed with the payment of $7,700 for Legacy Kitchen Solutions.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  placeholder="Enter your full name"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsPaymentModalOpen(false)}
+                disabled={isProcessing}
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handlePayment}
+                className="bg-flavour-red hover:bg-red-700"
+                disabled={isProcessing}
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Pay Now'
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </>
