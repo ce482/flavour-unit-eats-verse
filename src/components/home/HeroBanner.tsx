@@ -7,12 +7,9 @@ const HeroBanner = () => {
     <div className="relative min-h-screen flex items-center">
       {/* Background Image with Overlay */}
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: "url('/lovable-uploads/e67289e8-f772-4c5f-a406-840a72cfb45f.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundImage: "url('/lovable-uploads/5fe3c549-7c1e-4e4d-a76f-3cb60386a6b8.png')",
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
