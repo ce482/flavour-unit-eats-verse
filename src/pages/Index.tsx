@@ -7,6 +7,10 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
 
+// Preload hero image
+const heroImage = new Image();
+heroImage.src = '/lovable-uploads/e67289e8-f772-4c5f-a406-840a72cfb45f.png';
+
 const featuredProducts = [
   {
     id: 1,
@@ -34,6 +38,7 @@ const featuredProducts = [
 const Index = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+    console.log("Hero image loading status:", heroImage.complete ? "loaded" : "loading");
   }, []);
 
   return (
