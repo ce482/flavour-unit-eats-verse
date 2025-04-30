@@ -81,8 +81,10 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4">Contact Us</h3>
             <address className="not-italic text-gray-300 space-y-2">
               <p>Chicago, IL</p>
-              <p>Email: info@flavourunitcorp.com</p>
-              <p>Phone: (555) 123-4567</p>
+              <p>Email: Javon@theflavourunitcorp.com</p>
+              <p>Egg Rolls Etc: shopeggrollsetc@gmail.com</p>
+              <p>Egg Rolls Etc: 844-434-4-EGGROL</p>
+              <p>Le Petit Déjeuner: Orderwithlepetitdejeuner@gmail.com</p>
             </address>
           </div>
         </div>

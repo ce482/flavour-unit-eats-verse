@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -129,7 +130,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-1">Phone</h3>
-                        <p className="text-gray-600">(555) 123-4567</p>
+                        <p className="text-gray-600">844-434-4-EGGROL (for Egg Rolls Etc.)</p>
                         <p className="text-sm text-gray-500 mt-1">Mon-Fri, 9am-5pm CT</p>
                       </div>
                     </div>
@@ -140,7 +141,9 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold mb-1">Email</h3>
-                        <p className="text-gray-600">info@flavourunitcorp.com</p>
+                        <p className="text-gray-600">Javon@theflavourunitcorp.com</p>
+                        <p className="text-gray-600">shopeggrollsetc@gmail.com (Egg Rolls Etc.)</p>
+                        <p className="text-gray-600">Orderwithlepetitdejeuner@gmail.com (Le Petit Déjeuner)</p>
                         <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
                       </div>
                     </div>

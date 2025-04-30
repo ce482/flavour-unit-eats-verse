@@ -13,7 +13,7 @@ const BrandShowcase = () => {
     {
       name: "Legacy Kitchen Solutions",
       description: "Coaching and consulting for small food businesses. Learn how to scale your food business from concept to market.",
-      imageSrc: "https://images.unsplash.com/photo-1556911261-6bd341186b2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageSrc: "/lovable-uploads/our_story.jpg",
       path: "/legacy-kitchen",
       isActive: true
     },
