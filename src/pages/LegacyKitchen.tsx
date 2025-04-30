@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const LegacyKitchen = () => {
   useEffect(() => {
@@ -17,27 +16,9 @@ const LegacyKitchen = () => {
         {/* Hero Section */}
         <section className="pt-32 pb-20 bg-gray-50">
           <div className="container-wide">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Legacy Kitchen Solutions</h1>
-                <h2 className="text-3xl font-bold mb-4">PROPOSAL</h2>
-                <h3 className="text-2xl mb-6">CULINARY INDUSTRY SOLUTIONS</h3>
-                <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                  <Link to="#contact-form" className="btn-primary">
-                    Contact Us
-                  </Link>
-                  <Link to="#services" className="btn-outline">
-                    View Services
-                  </Link>
-                </div>
-              </div>
-              <div>
-                <img 
-                  src="/lovable-uploads/b66f8d62-eb9d-480b-af64-378fe2d3c55b.png"
-                  alt="Legacy Kitchen Solutions" 
-                  className="rounded-lg shadow-xl"
-                />
-              </div>
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Legacy Kitchen Solutions</h1>
+              <h3 className="text-2xl mb-6">CULINARY INDUSTRY SOLUTIONS</h3>
             </div>
           </div>
         </section>
