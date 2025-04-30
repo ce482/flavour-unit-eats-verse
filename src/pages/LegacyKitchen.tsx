@@ -13,148 +13,142 @@ const LegacyKitchen = () => {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">
+      <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-gradient-to-b from-gray-50 to-white">
+        <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
           <div className="container-wide">
             <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-flavour-black animate-fade-in">Legacy Kitchen Solutions</h1>
-              <div className="w-24 h-1 bg-flavour-red mx-auto mb-6"></div>
-              <h3 className="text-xl md:text-2xl text-flavour-brown font-medium mb-8">CULINARY INDUSTRY SOLUTIONS</h3>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-flavour-black animate-fade-in">
+                Legacy Kitchen Solutions
+              </h1>
+              <div className="w-32 h-1 bg-flavour-red mx-auto mb-8"></div>
+              <h3 className="text-xl md:text-2xl text-flavour-brown font-medium">
+                CULINARY INDUSTRY SOLUTIONS
+              </h3>
             </div>
           </div>
         </section>
 
         {/* Company Background */}
-        <section className="py-16 bg-white">
+        <section className="py-20 bg-white">
           <div className="container-wide">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold mb-8 text-center relative">
-                <span className="relative inline-block after:content-[''] after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:w-16 after:h-1 after:bg-flavour-gold">
+              <h2 className="text-3xl font-bold mb-10 text-center">
+                <span className="relative inline-block pb-2 border-b-2 border-flavour-gold px-4">
                   COMPANY BACKGROUND
                 </span>
               </h2>
-              <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-                <p className="text-lg text-gray-700 mb-0 leading-relaxed">
-                  Legacy Kitchen Solutions provide training, coaching and experienced guidance
-                  within the food industry sector. Our 23 years of expertise in food safety, food
-                  quality assurance, food production, and facilitating restaurant/foodservice
-                  operations advise food industry businesses and professionals on the
-                  development and improvement of their food service operations. We consult with
-                  restaurants, food producers, schools or any other food service facility within the
-                  Chicagoland area.
-                </p>
-              </div>
+              <Card className="bg-gray-50 shadow-md overflow-hidden border-t-4 border-t-flavour-red">
+                <CardContent className="p-8">
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    Legacy Kitchen Solutions provide training, coaching and experienced guidance
+                    within the food industry sector. Our 23 years of expertise in food safety, food
+                    quality assurance, food production, and facilitating restaurant/foodservice
+                    operations advise food industry businesses and professionals on the
+                    development and improvement of their food service operations. We consult with
+                    restaurants, food producers, schools or any other food service facility within the
+                    Chicagoland area.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
-        {/* Project Description */}
-        <section className="py-16 bg-flavour-cream">
+        {/* Capabilities Section */}
+        <section className="py-20 bg-flavour-cream">
           <div className="container-wide">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold mb-10 text-center relative">
-                <span className="relative inline-block after:content-[''] after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:w-16 after:h-1 after:bg-flavour-red">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-3xl font-bold mb-12 text-center">
+                <span className="relative inline-block pb-2 border-b-2 border-flavour-red px-4">
                   CAPABILITIES
                 </span>
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ul className="space-y-4 text-lg">
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Early to Advance stage Food Industry Entrepreneurs Cohort</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Identifying your competitive advantage</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Cost and Pricing (Wholesale and Product based Entrepreneurs)</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Creating Your Pitch</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Licensing, Certifications and Trademarking</span>
-                  </li>
-                </ul>
-                <ul className="space-y-4 text-lg">
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Food Industry Trends</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Brand Identity vs The Business or Product</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Go to market strategy or for advanced businesses Scale up market strategy</span>
-                  </li>
-                  <li className="flex items-start bg-white p-4 rounded-lg shadow-sm transition-transform hover:translate-y-[-2px]">
-                    <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                    <span>Legal and Finance (Book keeping, accounting)</span>
-                  </li>
-                </ul>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  {[
+                    "Early to Advance stage Food Industry Entrepreneurs Cohort",
+                    "Identifying your competitive advantage",
+                    "Cost and Pricing (Wholesale and Product based Entrepreneurs)",
+                    "Creating Your Pitch",
+                    "Licensing, Certifications and Trademarking"
+                  ].map((item, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-start bg-white p-5 rounded-lg shadow-sm transition-all hover:shadow-md hover:translate-y-[-2px]"
+                    >
+                      <CheckCircle className="text-flavour-red mr-4 shrink-0 mt-1" size={22} />
+                      <span className="text-lg">{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-4">
+                  {[
+                    "Food Industry Trends",
+                    "Brand Identity vs The Business or Product",
+                    "Go to market strategy or for advanced businesses Scale up market strategy",
+                    "Legal and Finance (Book keeping, accounting)"
+                  ].map((item, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-start bg-white p-5 rounded-lg shadow-sm transition-all hover:shadow-md hover:translate-y-[-2px]"
+                    >
+                      <CheckCircle className="text-flavour-red mr-4 shrink-0 mt-1" size={22} />
+                      <span className="text-lg">{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Services And Cost */}
-        <section id="services" className="py-16 bg-white">
+        <section id="services" className="py-20 bg-white">
           <div className="container-wide">
             <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <Card className="border-t-4 border-t-flavour-red shadow-md overflow-hidden">
-                  <CardContent className="pt-6">
-                    <h2 className="text-2xl font-bold mb-6 text-center">SERVICES AND COST</h2>
-                    <ul className="space-y-4 text-lg">
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>Full Semester Instructor - $7,700 (8 hours per student)</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>Includes, Cohort promotion, Recruitment, Orientation for up to 22 students</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>4 weeks (2 hour) guided food industry Entrepreneur curriculum</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>Assistance with Cohort recruitment</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>1 (2 hour) guided in-person activity TBD</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>Graded homework if required</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
-                        <span>Certificate of Completion ceremony</span>
-                      </li>
+              <h2 className="text-3xl font-bold mb-12 text-center">
+                <span className="relative inline-block pb-2 border-b-2 border-flavour-gold px-4">
+                  OUR SERVICES
+                </span>
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <Card className="border-t-4 border-t-flavour-red shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-6 text-center text-flavour-black">
+                      SERVICES AND COST
+                    </h3>
+                    <ul className="space-y-4">
+                      {[
+                        "Full Semester Instructor - $7,700 (8 hours per student)",
+                        "Includes, Cohort promotion, Recruitment, Orientation for up to 22 students",
+                        "4 weeks (2 hour) guided food industry Entrepreneur curriculum",
+                        "Assistance with Cohort recruitment",
+                        "1 (2 hour) guided in-person activity TBD",
+                        "Graded homework if required",
+                        "Certificate of Completion ceremony"
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className="text-flavour-red mr-3 shrink-0 mt-1" size={20} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
                     </ul>
                   </CardContent>
                 </Card>
                 
-                <Card className="border-t-4 border-t-flavour-gold shadow-md overflow-hidden">
-                  <CardContent className="pt-6">
-                    <h2 className="text-2xl font-bold mb-6 text-center">PAYMENT</h2>
-                    <ul className="space-y-4 text-lg">
-                      <li className="flex items-start">
-                        <CheckCircle className="text-flavour-gold mr-3 shrink-0 mt-1" size={20} />
-                        <span>Payment- Bi- Weekly via check, Square, Quickbooks payable to The Flavour Unit Corp or Javon McCain Nicholas.</span>
-                      </li>
-                    </ul>
+                <Card className="border-t-4 border-t-flavour-gold shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-6 text-center text-flavour-black">
+                      PAYMENT DETAILS
+                    </h3>
+                    <div className="flex items-start p-4 bg-gray-50 rounded-lg">
+                      <CheckCircle className="text-flavour-gold mr-3 shrink-0 mt-1" size={20} />
+                      <p className="text-lg">
+                        Payment- Bi- Weekly via check, Square, Quickbooks payable to The Flavour Unit Corp or Javon McCain Nicholas.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -163,29 +157,29 @@ const LegacyKitchen = () => {
         </section>
 
         {/* Contact Info */}
-        <section className="py-10 bg-gray-100">
+        <section className="py-16 bg-gray-100">
           <div className="container-wide">
-            <div className="flex flex-col md:flex-row justify-center items-center gap-6 text-center md:text-left bg-white p-6 rounded-lg shadow-sm max-w-3xl mx-auto">
-              <div>
-                <span className="font-bold">Javon Nicholas</span>
-              </div>
-              <div className="mx-2 hidden md:block">|</div>
-              <div>
-                <span className="font-bold">Legacy Kitchen Solutions</span>
-              </div>
-              <div className="mx-2 hidden md:block">|</div>
-              <div>
-                <span className="font-bold">844.434.4765</span>
-              </div>
-              <div className="mx-2 hidden md:block">|</div>
-              <div>
-                <span className="font-bold">
-                  <a href="mailto:Legacykitchensolutions@gmail.com" className="text-flavour-red hover:underline">
-                    Legacykitchensolutions@gmail.com
-                  </a>
-                </span>
-              </div>
-            </div>
+            <Card className="max-w-4xl mx-auto shadow-md hover:shadow-lg transition-shadow">
+              <CardContent className="p-8">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+                  <div>
+                    <p className="font-bold text-lg">Javon Nicholas</p>
+                    <p className="text-gray-500">Legacy Kitchen Solutions</p>
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
+                    <p className="font-bold text-lg">844.434.4765</p>
+                    <div className="hidden md:block w-1 h-6 bg-gray-300"></div>
+                    <a 
+                      href="mailto:Legacykitchensolutions@gmail.com" 
+                      className="text-flavour-red hover:underline font-bold text-lg"
+                    >
+                      Legacykitchensolutions@gmail.com
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
       </main>
