@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
 
 const Contact = () => {
   useEffect(() => {
@@ -29,7 +29,6 @@ const Contact = () => {
         <section className="py-16 bg-white">
           <div className="container-wide">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
               <div className="bg-gray-50 rounded-lg p-8 mb-8">
                 <div className="space-y-8">
                   <div className="flex items-start">
@@ -48,21 +47,26 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold mb-1">Email</h3>
-                      <p className="text-gray-600">Javon@theflavourunitcorp.com</p>
-                      <p className="text-gray-600">shopeggrollsetc@gmail.com (Egg Rolls Etc.)</p>
-                      <p className="text-gray-600">Orderwithlepetitdejeuner@gmail.com (Le Petit Déjeuner)</p>
-                      <p className="text-gray-600">Legacykitchensolutions@gmail.com (Legacy Kitchen Solutions)</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <div className="bg-flavour-red p-3 rounded-full text-white mr-4">
-                      <MapPin size={20} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold mb-1">Location</h3>
-                      <p className="text-gray-600">Chicago, IL</p>
-                      <p className="text-gray-600">Corporate Headquarters</p>
+                      <p className="text-gray-600">
+                        <a href="mailto:Javon@theflavourunitcorp.com" className="hover:text-flavour-red transition-colors">
+                          Javon@theflavourunitcorp.com
+                        </a>
+                      </p>
+                      <p className="text-gray-600">
+                        <a href="mailto:shopeggrollsetc@gmail.com" className="hover:text-flavour-red transition-colors">
+                          shopeggrollsetc@gmail.com
+                        </a> (Egg Rolls Etc.)
+                      </p>
+                      <p className="text-gray-600">
+                        <a href="mailto:Orderwithlepetitdejeuner@gmail.com" className="hover:text-flavour-red transition-colors">
+                          Orderwithlepetitdejeuner@gmail.com
+                        </a> (Le Petit Déjeuner)
+                      </p>
+                      <p className="text-gray-600">
+                        <a href="mailto:Legacykitchensolutions@gmail.com" className="hover:text-flavour-red transition-colors">
+                          Legacykitchensolutions@gmail.com
+                        </a> (Legacy Kitchen Solutions)
+                      </p>
                     </div>
                   </div>
                 </div>
