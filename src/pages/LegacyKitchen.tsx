@@ -19,6 +19,13 @@ const LegacyKitchen = () => {
             <div className="text-center max-w-4xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Legacy Kitchen Solutions</h1>
               <h3 className="text-2xl mb-6">CULINARY INDUSTRY SOLUTIONS</h3>
+              <div className="mt-8">
+                <img 
+                  src="/lovable-uploads/920bba3d-0652-47e5-8919-d837b56ee917.png" 
+                  alt="Legacy Kitchen Solutions" 
+                  className="max-w-full mx-auto rounded-lg"
+                />
+              </div>
             </div>
           </div>
         </section>
