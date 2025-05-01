@@ -6,15 +6,19 @@ import Footer from '@/components/layout/Footer';
 import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/contexts/CartContext';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const { clearCart } = useCart();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    // Clear the cart after successful payment
+    clearCart();
+  }, [clearCart]);
 
   return (
     <>
@@ -30,7 +34,7 @@ const PaymentSuccess = () => {
               <h1 className="text-3xl font-bold mb-4 text-green-700">Payment Successful!</h1>
               
               <p className="text-gray-700 text-lg mb-8">
-                Thank you for your payment. We have received your order and will be in touch shortly.
+                Thank you for your order! Your payment has been processed successfully and your order is confirmed.
               </p>
               
               {sessionId && (
@@ -49,10 +53,10 @@ const PaymentSuccess = () => {
                   Return Home
                 </Button>
                 <Button 
-                  onClick={() => navigate('/legacy-kitchen')} 
+                  onClick={() => navigate('/egg-rolls')} 
                   className="bg-flavour-red hover:bg-red-700 flex-1 sm:flex-initial"
                 >
-                  Back to Legacy Kitchen
+                  Continue Shopping
                 </Button>
               </div>
             </CardContent>
