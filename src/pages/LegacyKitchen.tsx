@@ -198,12 +198,7 @@ const LegacyKitchen = () => {
                       ))}
                     </ul>
                     
-                    <Button 
-                      onClick={() => setIsPaymentModalOpen(true)}
-                      className="mt-8 bg-flavour-red hover:bg-red-700 w-full"
-                    >
-                      Pay Now - $7,700
-                    </Button>
+                    {/* Pay Now button removed */}
                   </CardContent>
                 </Card>
                 
@@ -224,12 +219,33 @@ const LegacyKitchen = () => {
                       <p className="text-sm text-gray-600 mb-4">
                         You can now pay securely online with credit card. All payments are processed through Stripe, a secure payment processor.
                       </p>
+                      {/* Add to Cart button instead of direct payment */}
                       <Button 
-                        onClick={() => setIsPaymentModalOpen(true)} 
+                        onClick={() => {
+                          // Create Legacy Kitchen Solutions as a product and add to cart
+                          const legacyKitchenProduct = {
+                            id: 999, // Use a unique ID that won't conflict with other products
+                            name: "Legacy Kitchen Solutions - Full Semester",
+                            price: 7700, // $7,700
+                            image: "/lovable-uploads/7007a267-bc2e-4f8b-a678-0bf4225fbc9c.png" // Use a generic image
+                          };
+                          
+                          import('@/contexts/CartContext').then(module => {
+                            const { useCart } = module;
+                            const { addItem, openCart } = useCart();
+                            
+                            addItem(legacyKitchenProduct);
+                            openCart();
+                            toast.success('Legacy Kitchen Solutions added to cart');
+                          }).catch(err => {
+                            console.error('Error importing cart context:', err);
+                            toast.error('Could not add to cart');
+                          });
+                        }}
                         variant="outline"
                         className="w-full"
                       >
-                        Pay with Card
+                        Add to Cart
                       </Button>
                     </div>
                   </CardContent>

@@ -17,7 +17,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-[100]">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50" 
@@ -25,7 +25,7 @@ const Cart = () => {
       />
       
       {/* Cart panel */}
-      <div className="relative w-full max-w-md bg-white shadow-xl h-full overflow-y-auto animate-in slide-in-from-right">
+      <div className="absolute top-0 right-0 w-full max-w-md bg-white shadow-xl h-full overflow-y-auto animate-in slide-in-from-right">
         <div className="p-4 border-b sticky top-0 bg-white z-10">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold flex items-center">
@@ -40,7 +40,7 @@ const Cart = () => {
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={closeCart}
+              onClick={() => closeCart()}
               className="rounded-full h-8 w-8 p-0"
             >
               <X size={20} />
@@ -57,7 +57,7 @@ const Cart = () => {
             <Button 
               variant="outline" 
               className="mt-4"
-              onClick={closeCart}
+              onClick={() => closeCart()}
             >
               Continue Shopping
             </Button>
@@ -132,7 +132,7 @@ const Cart = () => {
                 <Button 
                   variant="link" 
                   className="text-sm"
-                  onClick={closeCart}
+                  onClick={() => closeCart()}
                 >
                   Continue Shopping
                 </Button>
