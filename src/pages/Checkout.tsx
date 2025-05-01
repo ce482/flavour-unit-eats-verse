@@ -22,7 +22,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const customerFormSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters long' }),
@@ -32,9 +33,15 @@ const customerFormSchema = z.object({
   city: z.string().min(2, { message: 'Please enter a valid city' }),
   state: z.string().min(2, { message: 'Please enter a valid state' }),
   zipCode: z.string().min(5, { message: 'Please enter a valid ZIP/postal code' }),
+  shippingMethod: z.enum(['standard', 'fedex_2day']),
 });
 
 type CustomerFormValues = z.infer<typeof customerFormSchema>;
+
+const SHIPPING_METHODS = {
+  standard: { name: 'Standard Shipping', price: 0, description: 'Free - 5-7 business days' },
+  fedex_2day: { name: 'FedEx 2-Day Shipping', price: 15.99, description: 'Guaranteed delivery in 2 business days' },
+};
 
 const Checkout = () => {
   const { user } = useAuth();
@@ -52,7 +59,7 @@ const Checkout = () => {
     message: '',
     checked: false,
   });
-
+  
   const customerForm = useForm<CustomerFormValues>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
@@ -63,8 +70,14 @@ const Checkout = () => {
       city: '',
       state: '',
       zipCode: '',
+      shippingMethod: 'standard',
     },
   });
+
+  // Watch for shipping method changes to calculate total
+  const selectedShippingMethod = customerForm.watch('shippingMethod');
+  const shippingCost = SHIPPING_METHODS[selectedShippingMethod].price;
+  const orderTotal = totalPrice + shippingCost;
 
   if (items.length === 0) {
     navigate('/egg-rolls');
@@ -147,8 +160,11 @@ const Checkout = () => {
           service: 'Chef Gang Food Products',
           customerName: values.customerName,
           customerEmail: values.customerEmail,
-          // Convert price to cents for Stripe
-          amount: Math.round(totalPrice * 100)
+          // Convert price to cents for Stripe and include shipping cost
+          amount: Math.round(orderTotal * 100),
+          // Include shipping method details
+          shippingMethod: values.shippingMethod,
+          shippingCost: shippingCost
         }
       });
 
@@ -221,11 +237,11 @@ const Checkout = () => {
                     </div>
                     <div className="flex justify-between text-sm mt-2">
                       <p>Shipping</p>
-                      <p>Free</p>
+                      <p>{shippingCost === 0 ? 'Free' : `$${shippingCost.toFixed(2)}`}</p>
                     </div>
                     <div className="flex justify-between font-bold text-lg mt-4">
                       <p>Total</p>
-                      <p>${totalPrice.toFixed(2)}</p>
+                      <p>${orderTotal.toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -342,6 +358,45 @@ const Checkout = () => {
                         </FormItem>
                       )}
                     />
+                    
+                    {/* Shipping Method Selection */}
+                    <div className="pt-4">
+                      <h3 className="font-medium mb-3">Shipping Method</h3>
+                      <FormField
+                        control={customerForm.control}
+                        name="shippingMethod"
+                        render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormControl>
+                              <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="space-y-3"
+                              >
+                                {Object.entries(SHIPPING_METHODS).map(([key, method]) => (
+                                  <div key={key} className={`flex items-start space-x-3 border p-4 rounded-md cursor-pointer ${field.value === key ? 'bg-gray-50 border-gray-300' : 'border-gray-200'}`}>
+                                    <RadioGroupItem value={key} id={`shipping-${key}`} />
+                                    <div className="flex-1">
+                                      <div className="flex justify-between items-center">
+                                        <label htmlFor={`shipping-${key}`} className="font-medium cursor-pointer flex items-center">
+                                          {key === 'fedex_2day' && <Package className="h-4 w-4 mr-2 text-blue-600" />}
+                                          {method.name}
+                                        </label>
+                                        <span className="font-semibold">
+                                          {method.price === 0 ? 'Free' : `$${method.price.toFixed(2)}`}
+                                        </span>
+                                      </div>
+                                      <p className="text-sm text-gray-500 mt-1">{method.description}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     
                     {/* Address Validation Section */}
                     <div className="mt-4">
