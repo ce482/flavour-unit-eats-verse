@@ -87,7 +87,6 @@ const Checkout = () => {
 
   const validateAddress = async (data: CustomerFormValues) => {
     setIsValidatingAddress(true);
-    setAddressValidation(prev => ({ ...prev, checked: true }));
     
     try {
       const { data: validationData, error } = await supabase.functions.invoke('validate-address', {
@@ -106,6 +105,7 @@ const Checkout = () => {
           message: 'Could not validate address. Please check your information.',
           checked: true
         });
+        return false;
       } else {
         setAddressValidation({
           valid: validationData.valid,
@@ -120,6 +120,8 @@ const Checkout = () => {
           customerForm.setValue('state', validationData.formattedAddress.state);
           customerForm.setValue('zipCode', validationData.formattedAddress.zipCode);
         }
+        
+        return validationData.valid;
       }
     } catch (error) {
       console.error('Error validating address:', error);
@@ -128,30 +130,26 @@ const Checkout = () => {
         message: 'Could not validate address. Please check your information.',
         checked: true
       });
+      return false;
     } finally {
       setIsValidatingAddress(false);
     }
   };
 
   const handleStripeCheckout = async (values: CustomerFormValues) => {
-    // If we haven't validated the address yet, do it now
-    if (!addressValidation.checked) {
-      await validateAddress(values);
-      
-      // If the address is invalid, don't proceed
-      if (!addressValidation.valid) {
-        toast.error('Please correct your address before proceeding.');
-        return;
-      }
-    }
+    setIsSubmitting(true);
     
-    // If address validation was checked and is not valid, don't proceed
-    if (addressValidation.checked && !addressValidation.valid) {
-      toast.error('Please correct your address before proceeding.');
+    // Always validate the address first
+    const isAddressValid = await validateAddress(values);
+    
+    // If the address is invalid, don't proceed with payment
+    if (!isAddressValid) {
+      setIsSubmitting(false);
+      toast.error('Please correct your address before proceeding', {
+        description: addressValidation.message
+      });
       return;
     }
-
-    setIsSubmitting(true);
 
     try {
       // Create order details for Stripe
@@ -189,7 +187,7 @@ const Checkout = () => {
     }
   };
 
-  // Watch form fields for address validation
+  // Watch form fields for address validation reset
   const shippingAddress = customerForm.watch('shippingAddress');
   const city = customerForm.watch('city');
   const state = customerForm.watch('state');
@@ -398,45 +396,30 @@ const Checkout = () => {
                       />
                     </div>
                     
-                    {/* Address Validation Section */}
-                    <div className="mt-4">
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        onClick={() => {
-                          const values = customerForm.getValues();
-                          validateAddress(values);
-                        }}
-                        disabled={isValidatingAddress || 
-                          !customerForm.getValues().shippingAddress || 
-                          !customerForm.getValues().city || 
-                          !customerForm.getValues().state || 
-                          !customerForm.getValues().zipCode}
-                        className="w-full"
-                      >
-                        {isValidatingAddress ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Validating Address...
-                          </>
-                        ) : (
-                          'Validate Address'
-                        )}
-                      </Button>
-                      
-                      {addressValidation.checked && (
-                        <div className={`mt-2 p-3 rounded-md flex items-start ${addressValidation.valid ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
-                          {addressValidation.valid ? (
-                            <CheckCircle className="text-green-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
-                          ) : (
-                            <AlertTriangle className="text-amber-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
-                          )}
-                          <span className={`text-sm ${addressValidation.valid ? 'text-green-700' : 'text-amber-700'}`}>
-                            {addressValidation.message}
+                    {/* Address Validation Feedback Section */}
+                    {isValidatingAddress && (
+                      <div className="mt-4 p-3 rounded-md bg-blue-50 border border-blue-100">
+                        <div className="flex items-center">
+                          <Loader2 className="text-blue-600 mr-2 animate-spin" size={16} />
+                          <span className="text-sm text-blue-700">
+                            Validating your shipping address...
                           </span>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
+
+                    {addressValidation.checked && !isValidatingAddress && (
+                      <div className={`mt-4 p-3 rounded-md flex items-start ${addressValidation.valid ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
+                        {addressValidation.valid ? (
+                          <CheckCircle className="text-green-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
+                        ) : (
+                          <AlertTriangle className="text-amber-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
+                        )}
+                        <span className={`text-sm ${addressValidation.valid ? 'text-green-700' : 'text-amber-700'}`}>
+                          {addressValidation.message}
+                        </span>
+                      </div>
+                    )}
                     
                     <div className="border rounded-md p-4 mt-4 bg-gray-50">
                       <p className="text-sm text-gray-600">
@@ -447,12 +430,12 @@ const Checkout = () => {
                     <Button 
                       type="submit" 
                       className="w-full bg-flavour-red hover:bg-red-700 mt-6"
-                      disabled={isSubmitting || (addressValidation.checked && !addressValidation.valid)}
+                      disabled={isSubmitting}
                     >
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Processing...
+                          {isValidatingAddress ? "Validating Address..." : "Processing..."}
                         </>
                       ) : (
                         'Proceed to Payment'
