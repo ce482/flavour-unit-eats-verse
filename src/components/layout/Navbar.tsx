@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart as CartIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -29,7 +30,8 @@ const Navbar = () => {
   const { isAdmin, isLoading: isAdminLoading } = useAdmin();
   const { openCart, totalItems } = useCart();
 
-  const darkTextRoutes = ['/about', '/faq', '/cookbook', '/legacy-kitchen', '/contact', '/petit-dejeuner'];
+  // Update the dark text routes to include the checkout page
+  const darkTextRoutes = ['/about', '/faq', '/cookbook', '/legacy-kitchen', '/contact', '/petit-dejeuner', '/checkout'];
   const shouldUseDarkText = darkTextRoutes.includes(location.pathname);
 
   const toggleMenu = () => {
