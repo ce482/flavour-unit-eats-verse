@@ -1,0 +1,21 @@
+
+export const navItems = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+  { name: 'Egg Rolls', path: '/egg-rolls' },
+  { name: 'Petit Dejeuner', path: '/petit-dejeuner' },
+  { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
+  { name: 'Cookbook', path: '/cookbook' },
+  { name: 'FAQ', path: '/faq' },
+  { name: 'Contact', path: '/contact' },
+];
+
+export const darkTextRoutes = [
+  '/about', 
+  '/faq', 
+  '/cookbook', 
+  '/legacy-kitchen', 
+  '/contact', 
+  '/petit-dejeuner',
+  '/checkout'
+];
