@@ -5,9 +5,9 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/hooks/useAuth';
-import { useOrders } from '@/hooks/useOrders';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 
 const customerFormSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters long' }),
@@ -42,6 +42,16 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState<'customer'>('customer');
+  const [isValidatingAddress, setIsValidatingAddress] = useState(false);
+  const [addressValidation, setAddressValidation] = useState<{
+    valid: boolean;
+    message: string;
+    checked: boolean;
+  }>({
+    valid: false,
+    message: '',
+    checked: false,
+  });
 
   const customerForm = useForm<CustomerFormValues>({
     resolver: zodResolver(customerFormSchema),
@@ -62,7 +72,72 @@ const Checkout = () => {
     return null;
   }
 
+  const validateAddress = async (data: CustomerFormValues) => {
+    setIsValidatingAddress(true);
+    setAddressValidation(prev => ({ ...prev, checked: true }));
+    
+    try {
+      const { data: validationData, error } = await supabase.functions.invoke('validate-address', {
+        body: {
+          address: data.shippingAddress,
+          city: data.city,
+          state: data.state,
+          zipCode: data.zipCode
+        }
+      });
+
+      if (error) {
+        console.error('Error validating address:', error);
+        setAddressValidation({
+          valid: false,
+          message: 'Could not validate address. Please check your information.',
+          checked: true
+        });
+      } else {
+        setAddressValidation({
+          valid: validationData.valid,
+          message: validationData.message,
+          checked: true
+        });
+
+        // If address is valid, we can update the form with formatted values
+        if (validationData.valid && validationData.formattedAddress) {
+          customerForm.setValue('shippingAddress', validationData.formattedAddress.address);
+          customerForm.setValue('city', validationData.formattedAddress.city);
+          customerForm.setValue('state', validationData.formattedAddress.state);
+          customerForm.setValue('zipCode', validationData.formattedAddress.zipCode);
+        }
+      }
+    } catch (error) {
+      console.error('Error validating address:', error);
+      setAddressValidation({
+        valid: false,
+        message: 'Could not validate address. Please check your information.',
+        checked: true
+      });
+    } finally {
+      setIsValidatingAddress(false);
+    }
+  };
+
   const handleStripeCheckout = async (values: CustomerFormValues) => {
+    // If we haven't validated the address yet, do it now
+    if (!addressValidation.checked) {
+      await validateAddress(values);
+      
+      // If the address is invalid, don't proceed
+      if (!addressValidation.valid) {
+        toast.error('Please correct your address before proceeding.');
+        return;
+      }
+    }
+    
+    // If address validation was checked and is not valid, don't proceed
+    if (addressValidation.checked && !addressValidation.valid) {
+      toast.error('Please correct your address before proceeding.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -97,6 +172,23 @@ const Checkout = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Watch form fields for address validation
+  const shippingAddress = customerForm.watch('shippingAddress');
+  const city = customerForm.watch('city');
+  const state = customerForm.watch('state');
+  const zipCode = customerForm.watch('zipCode');
+
+  // Reset validation status when address fields change
+  React.useEffect(() => {
+    if (addressValidation.checked) {
+      setAddressValidation({
+        valid: false,
+        message: '',
+        checked: false
+      });
+    }
+  }, [shippingAddress, city, state, zipCode]);
 
   return (
     <>
@@ -251,6 +343,46 @@ const Checkout = () => {
                       )}
                     />
                     
+                    {/* Address Validation Section */}
+                    <div className="mt-4">
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={() => {
+                          const values = customerForm.getValues();
+                          validateAddress(values);
+                        }}
+                        disabled={isValidatingAddress || 
+                          !customerForm.getValues().shippingAddress || 
+                          !customerForm.getValues().city || 
+                          !customerForm.getValues().state || 
+                          !customerForm.getValues().zipCode}
+                        className="w-full"
+                      >
+                        {isValidatingAddress ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Validating Address...
+                          </>
+                        ) : (
+                          'Validate Address'
+                        )}
+                      </Button>
+                      
+                      {addressValidation.checked && (
+                        <div className={`mt-2 p-3 rounded-md flex items-start ${addressValidation.valid ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
+                          {addressValidation.valid ? (
+                            <CheckCircle className="text-green-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
+                          ) : (
+                            <AlertTriangle className="text-amber-600 mr-2 mt-0.5 flex-shrink-0" size={16} />
+                          )}
+                          <span className={`text-sm ${addressValidation.valid ? 'text-green-700' : 'text-amber-700'}`}>
+                            {addressValidation.message}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    
                     <div className="border rounded-md p-4 mt-4 bg-gray-50">
                       <p className="text-sm text-gray-600">
                         <span className="font-semibold">Note:</span> You will be redirected to Stripe's secure payment page to complete your purchase.
@@ -260,7 +392,7 @@ const Checkout = () => {
                     <Button 
                       type="submit" 
                       className="w-full bg-flavour-red hover:bg-red-700 mt-6"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || (addressValidation.checked && !addressValidation.valid)}
                     >
                       {isSubmitting ? (
                         <>
