@@ -14,8 +14,8 @@ const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const { clearCart } = useCart();
 
-  // Get reference ID from URL - works with both Square (link_id) and other payment processors
-  const referenceId = searchParams.get('link_id') || searchParams.get('session_id') || 'unknown';
+  // Get reference ID from URL - works with Square (link_id)
+  const referenceId = searchParams.get('link_id') || 'unknown';
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,7 +57,7 @@ const PaymentSuccess = () => {
               
               <p className="text-gray-700 text-lg mb-6">
                 Thank you for your order! Your payment has been processed successfully and your order is confirmed.
-                {checkoutDetails?.customerName && ` We'll send a confirmation to ${checkoutDetails.customerEmail}.`}
+                {checkoutDetails?.customerEmail && ` We'll send a confirmation to ${checkoutDetails.customerEmail}.`}
               </p>
               
               {referenceId && referenceId !== 'unknown' && (
@@ -86,6 +86,20 @@ const PaymentSuccess = () => {
                         <span>${(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                     ))}
+                    
+                    {checkoutDetails.shippingMethod && (
+                      <div className="flex justify-between text-sm py-1 text-gray-600">
+                        <span>Shipping ({checkoutDetails.shippingMethod === 'standard' ? 'Standard' : 'FedEx 2-Day'})</span>
+                        <span>{checkoutDetails.shippingMethod === 'standard' ? 'Free' : '$15.99'}</span>
+                      </div>
+                    )}
+                    
+                    {checkoutDetails.shippingAddress && (
+                      <div className="mt-3 pt-2 border-t border-gray-200">
+                        <p className="text-sm text-gray-600 font-medium">Shipping to:</p>
+                        <p className="text-sm">{checkoutDetails.shippingAddress}</p>
+                      </div>
+                    )}
                     
                     <div className="border-t border-gray-200 pt-2 mt-2 font-medium">
                       <div className="flex justify-between py-1">

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -45,7 +46,6 @@ const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState<'customer'>('customer');
   const [isValidatingAddress, setIsValidatingAddress] = useState(false);
   const [addressValidation, setAddressValidation] = useState<{
     valid: boolean;
@@ -133,7 +133,7 @@ const Checkout = () => {
     }
   };
 
-  const handleStripeCheckout = async (values: CustomerFormValues) => {
+  const handleSquareCheckout = async (values: CustomerFormValues) => {
     setIsSubmitting(true);
     
     // Always validate the address first
@@ -152,6 +152,16 @@ const Checkout = () => {
       toast.info('Preparing payment session...', {
         duration: 5000
       });
+      
+      // Store checkout data in session storage for success page
+      sessionStorage.setItem('checkout_details', JSON.stringify({
+        orderTotal: orderTotal,
+        items: items,
+        shippingMethod: values.shippingMethod,
+        customerName: values.customerName,
+        customerEmail: values.customerEmail,
+        shippingAddress: `${values.shippingAddress}, ${values.city}, ${values.state} ${values.zipCode}`
+      }));
       
       // Create order details for Square
       const { data, error } = await supabase.functions.invoke('create-payment', {
@@ -176,24 +186,19 @@ const Checkout = () => {
         return;
       }
 
-      if (data?.url) {
-        // Store checkout data in session storage for success page
-        sessionStorage.setItem('checkout_details', JSON.stringify({
-          orderTotal: orderTotal,
-          items: items,
-          shippingMethod: values.shippingMethod,
-          customerName: values.customerName,
-          customerEmail: values.customerEmail
-        }));
-        
-        console.log('Redirecting to payment URL:', data.url);
-        
-        // Redirect to Square Checkout
-        window.location.href = data.url;
-      } else {
-        toast.error('Invalid response from payment service');
+      if (!data || !data.url) {
+        toast.error('Invalid response from payment service', {
+          description: 'Please try again or contact support'
+        });
+        console.error('Invalid payment data returned:', data);
         setIsSubmitting(false);
+        return;
       }
+      
+      console.log('Redirecting to Square payment URL:', data.url);
+      
+      // Redirect to Square Checkout
+      window.location.href = data.url;
     } catch (error) {
       console.error('Error processing payment:', error);
       toast.error('Failed to process payment');
@@ -266,7 +271,7 @@ const Checkout = () => {
                 <h2 className="text-xl font-semibold mb-4">Customer Information</h2>
                 
                 <Form {...customerForm}>
-                  <form onSubmit={customerForm.handleSubmit(handleStripeCheckout)} className="space-y-4">
+                  <form onSubmit={customerForm.handleSubmit(handleSquareCheckout)} className="space-y-4">
                     <FormField
                       control={customerForm.control}
                       name="customerName"

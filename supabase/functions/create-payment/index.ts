@@ -32,6 +32,9 @@ serve(async (req) => {
       );
     }
     
+    // Clean location ID (remove any whitespace or special characters)
+    const cleanLocationId = locationId.trim().replace(/[^\w-]/g, '');
+    
     // Generate random idempotency key
     const idempotencyKey = crypto.randomUUID();
     
@@ -42,7 +45,7 @@ serve(async (req) => {
     console.log(`- Service: ${service || "Legacy Kitchen Solutions"}`);
     console.log(`- Amount: ${totalAmount} cents (${totalAmount/100} USD)`);
     console.log(`- Customer: ${customerName}, ${customerEmail}`);
-    console.log(`- Using location ID: ${locationId}`);
+    console.log(`- Using location ID: ${cleanLocationId}`);
     
     // Create a checkout URL using Square's API
     const response = await fetch("https://connect.squareup.com/v2/online-checkout/payment-links", {
@@ -56,11 +59,11 @@ serve(async (req) => {
         idempotency_key: idempotencyKey,
         checkout_options: {
           redirect_url: `${req.headers.get("origin")}/payment-success?link_id={link_id}`,
-          merchant_support_email: "info@chefgang.com", // Use a valid email address
+          merchant_support_email: "info@chefgang.com",
           ask_for_shipping_address: true
         },
         order: {
-          location_id: locationId,
+          location_id: cleanLocationId,
           line_items: [
             {
               name: service || "Legacy Kitchen Solutions",
@@ -103,11 +106,12 @@ serve(async (req) => {
     if (!response.ok) {
       console.error("Square API error:", JSON.stringify(responseData));
       
-      // Return a more user-friendly error message
+      // Return a more detailed error message
       return new Response(
         JSON.stringify({ 
           error: "Payment processing error", 
-          details: responseData?.errors?.[0]?.detail || "Unknown error occurred"
+          details: responseData?.errors?.[0]?.detail || "Unknown error occurred",
+          raw_response: responseData
         }),
         {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
