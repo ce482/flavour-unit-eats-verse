@@ -1,6 +1,5 @@
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@12.7.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,51 +13,82 @@ serve(async (req) => {
   }
 
   try {
-    const { service, customerName, customerEmail, amount = 7700 } = await req.json();
+    const { service, customerName, customerEmail, amount = 7700, shippingMethod, shippingCost } = await req.json();
     
-    // Initialize Stripe with the secret key
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2023-10-16",
-    });
+    // Square API credentials
+    const appId = Deno.env.get("SQUARE_APP_ID") || "";
+    const accessToken = Deno.env.get("SQUARE_ACCESS_TOKEN") || "";
+    const locationId = Deno.env.get("SQUARE_LOCATION_ID") || "";
     
     console.log(`Creating payment session for ${service || "Legacy Kitchen Solutions"} - ${amount}`);
     
-    // Create a checkout session for a one-time payment
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      customer_email: customerEmail,
-      metadata: {
-        customer_name: customerName,
-        service: service || "Legacy Kitchen Solutions"
+    // Generate random idempotency key to ensure uniqueness for this payment attempt
+    const idempotencyKey = crypto.randomUUID();
+    
+    // Calculate the total amount with shipping if provided
+    const totalAmount = shippingCost ? amount + (shippingCost * 100) : amount;
+    
+    // Create a checkout URL using Square's API
+    const response = await fetch("https://connect.squareupsandbox.com/v2/online-checkout/payment-links", {
+      method: "POST",
+      headers: {
+        "Square-Version": "2023-09-25",
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       },
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: service || "Legacy Kitchen Solutions",
-              description: "Professional food industry consulting services"
-            },
-            unit_amount: amount, // Amount in cents
-          },
-          quantity: 1,
+      body: JSON.stringify({
+        idempotency_key: idempotencyKey,
+        checkout_options: {
+          redirect_url: `${req.headers.get("origin")}/payment-success?link_id={link_id}`,
+          merchant_support_email: customerEmail,
+          ask_for_shipping_address: true
         },
-      ],
-      mode: "payment",
-      success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/legacy-kitchen`,
+        order: {
+          location_id: locationId,
+          line_items: [
+            {
+              name: service || "Legacy Kitchen Solutions",
+              quantity: "1",
+              base_price_money: {
+                amount: amount,
+                currency: "USD"
+              }
+            }
+          ],
+          metadata: {
+            customer_name: customerName,
+            customer_email: customerEmail,
+            shipping_method: shippingMethod || "standard"
+          }
+        },
+        pre_populated_data: {
+          buyer_email: customerEmail,
+          buyer_name: customerName
+        }
+      }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Square API error:", JSON.stringify(errorData));
+      throw new Error(`Square API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
     // Return the checkout URL for the frontend to redirect to
     return new Response(
-      JSON.stringify({ url: session.url }),
+      JSON.stringify({ 
+        url: result.payment_link.url,
+        id: result.payment_link.id
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       }
     );
   } catch (error) {
-    console.error("Error creating Stripe session:", error);
+    console.error("Error creating Square payment link:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {
