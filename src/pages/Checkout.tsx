@@ -152,13 +152,13 @@ const Checkout = () => {
     }
 
     try {
-      // Create order details for Stripe
+      // Create order details for Square
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: {
           service: 'Chef Gang Food Products',
           customerName: values.customerName,
           customerEmail: values.customerEmail,
-          // Convert price to cents for Stripe and include shipping cost
+          // Convert price to cents for Square
           amount: Math.round(orderTotal * 100),
           // Include shipping method details
           shippingMethod: values.shippingMethod,
@@ -168,13 +168,15 @@ const Checkout = () => {
 
       if (error) {
         console.error('Error creating payment session:', error);
-        toast.error('Failed to create payment session');
+        toast.error('Failed to create payment session', {
+          description: error.message
+        });
         setIsSubmitting(false);
         return;
       }
 
       if (data?.url) {
-        // Redirect to Stripe Checkout
+        // Redirect to Square Checkout
         window.location.href = data.url;
       } else {
         toast.error('Invalid response from payment service');
@@ -423,7 +425,7 @@ const Checkout = () => {
                     
                     <div className="border rounded-md p-4 mt-4 bg-gray-50">
                       <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Note:</span> You will be redirected to Stripe's secure payment page to complete your purchase.
+                        <span className="font-semibold">Note:</span> You will be redirected to Square's secure payment page to complete your purchase.
                       </p>
                     </div>
                     

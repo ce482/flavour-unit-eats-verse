@@ -20,8 +20,11 @@ serve(async (req) => {
     const accessToken = Deno.env.get("SQUARE_ACCESS_TOKEN") || "";
     const locationId = Deno.env.get("SQUARE_LOCATION_ID") || "";
     
+    // Remove any potential whitespace from the location ID
+    const cleanLocationId = locationId.trim();
+    
     console.log(`Creating payment session for ${service || "Legacy Kitchen Solutions"} - ${amount}`);
-    console.log(`Using location ID: ${locationId}`);
+    console.log(`Using location ID: "${cleanLocationId}"`);
     
     // Generate random idempotency key to ensure uniqueness for this payment attempt
     const idempotencyKey = crypto.randomUUID();
@@ -45,7 +48,7 @@ serve(async (req) => {
           ask_for_shipping_address: true
         },
         order: {
-          location_id: locationId,
+          location_id: cleanLocationId,
           line_items: [
             {
               name: service || "Legacy Kitchen Solutions",

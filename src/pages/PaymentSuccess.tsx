@@ -7,6 +7,7 @@ import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
+import { toast } from 'sonner';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
@@ -18,6 +19,11 @@ const PaymentSuccess = () => {
     window.scrollTo(0, 0);
     // Clear the cart after successful payment
     clearCart();
+    
+    // Show success message
+    toast.success('Payment completed successfully!', {
+      description: 'Your order has been confirmed.'
+    });
   }, [clearCart]);
 
   return (
