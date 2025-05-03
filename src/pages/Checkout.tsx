@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -7,7 +6,6 @@ import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -21,9 +19,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import { Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-react';
 
 const customerFormSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters long' }),
@@ -152,6 +149,10 @@ const Checkout = () => {
     }
 
     try {
+      toast.info('Preparing payment session...', {
+        duration: 5000
+      });
+      
       // Create order details for Square
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: {
@@ -169,13 +170,24 @@ const Checkout = () => {
       if (error) {
         console.error('Error creating payment session:', error);
         toast.error('Failed to create payment session', {
-          description: error.message
+          description: error.message || 'Please try again later'
         });
         setIsSubmitting(false);
         return;
       }
 
       if (data?.url) {
+        // Store checkout data in session storage for success page
+        sessionStorage.setItem('checkout_details', JSON.stringify({
+          orderTotal: orderTotal,
+          items: items,
+          shippingMethod: values.shippingMethod,
+          customerName: values.customerName,
+          customerEmail: values.customerEmail
+        }));
+        
+        console.log('Redirecting to payment URL:', data.url);
+        
         // Redirect to Square Checkout
         window.location.href = data.url;
       } else {
