@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -19,7 +20,26 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-react';
+import { 
+  Loader2, 
+  CheckCircle, 
+  AlertTriangle, 
+  Package, 
+  InfoIcon 
+} from 'lucide-react';
+import { 
+  EXCLUDED_STATES, 
+  STATE_NAMES, 
+  SHIPPING_METHODS,
+  isShippingAllowed
+} from '@/utils/shippingUtils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const customerFormSchema = z.object({
   customerName: z.string().min(2, { message: 'Name must be at least 2 characters long' }),
@@ -27,17 +47,14 @@ const customerFormSchema = z.object({
   customerPhone: z.string().optional(),
   shippingAddress: z.string().min(5, { message: 'Please enter a valid shipping address' }),
   city: z.string().min(2, { message: 'Please enter a valid city' }),
-  state: z.string().min(2, { message: 'Please enter a valid state' }),
+  state: z.string().refine(state => isShippingAllowed(state), {
+    message: "We currently don't ship to this state due to extreme heat conditions"
+  }),
   zipCode: z.string().min(5, { message: 'Please enter a valid ZIP/postal code' }),
   shippingMethod: z.enum(['standard', 'fedex_2day']),
 });
 
 type CustomerFormValues = z.infer<typeof customerFormSchema>;
-
-const SHIPPING_METHODS = {
-  standard: { name: 'Standard Shipping', price: 0, description: 'Free - 5-7 business days' },
-  fedex_2day: { name: 'FedEx 2-Day Shipping', price: 15.99, description: 'Guaranteed delivery in 2 business days' },
-};
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -70,6 +87,7 @@ const Checkout = () => {
 
   // Watch for shipping method changes to calculate total
   const selectedShippingMethod = customerForm.watch('shippingMethod');
+  const selectedState = customerForm.watch('state');
   const shippingCost = SHIPPING_METHODS[selectedShippingMethod].price;
   const orderTotal = totalPrice + shippingCost;
 
@@ -78,6 +96,11 @@ const Checkout = () => {
     toast.error('Your cart is empty');
     return null;
   }
+
+  // Sort states alphabetically and filter out excluded ones
+  const availableStates = Object.entries(STATE_NAMES)
+    .filter(([code]) => isShippingAllowed(code))
+    .sort((a, b) => a[1].localeCompare(b[1]));
 
   const validateAddress = async (data: CustomerFormValues) => {
     setIsValidatingAddress(true);
@@ -206,7 +229,6 @@ const Checkout = () => {
   // Watch form fields for address validation reset
   const shippingAddress = customerForm.watch('shippingAddress');
   const city = customerForm.watch('city');
-  const state = customerForm.watch('state');
   const zipCode = customerForm.watch('zipCode');
 
   // Reset validation status when address fields change
@@ -218,7 +240,7 @@ const Checkout = () => {
         checked: false
       });
     }
-  }, [shippingAddress, city, state, zipCode]);
+  }, [shippingAddress, city, selectedState, zipCode]);
 
   return (
     <>
@@ -256,6 +278,22 @@ const Checkout = () => {
                     <div className="flex justify-between font-bold text-lg mt-4">
                       <p>Total</p>
                       <p>${orderTotal.toFixed(2)}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Shipping Restriction Notice */}
+                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-md">
+                  <div className="flex items-start">
+                    <InfoIcon className="h-5 w-5 text-amber-500 mt-0.5 mr-2" />
+                    <div>
+                      <p className="font-medium text-amber-800">Shipping Restrictions</p>
+                      <p className="text-sm text-amber-700 mt-1">
+                        We currently don't ship to the following states due to extreme heat conditions:
+                      </p>
+                      <p className="text-sm font-medium text-amber-700 mt-1">
+                        {EXCLUDED_STATES.map(code => STATE_NAMES[code]).join(', ')}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -351,7 +389,21 @@ const Checkout = () => {
                           <FormItem>
                             <FormLabel>State</FormLabel>
                             <FormControl>
-                              <Input placeholder="IL" {...field} />
+                              <Select 
+                                onValueChange={field.onChange} 
+                                value={field.value}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select state" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableStates.map(([code, name]) => (
+                                    <SelectItem key={code} value={code}>
+                                      {name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                             </FormControl>
                             <FormMessage />
                           </FormItem>

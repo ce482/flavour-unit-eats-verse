@@ -6,6 +6,19 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// List of states we don't ship to due to extreme heat
+const EXCLUDED_STATES = [
+  'AK', // Alaska
+  'HI', // Hawaii
+  'AZ', // Arizona
+  'FL', // Florida
+  'CA', // California
+  'NV', // Nevada
+  'TX', // Texas
+  'GA', // Georgia
+  'MS'  // Mississippi
+];
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -21,6 +34,17 @@ serve(async (req) => {
         JSON.stringify({ 
           valid: false, 
           message: "All address fields are required" 
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Check for shipping restrictions
+    if (EXCLUDED_STATES.includes(state.toUpperCase())) {
+      return new Response(
+        JSON.stringify({ 
+          valid: false, 
+          message: `We currently don't ship to ${state} due to extreme heat conditions.` 
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
