@@ -11,7 +11,7 @@ import { useCart } from '@/contexts/CartContext';
 const PaymentSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  const sessionId = searchParams.get('session_id') || searchParams.get('link_id'); // Handle both Stripe and Square parameters
   const { clearCart } = useCart();
 
   useEffect(() => {

@@ -21,6 +21,7 @@ serve(async (req) => {
     const locationId = Deno.env.get("SQUARE_LOCATION_ID") || "";
     
     console.log(`Creating payment session for ${service || "Legacy Kitchen Solutions"} - ${amount}`);
+    console.log(`Using location ID: ${locationId}`);
     
     // Generate random idempotency key to ensure uniqueness for this payment attempt
     const idempotencyKey = crypto.randomUUID();
@@ -40,7 +41,7 @@ serve(async (req) => {
         idempotency_key: idempotencyKey,
         checkout_options: {
           redirect_url: `${req.headers.get("origin")}/payment-success?link_id={link_id}`,
-          merchant_support_email: customerEmail,
+          merchant_support_email: "support@example.com", // Use a default support email
           ask_for_shipping_address: true
         },
         order: {
@@ -50,16 +51,11 @@ serve(async (req) => {
               name: service || "Legacy Kitchen Solutions",
               quantity: "1",
               base_price_money: {
-                amount: amount,
+                amount: totalAmount,
                 currency: "USD"
               }
             }
-          ],
-          metadata: {
-            customer_name: customerName,
-            customer_email: customerEmail,
-            shipping_method: shippingMethod || "standard"
-          }
+          ]
         },
         pre_populated_data: {
           buyer_email: customerEmail,
@@ -71,10 +67,11 @@ serve(async (req) => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Square API error:", JSON.stringify(errorData));
-      throw new Error(`Square API error: ${response.status}`);
+      throw new Error(`Square API error: ${response.status} - ${JSON.stringify(errorData)}`);
     }
 
     const result = await response.json();
+    console.log("Square payment link created successfully:", result.payment_link.id);
     
     // Return the checkout URL for the frontend to redirect to
     return new Response(
