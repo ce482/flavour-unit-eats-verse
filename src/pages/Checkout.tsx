@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -42,7 +40,6 @@ const SHIPPING_METHODS = {
 };
 
 const Checkout = () => {
-  const { user } = useAuth();
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,8 +57,8 @@ const Checkout = () => {
   const customerForm = useForm<CustomerFormValues>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
-      customerName: user?.user_metadata?.full_name || '',
-      customerEmail: user?.email || '',
+      customerName: '',
+      customerEmail: '',
       customerPhone: '',
       shippingAddress: '',
       city: '',

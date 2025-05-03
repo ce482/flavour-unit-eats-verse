@@ -2,17 +2,11 @@
 import React from 'react';
 import NavLink from './NavLink';
 import CartButton from './CartButton';
-import { Link } from 'react-router-dom';
 import { navItems } from './NavConfig';
 
 type DesktopNavProps = {
   isScrolled: boolean;
   shouldUseDarkText: boolean;
-  showOrdersTab: boolean;
-  handleOrdersClick: (e: React.MouseEvent) => void;
-  handleLogout: () => void;
-  isLoggingOut: boolean;
-  user: any;
   openCart: () => void;
   totalItems: number;
 };
@@ -20,11 +14,6 @@ type DesktopNavProps = {
 const DesktopNav = ({ 
   isScrolled, 
   shouldUseDarkText, 
-  showOrdersTab,
-  handleOrdersClick,
-  handleLogout,
-  isLoggingOut,
-  user,
   openCart,
   totalItems
 }: DesktopNavProps) => {
@@ -41,46 +30,7 @@ const DesktopNav = ({
           />
         ))}
         
-        {showOrdersTab && (
-          <Link
-            to="/orders"
-            className={`text-sm font-medium transition-colors hover:text-flavour-red ${
-              isScrolled 
-                ? 'text-flavour-black' 
-                : shouldUseDarkText
-                  ? 'text-flavour-black hover:text-flavour-red'
-                  : 'text-white hover:text-white/80'
-            }`}
-            onClick={handleOrdersClick}
-          >
-            Orders
-          </Link>
-        )}
-        
         <div className="pl-6 flex items-center space-x-6">
-          {user ? (
-            <button
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-              className={`text-sm font-medium transition-colors hover:text-flavour-red ${
-                isScrolled 
-                  ? 'text-flavour-black' 
-                  : shouldUseDarkText
-                    ? 'text-flavour-black'
-                    : 'text-white'
-              }`}
-            >
-              {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
-            </button>
-          ) : (
-            <NavLink
-              name="Sign In"
-              path="/auth"
-              isScrolled={isScrolled}
-              shouldUseDarkText={shouldUseDarkText}
-            />
-          )}
-          
           <CartButton
             totalItems={totalItems}
             onClick={openCart}

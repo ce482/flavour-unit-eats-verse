@@ -13,9 +13,7 @@ import Cookbook from "./pages/Cookbook";
 import LegacyKitchen from "./pages/LegacyKitchen";
 import Contact from "./pages/Contact";
 import PetitDejeuner from "./pages/PetitDejeuner";
-import Orders from "./pages/Orders";
 import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -33,8 +31,6 @@ const App = () => (
           <Cart />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/auth" element={<Auth />} />
             <Route path="/egg-rolls" element={<EggRolls />} />
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<FAQ />} />

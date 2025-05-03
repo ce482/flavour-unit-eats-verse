@@ -3,7 +3,6 @@ import React from 'react';
 import { X, Menu } from 'lucide-react';
 import MobileNavLink from './MobileNavLink';
 import CartButton from './CartButton';
-import { Link } from 'react-router-dom';
 import { navItems } from './NavConfig';
 
 type MobileNavProps = {
@@ -11,11 +10,6 @@ type MobileNavProps = {
   shouldUseDarkText: boolean;
   isMenuOpen: boolean;
   toggleMenu: () => void;
-  showOrdersTab: boolean;
-  handleOrdersClick: (e: React.MouseEvent) => void;
-  handleLogout: () => void;
-  isLoggingOut: boolean;
-  user: any;
   openCart: () => void;
   totalItems: number;
   location: any;
@@ -26,11 +20,6 @@ const MobileNav = ({
   shouldUseDarkText,
   isMenuOpen,
   toggleMenu,
-  showOrdersTab,
-  handleOrdersClick,
-  handleLogout,
-  isLoggingOut,
-  user,
   openCart,
   totalItems,
   location
@@ -70,29 +59,6 @@ const MobileNav = ({
                 path={item.path}
               />
             ))}
-            
-            {showOrdersTab && (
-              <MobileNavLink
-                name="Orders"
-                path="/orders"
-                onClick={handleOrdersClick}
-              />
-            )}
-            
-            {user ? (
-              <button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="px-4 py-2 text-base font-medium text-flavour-black transition-colors hover:bg-gray-100 rounded text-left"
-              >
-                {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
-              </button>
-            ) : (
-              <MobileNavLink
-                name="Sign In"
-                path="/auth"
-              />
-            )}
           </div>
         </div>
       )}
