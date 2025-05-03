@@ -20,11 +20,12 @@ serve(async (req) => {
     const accessToken = Deno.env.get("SQUARE_ACCESS_TOKEN") || "";
     const locationId = Deno.env.get("SQUARE_LOCATION_ID") || "";
     
-    // Remove any potential whitespace from the location ID
-    const cleanLocationId = locationId.trim();
+    // Clean the location ID - remove any potential whitespace and special characters
+    const cleanLocationId = locationId.trim().replace(/\s+/g, "").replace(/[^\w-]/g, "");
     
     console.log(`Creating payment session for ${service || "Legacy Kitchen Solutions"} - ${amount}`);
-    console.log(`Using location ID: "${cleanLocationId}"`);
+    console.log(`Original location ID: "${locationId}"`);
+    console.log(`Cleaned location ID: "${cleanLocationId}"`);
     
     // Generate random idempotency key to ensure uniqueness for this payment attempt
     const idempotencyKey = crypto.randomUUID();
@@ -67,20 +68,30 @@ serve(async (req) => {
       }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Square API error:", JSON.stringify(errorData));
-      throw new Error(`Square API error: ${response.status} - ${JSON.stringify(errorData)}`);
+    const responseText = await response.text();
+    console.log(`Square API response status: ${response.status}`);
+    console.log(`Square API response body: ${responseText}`);
+
+    let responseData;
+    try {
+      responseData = JSON.parse(responseText);
+    } catch (e) {
+      console.error("Failed to parse Square API response:", e);
+      throw new Error(`Invalid response from Square API: ${responseText}`);
     }
 
-    const result = await response.json();
-    console.log("Square payment link created successfully:", result.payment_link.id);
+    if (!response.ok) {
+      console.error("Square API error:", JSON.stringify(responseData));
+      throw new Error(`Square API error: ${response.status} - ${JSON.stringify(responseData)}`);
+    }
+    
+    console.log("Square payment link created successfully:", responseData.payment_link.id);
     
     // Return the checkout URL for the frontend to redirect to
     return new Response(
       JSON.stringify({ 
-        url: result.payment_link.url,
-        id: result.payment_link.id
+        url: responseData.payment_link.url,
+        id: responseData.payment_link.id
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
