@@ -1,7 +1,11 @@
 
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ImageLoader } from '../../utils/imageLoader';
 
 const BrandShowcase = () => {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
   const brands = [
     {
       name: "Egg Rolls Etc.",
@@ -20,11 +24,19 @@ const BrandShowcase = () => {
     {
       name: "Petit Déjeuner",
       description: "Savory breakfast options that bring international flavors to your morning routine. (Coming Soon)",
-      imageSrc: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+      imageSrc: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       path: "/petit-dejeuner",
       isActive: false
     }
   ];
+
+  useEffect(() => {
+    // Preload brand images
+    const imageUrls = brands.map(brand => brand.imageSrc);
+    ImageLoader.preloadImages(imageUrls).then(() => {
+      setImagesLoaded(true);
+    });
+  }, []);
 
   return (
     <section className="py-20 bg-flavour-cream">
@@ -42,11 +54,21 @@ const BrandShowcase = () => {
               key={brand.name}
               className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2"
             >
-              <div className="h-56 overflow-hidden">
+              <div className="h-56 overflow-hidden relative">
+                {!imagesLoaded && (
+                  <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+                )}
                 <img 
                   src={brand.imageSrc} 
                   alt={brand.name}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
+                  className={`w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110 ${imagesLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  style={{ transition: "opacity 0.3s ease-in-out" }}
+                  loading="eager"
+                  onLoad={(e) => {
+                    // Ensure image is visible when loaded individually
+                    e.currentTarget.classList.remove('opacity-0');
+                    e.currentTarget.classList.add('opacity-100');
+                  }}
                 />
               </div>
               

@@ -1,11 +1,12 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import HeroBanner from '../components/home/HeroBanner';
 import BrandShowcase from '../components/home/BrandShowcase';
 import OrderPopup from '../components/ui/OrderPopup';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
+import { ImageLoader } from '../utils/imageLoader';
 
 const featuredProducts = [
   {
@@ -32,8 +33,16 @@ const featuredProducts = [
 ];
 
 const Index = () => {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Preload the featured product images
+    const imageUrls = featuredProducts.map(product => product.image);
+    ImageLoader.preloadImages(imageUrls).then(() => {
+      setImagesLoaded(true);
+    });
   }, []);
 
   return (
@@ -76,11 +85,21 @@ const Index = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                  <div className="h-64 overflow-hidden">
+                  <div className="h-64 overflow-hidden relative">
+                    {!imagesLoaded && (
+                      <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+                    )}
                     <img 
                       src={product.image}
                       alt={product.name} 
-                      className="w-full h-full object-cover transition-transform hover:scale-105"
+                      className={`w-full h-full object-cover transition-transform hover:scale-105 ${imagesLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      style={{ transition: "opacity 0.3s ease-in-out" }}
+                      loading="eager"
+                      onLoad={(e) => {
+                        // Ensure image is visible when loaded individually
+                        e.currentTarget.classList.remove('opacity-0');
+                        e.currentTarget.classList.add('opacity-100');
+                      }}
                     />
                   </div>
                   <div className="p-6">
