@@ -60,7 +60,7 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
             {isImageArray ? (
               <Carousel className="w-full h-full">
                 <CarouselContent className="h-full">
-                  {product.image.map((img, index) => (
+                  {(product.image as string[]).map((img, index) => (
                     <CarouselItem key={index} className="h-full">
                       <img
                         src={img}
@@ -75,7 +75,7 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
               </Carousel>
             ) : (
               <img
-                src={product.image}
+                src={product.image as string}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
