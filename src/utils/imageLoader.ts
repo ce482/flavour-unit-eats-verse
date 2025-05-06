@@ -34,4 +34,13 @@ export class ImageLoader {
     // For local images, return as is
     return url;
   }
+
+  /**
+   * Determine if an image URL is an array of images (for carousel)
+   * This helps identify when we should use a carousel vs a single image
+   */
+  static isImageArray(image: string | string[]): image is string[] {
+    return Array.isArray(image);
+  }
 }
+

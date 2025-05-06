@@ -4,13 +4,21 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { ImageLoader } from '@/utils/imageLoader';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export type Product = {
   id: number;
   name: string;
   description: string;
   price: number;
-  image: string;
+  image: string | string[];
   category: string;
   longDescription?: string;
 };
@@ -31,10 +39,12 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image,
+      image: Array.isArray(product.image) ? product.image[0] : product.image,
     });
     onClose();
   };
+
+  const isImageArray = ImageLoader.isImageArray(product.image);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -47,11 +57,29 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
         </DialogHeader>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="aspect-square overflow-hidden rounded-lg">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+            {isImageArray ? (
+              <Carousel className="w-full h-full">
+                <CarouselContent className="h-full">
+                  {product.image.map((img, index) => (
+                    <CarouselItem key={index} className="h-full">
+                      <img
+                        src={img}
+                        alt={`${product.name} - view ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-white/80 hover:bg-white" />
+                <CarouselNext className="right-2 bg-white/80 hover:bg-white" />
+              </Carousel>
+            ) : (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
           <div className="flex flex-col">
             <p className="text-gray-600 mb-4">{product.description}</p>
