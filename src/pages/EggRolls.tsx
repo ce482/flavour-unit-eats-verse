@@ -65,7 +65,10 @@ const EggRolls = () => {
       name: "AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
       description: "(4 PIECES OF) AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
       price: 12.99,
-      image: "",
+      image: [
+        "/lovable-uploads/2f82422a-e001-4e40-a50f-963fb94a5e66.png",
+        "/lovable-uploads/c22b050e-f196-49e6-a865-e2d1b489e2e9.png"
+      ],
       category: "egg-rolls",
       longDescription: "Auntie Kathy's Peach Cobbler Dessert Egg Rolls - A delightful dessert twist on egg rolls! Sweet peaches, cinnamon, and a touch of vanilla are wrapped in a crispy wonton wrapper and fried to golden perfection. A family recipe passed down from our Auntie Kathy."
     },
