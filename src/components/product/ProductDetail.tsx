@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import ProductImageCarousel from './ProductImageCarousel';
 
 export type Product = {
   id: number;
@@ -31,7 +32,7 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: typeof product.image === 'string' ? product.image : '',
+      image: typeof product.image === 'string' ? product.image : Array.isArray(product.image) ? product.image[0] : '',
     });
     onClose();
   };
@@ -48,13 +49,22 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {product.image && (
-            <div className="aspect-square overflow-hidden rounded-md">
-              <img 
-                src={typeof product.image === 'string' ? product.image : product.image[0]} 
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            Array.isArray(product.image) ? (
+              <div className="aspect-square overflow-hidden rounded-md">
+                <ProductImageCarousel 
+                  images={product.image} 
+                  productName={product.name} 
+                />
+              </div>
+            ) : (
+              <div className="aspect-square overflow-hidden rounded-md">
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )
           )}
           
           <div className="flex flex-col">

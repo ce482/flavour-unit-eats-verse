@@ -6,6 +6,7 @@ import { ExternalLink, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import ProductDetail, { Product } from '@/components/product/ProductDetail';
 import { toast } from 'sonner';
+import ProductImageCarousel from '@/components/product/ProductImageCarousel';
 
 const EggRolls = () => {
   const { addItem } = useCart();
@@ -31,7 +32,10 @@ const EggRolls = () => {
       name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
       description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
       price: 12.99,
-      image: "",
+      image: [
+        "/lovable-uploads/747d6253-a20c-4596-98e4-daa838676a71.png",
+        "/lovable-uploads/c0bf92d3-5f82-4b14-9022-da738b873037.png"
+      ],
       category: "egg-rolls",
       longDescription: "Plant-Based Philly Cheesesteak Egg Rolls - A delicious vegan alternative to our classic Philly Cheesesteak Egg Rolls. Made with plant-based protein that mimics the taste and texture of beef, along with vegan cheese and sautéed peppers and onions."
     },
@@ -123,7 +127,7 @@ const EggRolls = () => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: "",
+      image: typeof product.image === 'string' ? product.image : Array.isArray(product.image) ? product.image[0] : "",
     });
     toast.success(`Added ${product.name} to cart`);
   };
@@ -166,11 +170,19 @@ const EggRolls = () => {
               {products.map((product) => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
                   {product.image && (
-                    <div 
-                      className="h-48 bg-center bg-cover cursor-pointer"
-                      style={{ backgroundImage: `url(${product.image})` }}
-                      onClick={() => handleProductClick(product)}
-                    />
+                    Array.isArray(product.image) ? (
+                      <ProductImageCarousel 
+                        images={product.image} 
+                        productName={product.name} 
+                        onClick={() => handleProductClick(product)}
+                      />
+                    ) : (
+                      <div 
+                        className="h-48 bg-center bg-cover cursor-pointer"
+                        style={{ backgroundImage: `url(${product.image})` }}
+                        onClick={() => handleProductClick(product)}
+                      />
+                    )
                   )}
                   <div className="p-6">
                     <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 block">
