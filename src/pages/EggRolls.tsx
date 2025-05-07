@@ -183,7 +183,7 @@ const EggRolls = () => {
             <h2 className="section-title text-center mb-12">Our Products</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow flex flex-col">
                   {product.image && (
                     Array.isArray(product.image) ? (
                       <ProductImageCarousel 
@@ -199,7 +199,7 @@ const EggRolls = () => {
                       />
                     )
                   )}
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-grow">
                     <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 block">
                       {product.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                     </span>
@@ -209,8 +209,8 @@ const EggRolls = () => {
                     >
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 mb-4">{product.description}</p>
-                    <div className="flex justify-between items-center">
+                    <p className="text-gray-600 mb-4 flex-grow">{product.description}</p>
+                    <div className="flex justify-between items-center mt-auto">
                       <span className="text-lg font-bold text-flavour-red">${product.price.toFixed(2)}</span>
                       <button 
                         className="bg-flavour-red text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors flex items-center gap-2"
