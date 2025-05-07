@@ -116,7 +116,7 @@ const EggRolls = () => {
       name: "SALMON RANGOON",
       description: "8 PIECES SALMON RANGOON",
       price: 12.99,
-      image: "",
+      image: "/lovable-uploads/71af7367-8ff9-437f-a2b6-7c69b4088ed5.png",
       category: "rangoon",
       longDescription: "Salmon Rangoon - Our gourmet twist on the classic crab rangoon, featuring premium salmon mixed with a creamy cheese filling and wrapped in a crispy wonton wrapper. Perfect for seafood lovers looking for something a bit different!"
     },
