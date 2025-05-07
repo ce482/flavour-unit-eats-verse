@@ -89,7 +89,7 @@ const EggRolls = () => {
       name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
       description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EGG ROLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
       price: 12.99,
-      image: "",
+      image: "/lovable-uploads/f282ef43-695b-4630-8821-bbe7f460ce05.png",
       category: "egg-rolls",
       longDescription: "Gert's Collard Greens Egg Rolls ™ - Our most popular Egg Roll named after our founder's late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton! We pair this Egg Roll with classic sweet and sour sauce and because its your Egg Roll please choose a method from our packaging on how to cook the outer layer."
     },
