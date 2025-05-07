@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -6,6 +7,7 @@ import { useCart } from '@/contexts/CartContext';
 import ProductDetail, { Product } from '@/components/product/ProductDetail';
 import { toast } from 'sonner';
 import ProductImageCarousel from '@/components/product/ProductImageCarousel';
+import { STATE_NAMES, EXCLUDED_STATES } from '@/utils/shippingUtils';
 
 const EggRolls = () => {
   const { addItem } = useCart();
@@ -149,6 +151,11 @@ const EggRolls = () => {
     setIsModalOpen(false);
   };
 
+  // Get list of states we ship to
+  const deliveryStates = Object.entries(STATE_NAMES)
+    .filter(([code]) => !EXCLUDED_STATES.includes(code))
+    .map(([, name]) => name);
+
   return (
     <>
       <Navbar />
@@ -163,7 +170,7 @@ const EggRolls = () => {
               </p>
               <div className="flex justify-center">
                 <div className="bg-white/10 text-white px-6 py-3 rounded-lg inline-block">
-                  <p className="text-sm">*We are only delivering to Chicago and Close to Chicagoland suburbs for now via a third party delivery platform.</p>
+                  <p className="text-sm">We deliver to {deliveryStates.slice(0, 5).join(', ')}, and {deliveryStates.length - 5}+ more states across the US.</p>
                 </div>
               </div>
             </div>
