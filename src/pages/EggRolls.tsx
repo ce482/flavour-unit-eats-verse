@@ -22,7 +22,7 @@ const EggRolls = () => {
       name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
       description: "(4 PIECES) KINGSTON'S MAC AND CHEESE EGG ROLL PAIRED WITH MARINARA",
       price: 12.99,
-      image: "",
+      image: "/lovable-uploads/5051ed22-9390-4151-ab42-452c1ec1d116.png",
       category: "egg-rolls",
       longDescription: "Kingston's Mac and Cheese Egg Rolls - Our signature mac and cheese egg rolls are filled with creamy mac and cheese, perfectly fried and served with marinara sauce for dipping. A perfect combination of comfort foods!"
     },
@@ -165,6 +165,13 @@ const EggRolls = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
+                  {product.image && (
+                    <div 
+                      className="h-48 bg-center bg-cover cursor-pointer"
+                      style={{ backgroundImage: `url(${product.image})` }}
+                      onClick={() => handleProductClick(product)}
+                    />
+                  )}
                   <div className="p-6">
                     <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 block">
                       {product.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
