@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -125,7 +124,7 @@ const EggRolls = () => {
       name: "JERK CABBAGE EGG ROLLS",
       description: "4 PIECES JERK CABBAGE EGG ROLLS",
       price: 12.99,
-      image: "",
+      image: "/lovable-uploads/8f02249c-7579-4fab-af91-b91520290390.png",
       category: "egg-rolls",
       longDescription: "Jerk Cabbage Egg Rolls - A Caribbean-inspired creation featuring cabbage seasoned with our authentic jerk spice blend, creating a perfect balance of heat and flavor. Each bite offers a unique taste experience that combines Jamaican culinary traditions with our signature egg roll style."
     }
