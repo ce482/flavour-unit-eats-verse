@@ -107,7 +107,7 @@ const EggRolls = () => {
       name: "LASAGNA POTSTICKERS",
       description: "(12 PIECES) LASAGNA POTSTICKERS",
       price: 13.99,
-      image: "",
+      image: "/lovable-uploads/db490621-6526-495d-a6f2-2b574f0f165d.png",
       category: "potstickers",
       longDescription: "Lasagna Potstickers - All the flavors of classic Italian lasagna in a convenient potsticker form! Filled with seasoned ground beef, ricotta cheese, mozzarella, and our special blend of Italian herbs and spices. Pan-fried to perfection and served with marinara sauce."
     },
