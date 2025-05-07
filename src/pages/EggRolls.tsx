@@ -98,7 +98,7 @@ const EggRolls = () => {
       name: "MILD BUFFALO CHICKEN EGG ROLL",
       description: "(4 PIECES) MILD BUFFALO CHICKEN EGG ROLL",
       price: 12.99,
-      image: "",
+      image: "/lovable-uploads/afb163ec-21c7-468c-8883-c116ad1acc7e.png",
       category: "egg-rolls",
       longDescription: "Mild Buffalo Chicken Egg Rolls - Don't like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer and grab your ranch or bleu cheese dressing to dip these delicious Egg Rolls in!"
     },
