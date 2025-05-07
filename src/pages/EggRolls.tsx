@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -52,7 +53,10 @@ const EggRolls = () => {
       name: "ITALIAN BEEF POTSTICKERS",
       description: "(12 PIECES) ITALIAN BEEF POTSTICKERS WITH DIPPING SAUCE",
       price: 13.99,
-      image: "",
+      image: [
+        "/lovable-uploads/96caeb4a-1a9d-4a4c-af4c-703258afe08b.png",
+        "/lovable-uploads/8b4dc6df-c9b8-408a-ad08-438ce26079c4.png"
+      ],
       category: "potstickers",
       longDescription: "Italian Beef Potstickers - Our unique fusion of Italian and Asian cuisine. Tender Italian beef with all the classic seasonings and giardiniera, wrapped in a delicate dumpling wrapper and pan-fried to perfection. Served with a complementary dipping sauce."
     },
