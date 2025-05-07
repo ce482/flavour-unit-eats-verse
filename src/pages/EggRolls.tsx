@@ -6,8 +6,6 @@ import { ExternalLink, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import ProductDetail, { Product } from '@/components/product/ProductDetail';
 import { toast } from 'sonner';
-import { ImageLoader } from '@/utils/imageLoader';
-import ProductImageCarousel from '@/components/product/ProductImageCarousel';
 
 const EggRolls = () => {
   const { addItem } = useCart();
@@ -16,13 +14,6 @@ const EggRolls = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Preload all product images
-    const allImages = products.flatMap(product => 
-      Array.isArray(product.image) ? product.image : [product.image]
-    );
-    
-    ImageLoader.preloadImages(allImages);
   }, []);
 
   const products: Product[] = [
@@ -31,7 +22,7 @@ const EggRolls = () => {
       name: "KINGSTON'S MAC AND CHEESE EGG ROLL",
       description: "(4 PIECES) KINGSTON'S MAC AND CHEESE EGG ROLL PAIRED WITH MARINARA",
       price: 12.99,
-      image: "/lovable-uploads/80704e34-622e-4905-a6a5-4f9b6f6ecbeb.png",
+      image: "",
       category: "egg-rolls",
       longDescription: "Kingston's Mac and Cheese Egg Rolls - Our signature mac and cheese egg rolls are filled with creamy mac and cheese, perfectly fried and served with marinara sauce for dipping. A perfect combination of comfort foods!"
     },
@@ -40,10 +31,7 @@ const EggRolls = () => {
       name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
       description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
       price: 12.99,
-      image: [
-        "/lovable-uploads/11890c5f-2698-46f8-a82a-ad3094294ad6.png", 
-        "/lovable-uploads/bcd3183d-dea4-48bc-a2e9-df778389afdf.png"
-      ],
+      image: "",
       category: "egg-rolls",
       longDescription: "Plant-Based Philly Cheesesteak Egg Rolls - A delicious vegan alternative to our classic Philly Cheesesteak Egg Rolls. Made with plant-based protein that mimics the taste and texture of beef, along with vegan cheese and sautéed peppers and onions."
     },
@@ -52,7 +40,7 @@ const EggRolls = () => {
       name: "APPLE CHEESECAKE RANGOONS",
       description: "8 PIECES OF APPLE CHEESECAKE RANGOONS WITH CARAMEL DIPPING SAUCE",
       price: 12.99,
-      image: "/lovable-uploads/49b0aab7-278c-4268-a181-69255a8526a1.png",
+      image: "",
       category: "rangoon",
       longDescription: "Apple Cheesecake Rangoons - These delightful little pastries combine the creaminess of cheesecake with the sweetness of apple filling, all wrapped up in a crispy wonton wrapper. Served with caramel dipping sauce for an extra touch of indulgence."
     },
@@ -61,10 +49,7 @@ const EggRolls = () => {
       name: "ITALIAN BEEF POTSTICKERS",
       description: "(12 PIECES) ITALIAN BEEF POTSTICKERS WITH DIPPING SAUCE",
       price: 13.99,
-      image: [
-        "/lovable-uploads/b09ff708-0b33-4973-91c1-9a4d17b8c9cb.png",
-        "/lovable-uploads/eebffaa2-4b7e-4e0e-abf6-a9baa98a1037.png"
-      ],
+      image: "",
       category: "potstickers",
       longDescription: "Italian Beef Potstickers - Our unique fusion of Italian and Asian cuisine. Tender Italian beef with all the classic seasonings and giardiniera, wrapped in a delicate dumpling wrapper and pan-fried to perfection. Served with a complementary dipping sauce."
     },
@@ -73,10 +58,7 @@ const EggRolls = () => {
       name: "AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
       description: "(4 PIECES OF) AUNTIE KATHY'S PEACH COBBLER DESSERT EGG ROLLS",
       price: 12.99,
-      image: [
-        "/lovable-uploads/259fcd4a-546e-41e6-95b0-158a52a69dba.png",
-        "/lovable-uploads/4ec7993b-023a-46d8-94db-d22c9589d7f0.png"
-      ],
+      image: "",
       category: "egg-rolls",
       longDescription: "Auntie Kathy's Peach Cobbler Dessert Egg Rolls - A delightful dessert twist on egg rolls! Sweet peaches, cinnamon, and a touch of vanilla are wrapped in a crispy wonton wrapper and fried to golden perfection. A family recipe passed down from our Auntie Kathy."
     },
@@ -85,7 +67,7 @@ const EggRolls = () => {
       name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
       description: "(4 PIECES OF) TACO OLE WITH GROUND CHICKEN EGG ROLL PAIRED WITH OLE SAUCE",
       price: 12.99,
-      image: "/lovable-uploads/fb727198-1a27-4129-8fec-048f0c6c984b.png",
+      image: "",
       category: "egg-rolls",
       longDescription: "Taco Ole ™ Egg Roll - If you love Taco's and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer"
     },
@@ -94,7 +76,7 @@ const EggRolls = () => {
       name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
       description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EGG ROLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
       price: 12.99,
-      image: "/lovable-uploads/51908366-4318-4f14-95fe-35401ca87312.png",
+      image: "",
       category: "egg-rolls",
       longDescription: "Gert's Collard Greens Egg Rolls ™ - Our most popular Egg Roll named after our founder's late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton! We pair this Egg Roll with classic sweet and sour sauce and because its your Egg Roll please choose a method from our packaging on how to cook the outer layer."
     },
@@ -103,7 +85,7 @@ const EggRolls = () => {
       name: "MILD BUFFALO CHICKEN EGG ROLL",
       description: "(4 PIECES) MILD BUFFALO CHICKEN EGG ROLL",
       price: 12.99,
-      image: "/lovable-uploads/4f632dc1-df80-42f5-8b5a-f619c66fc449.png",
+      image: "",
       category: "egg-rolls",
       longDescription: "Mild Buffalo Chicken Egg Rolls - Don't like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer and grab your ranch or bleu cheese dressing to dip these delicious Egg Rolls in!"
     },
@@ -112,7 +94,7 @@ const EggRolls = () => {
       name: "LASAGNA POTSTICKERS",
       description: "(12 PIECES) LASAGNA POTSTICKERS",
       price: 13.99,
-      image: "/lovable-uploads/06dd77b3-0ad1-4337-a1c5-19c50ad47dfd.png",
+      image: "",
       category: "potstickers",
       longDescription: "Lasagna Potstickers - All the flavors of classic Italian lasagna in a convenient potsticker form! Filled with seasoned ground beef, ricotta cheese, mozzarella, and our special blend of Italian herbs and spices. Pan-fried to perfection and served with marinara sauce."
     },
@@ -121,7 +103,7 @@ const EggRolls = () => {
       name: "SALMON RANGOON",
       description: "8 PIECES SALMON RANGOON",
       price: 12.99,
-      image: "/lovable-uploads/8bc03566-b833-4f5e-b804-06f3d0c168c6.png",
+      image: "",
       category: "rangoon",
       longDescription: "Salmon Rangoon - Our gourmet twist on the classic crab rangoon, featuring premium salmon mixed with a creamy cheese filling and wrapped in a crispy wonton wrapper. Perfect for seafood lovers looking for something a bit different!"
     },
@@ -130,7 +112,7 @@ const EggRolls = () => {
       name: "JERK CABBAGE EGG ROLLS",
       description: "4 PIECES JERK CABBAGE EGG ROLLS",
       price: 12.99,
-      image: "/lovable-uploads/9db48eb8-1e8e-49ad-8e18-bddacd78ced5.png",
+      image: "",
       category: "egg-rolls",
       longDescription: "Jerk Cabbage Egg Rolls - A Caribbean-inspired creation featuring cabbage seasoned with our authentic jerk spice blend, creating a perfect balance of heat and flavor. Each bite offers a unique taste experience that combines Jamaican culinary traditions with our signature egg roll style."
     }
@@ -141,7 +123,7 @@ const EggRolls = () => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: Array.isArray(product.image) ? product.image[0] : product.image,
+      image: "",
     });
     toast.success(`Added ${product.name} to cart`);
   };
@@ -183,24 +165,6 @@ const EggRolls = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow">
-                  {ImageLoader.isImageArray(product.image) ? (
-                    <ProductImageCarousel 
-                      images={product.image}
-                      productName={product.name}
-                      onClick={() => handleProductClick(product)}
-                    />
-                  ) : (
-                    <div 
-                      className="h-64 overflow-hidden cursor-pointer"
-                      onClick={() => handleProductClick(product)}
-                    >
-                      <img 
-                        src={product.image} 
-                        alt={product.name} 
-                        className="w-full h-full object-cover transition-transform hover:scale-105"
-                      />
-                    </div>
-                  )}
                   <div className="p-6">
                     <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 block">
                       {product.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
@@ -211,7 +175,7 @@ const EggRolls = () => {
                     >
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 mb-2">{product.description}</p>
+                    <p className="text-gray-600 mb-4">{product.description}</p>
                     <div className="flex justify-between items-center">
                       <span className="text-lg font-bold text-flavour-red">${product.price.toFixed(2)}</span>
                       <button 
