@@ -77,7 +77,10 @@ const EggRolls = () => {
       name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
       description: "(4 PIECES OF) TACO OLE WITH GROUND CHICKEN EGG ROLL PAIRED WITH OLE SAUCE",
       price: 12.99,
-      image: "",
+      image: [
+        "/lovable-uploads/2a56dd1a-9033-4a49-b0b3-3fcf40b363e8.png",
+        "/lovable-uploads/aeb40c51-fb87-45e1-8782-f20d7bf54d6e.png"
+      ],
       category: "egg-rolls",
       longDescription: "Taco Ole ™ Egg Roll - If you love Taco's and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer"
     },
