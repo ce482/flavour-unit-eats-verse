@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { ImageLoader } from '@/utils/imageLoader';
 
 const BrandShowcase = () => {
   const brands = [
@@ -16,7 +17,7 @@ const BrandShowcase = () => {
       description: "Coaching and consulting for small food businesses. Learn how to scale your food business from concept to market.",
       path: "/legacy-kitchen",
       isActive: true,
-      image: "/lovable-uploads/cc670d1e-b2dc-4b0d-a283-6a3d3e098a51.png"
+      image: "/lovable-uploads/25b5a5a4-5226-4405-b3f8-37eef97dcce9.png"
     },
     {
       name: "Le Petit Déjeuner",
@@ -48,7 +49,7 @@ const BrandShowcase = () => {
                   <img 
                     src={brand.image} 
                     alt={brand.name} 
-                    className="object-cover w-full h-full"
+                    className={`object-cover w-full h-full ${brand.name === "Le Petit Déjeuner" ? "transform rotate-90 scale-150" : ""}`}
                   />
                 </AspectRatio>
               </div>
