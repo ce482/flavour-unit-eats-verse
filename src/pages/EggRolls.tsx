@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -162,7 +163,7 @@ const EggRolls = () => {
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">EGG ROLLS ETC</h1>
               <p className="text-xl text-white/90 mb-8">
-                The first and only Black owned frozen product line of Asian inspired cuisine that are "Comfort Filled"! Our brand unites cultures and differences all inside of a warm wonton- "Lets Chow On"!
+                Chicago's favorite comfort-filled Egg Rolls. Comfort-filled and unites cultures all inside of a warm wonton- "Lets Chow On"!
               </p>
               <div className="flex justify-center">
                 <div className="bg-white/10 text-white px-6 py-3 rounded-lg inline-block">
