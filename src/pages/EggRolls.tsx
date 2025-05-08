@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -42,12 +41,12 @@ const EggRolls = () => {
     },
     {
       id: 3,
-      name: "APPLE CHEESECAKE RANGOONS",
-      description: "8 PIECES OF APPLE CHEESECAKE RANGOONS WITH CARAMEL DIPPING SAUCE",
+      name: "APPLE CHEESECAKE WONTONS",
+      description: "8 PIECES OF APPLE CHEESECAKE WONTONS WITH CARAMEL DIPPING SAUCE",
       price: 12.99,
       image: "/lovable-uploads/8df0379b-2e11-43ad-9b44-a2806b380c98.png",
       category: "rangoon",
-      longDescription: "Apple Cheesecake Rangoons - These delightful little pastries combine the creaminess of cheesecake with the sweetness of apple filling, all wrapped up in a crispy wonton wrapper. Served with caramel dipping sauce for an extra touch of indulgence."
+      longDescription: "Apple Cheesecake Wontons - These delightful little pastries combine the creaminess of cheesecake with the sweetness of apple filling, all wrapped up in a crispy wonton wrapper. Served with caramel dipping sauce for an extra touch of indulgence."
     },
     {
       id: 4,
