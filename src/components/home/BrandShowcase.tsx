@@ -49,7 +49,7 @@ const BrandShowcase = () => {
                   <img 
                     src={brand.image} 
                     alt={brand.name} 
-                    className={`object-cover w-full h-full ${brand.name === "Le Petit Déjeuner" ? "transform rotate-90 scale-150" : ""}`}
+                    className="object-cover w-full h-full"
                   />
                 </AspectRatio>
               </div>
