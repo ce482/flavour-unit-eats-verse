@@ -8,30 +8,6 @@ import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
 import { ImageLoader } from '../utils/imageLoader';
 
-const featuredProducts = [
-  {
-    id: 1,
-    name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
-    description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
-    image: "",
-    link: "/egg-rolls"
-  },
-  {
-    id: 2,
-    name: "Le Petit Déjeuner",
-    description: "Delicious French-inspired pastries with savory filling and herb garnish.",
-    image: "",
-    link: "/petit-dejeuner"
-  },
-  {
-    id: 3,
-    name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
-    description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
-    image: "",
-    link: "/egg-rolls"
-  }
-];
-
 const Index = () => {
   const [imagesLoaded, setImagesLoaded] = useState(true); // Set to true since we don't need to load images
   
@@ -62,40 +38,6 @@ const Index = () => {
                   Learn Our Story
                 </Link>
               </div>
-            </div>
-          </div>
-        </section>
-        
-        {/* Featured Products */}
-        <section className="py-20 bg-gray-50">
-          <div className="container-wide">
-            <div className="text-center mb-12">
-              <h2 className="section-title">Featured Products</h2>
-              <p className="text-lg text-flavour-gray max-w-2xl mx-auto">
-                Discover our most popular comfort-filled creations
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredProducts.map(product => (
-                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-                    <p className="text-flavour-gray mb-4">
-                      {product.description}
-                    </p>
-                    <Link to={product.link} className="text-flavour-red font-medium hover:underline">
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="text-center mt-12">
-              <Link to="/egg-rolls" className="btn-primary inline-block">
-                Shop All Products
-              </Link>
             </div>
           </div>
         </section>
