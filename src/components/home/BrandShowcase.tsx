@@ -16,7 +16,7 @@ const BrandShowcase = () => {
       isActive: true
     },
     {
-      name: "Petit Déjeuner",
+      name: "Le Petit Déjeuner",
       description: "Savory breakfast options that bring international flavors to your morning routine. (Coming Soon)",
       path: "/petit-dejeuner",
       isActive: false

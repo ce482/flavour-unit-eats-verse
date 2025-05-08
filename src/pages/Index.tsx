@@ -18,7 +18,7 @@ const featuredProducts = [
   },
   {
     id: 2,
-    name: "Le Petit Dejeuner",
+    name: "Le Petit Déjeuner",
     description: "Delicious French-inspired pastries with savory filling and herb garnish.",
     image: "",
     link: "/petit-dejeuner"
