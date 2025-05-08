@@ -72,12 +72,12 @@ export const STATE_NAMES: Record<string, string> = {
 export const SHIPPING_METHODS = {
   standard: { 
     name: 'Standard Shipping', 
-    price: 0, 
-    description: 'Free - 5-7 business days' 
+    price: 10, 
+    description: '$10.00 - 5-7 business days' 
   },
   fedex_2day: { 
     name: 'FedEx 2-Day Shipping', 
-    price: 15.99, 
+    price: 19.99, 
     description: 'Guaranteed delivery in 2 business days' 
   },
 };
