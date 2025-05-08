@@ -18,15 +18,15 @@ const featuredProducts = [
   },
   {
     id: 2,
-    name: "Potstickers",
-    description: "Delicious dumplings filled with savory ingredients, perfect for any occasion.",
-    image: "/lovable-uploads/759d43b6-694e-4d26-a7f8-7e6762338e17.png",
-    link: "/egg-rolls"
+    name: "Le Petit Dejeuner",
+    description: "Delicious French-inspired pastries with savory filling and herb garnish.",
+    image: "/lovable-uploads/f7513407-4838-4c9e-8b28-34d620a447a1.png",
+    link: "/petit-dejeuner"
   },
   {
     id: 3,
     name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
-    description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EOLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
+    description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
     image: "/lovable-uploads/50a943e2-acde-40de-8857-84c2a4261c4d.png",
     link: "/egg-rolls"
   }
