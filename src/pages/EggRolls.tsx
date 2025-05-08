@@ -77,10 +77,7 @@ const EggRolls = () => {
       name: "TACO OLE WITH GROUND CHICKEN EGG ROLL",
       description: "(4 PIECES OF) TACO OLE WITH GROUND CHICKEN EGG ROLL PAIRED WITH OLE SAUCE",
       price: 12.99,
-      image: [
-        "/lovable-uploads/2a56dd1a-9033-4a49-b0b3-3fcf40b363e8.png",
-        "/lovable-uploads/aeb40c51-fb87-45e1-8782-f20d7bf54d6e.png"
-      ],
+      image: "/lovable-uploads/5d5a85ff-fcfd-420b-836d-f1ff1646ae23.png",
       category: "egg-rolls",
       longDescription: "Taco Ole ™ Egg Roll - If you love Taco's and Egg Rolls like we do then get ready for our Taco Ole™ Egg Roll! Comfort filled with Tex-Mex spiced ground chicken, Southwest veggie blend, diced tomatoes and chilis in a savory cheese sauce layered with more cheese! We have included our Ole ™ sauce to give the ultimate Egg Rolls Etc experience! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer"
     },
@@ -89,7 +86,7 @@ const EggRolls = () => {
       name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
       description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EGG ROLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
       price: 12.99,
-      image: "/lovable-uploads/f282ef43-695b-4630-8821-bbe7f460ce05.png",
+      image: "/lovable-uploads/ad98fc17-cc03-41e1-9532-77dbed79bc82.png",
       category: "egg-rolls",
       longDescription: "Gert's Collard Greens Egg Rolls ™ - Our most popular Egg Roll named after our founder's late grandmother Gertrude, is comfort filled with freshly handpicked tender collard greens. These greens have simmered in a savory broth low and slow for hours, then lavished with decadent sweet smoked turkey meat and tucked inside of a wonton! We pair this Egg Roll with classic sweet and sour sauce and because its your Egg Roll please choose a method from our packaging on how to cook the outer layer."
     },
@@ -98,7 +95,7 @@ const EggRolls = () => {
       name: "MILD BUFFALO CHICKEN EGG ROLL",
       description: "(4 PIECES) MILD BUFFALO CHICKEN EGG ROLL",
       price: 12.99,
-      image: "/lovable-uploads/afb163ec-21c7-468c-8883-c116ad1acc7e.png",
+      image: "/lovable-uploads/3816c345-c7a7-4f40-8c8d-a5979e2601d4.png",
       category: "egg-rolls",
       longDescription: "Mild Buffalo Chicken Egg Rolls - Don't like spicy but love the buffalo flavor? Then you will love our comfort filled mildly spiced buffalo chicken in a creamy buffalo flavored cheese sauce, layered with more cheese and tucked inside of a wonton! Because it's your Egg Roll please choose a method from our packaging on how to cook the outer layer and grab your ranch or bleu cheese dressing to dip these delicious Egg Rolls in!"
     },

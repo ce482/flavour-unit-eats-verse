@@ -2,8 +2,11 @@
 import { Link } from 'react-router-dom';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageLoader } from '@/utils/imageLoader';
+import { useEffect, useState } from 'react';
 
 const BrandShowcase = () => {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
   const brands = [
     {
       name: "Egg Rolls Etc.",
@@ -28,6 +31,14 @@ const BrandShowcase = () => {
     }
   ];
 
+  // Preload all images
+  useEffect(() => {
+    const imageUrls = brands.map(brand => brand.image);
+    ImageLoader.preloadImages(imageUrls)
+      .then(() => setImagesLoaded(true))
+      .catch(() => setImagesLoaded(true)); // Set to true even on error to show something
+  }, []);
+
   return (
     <section className="py-20 bg-flavour-cream">
       <div className="container-wide">
@@ -46,11 +57,17 @@ const BrandShowcase = () => {
             >
               <div className="relative w-full h-48 overflow-hidden">
                 <AspectRatio ratio={16/9} className="bg-gray-100">
-                  <img 
-                    src={brand.image} 
-                    alt={brand.name} 
-                    className="object-cover w-full h-full"
-                  />
+                  {!imagesLoaded ? (
+                    <div className="flex items-center justify-center h-full w-full bg-gray-100">
+                      <div className="animate-pulse text-gray-400">Loading...</div>
+                    </div>
+                  ) : (
+                    <img 
+                      src={brand.image} 
+                      alt={brand.name} 
+                      className="object-cover w-full h-full"
+                    />
+                  )}
                 </AspectRatio>
               </div>
               <div className="p-6">
