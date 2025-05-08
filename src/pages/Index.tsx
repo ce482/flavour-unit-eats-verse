@@ -13,7 +13,7 @@ const featuredProducts = [
     id: 1,
     name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
     description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
-    image: "/lovable-uploads/283ac46a-c5ba-456c-929d-ca75f501b055.png",
+    image: "/lovable-uploads/29ff9f0d-2df4-42e5-b29b-5292b7618411.png",
     link: "/egg-rolls"
   },
   {
