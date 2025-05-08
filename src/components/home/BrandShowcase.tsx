@@ -1,5 +1,6 @@
 
 import { Link } from 'react-router-dom';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const BrandShowcase = () => {
   const brands = [
@@ -7,19 +8,22 @@ const BrandShowcase = () => {
       name: "Egg Rolls Etc.",
       description: "Chicago's favorite comfort-filled egg rolls, potstickers, and rangoon. Available at grocery stores, online retailers, and through catering services.",
       path: "/egg-rolls",
-      isActive: true
+      isActive: true,
+      image: "/lovable-uploads/c4ca84b4-77c3-489e-a08d-8607e2d62834.png"
     },
     {
       name: "Legacy Kitchen Solutions",
       description: "Coaching and consulting for small food businesses. Learn how to scale your food business from concept to market.",
       path: "/legacy-kitchen",
-      isActive: true
+      isActive: true,
+      image: "/lovable-uploads/cc670d1e-b2dc-4b0d-a283-6a3d3e098a51.png"
     },
     {
       name: "Le Petit Déjeuner",
       description: "Savory breakfast options that bring international flavors to your morning routine. (Coming Soon)",
       path: "/petit-dejeuner",
-      isActive: false
+      isActive: false,
+      image: "/lovable-uploads/5a898027-34e9-4f22-a1b0-a8843f6a836a.png"
     }
   ];
 
@@ -39,6 +43,15 @@ const BrandShowcase = () => {
               key={brand.name}
               className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2"
             >
+              <div className="relative w-full h-48 overflow-hidden">
+                <AspectRatio ratio={16/9} className="bg-gray-100">
+                  <img 
+                    src={brand.image} 
+                    alt={brand.name} 
+                    className="object-cover w-full h-full"
+                  />
+                </AspectRatio>
+              </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold mb-3 text-flavour-black">{brand.name}</h3>
                 <p className="text-flavour-gray mb-4">{brand.description}</p>
