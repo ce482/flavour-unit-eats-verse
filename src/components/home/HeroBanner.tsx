@@ -9,7 +9,7 @@ const HeroBanner = () => {
   useEffect(() => {
     // Preload the hero image
     const img = new Image();
-    img.src = "https://images.unsplash.com/photo-1546549032-9571cd6b27df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80";
+    img.src = "/lovable-uploads/5c27bc5f-2a88-4ecd-b088-9ba547f3b22a.png";
     img.onload = () => setImageLoaded(true);
   }, []);
 
@@ -19,10 +19,10 @@ const HeroBanner = () => {
       <div 
         className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
         style={{ 
-          backgroundImage: "url('https://images.unsplash.com/photo-1546549032-9571cd6b27df?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80')",
+          backgroundImage: "url('/lovable-uploads/5c27bc5f-2a88-4ecd-b088-9ba547f3b22a.png')",
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="absolute inset-0 bg-black opacity-60"></div>
       </div>
       
       {/* Loading placeholder */}
