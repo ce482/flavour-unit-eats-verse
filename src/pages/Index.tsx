@@ -13,36 +13,30 @@ const featuredProducts = [
     id: 1,
     name: "PLANT-BASED PHILLY CHEESESTEAK EGG ROLL",
     description: "(4 PIECES) PLANT-BASED PHILLY CHEESE STEAK EGG ROLL WITH DIPPING SAUCE",
-    image: "/lovable-uploads/29ff9f0d-2df4-42e5-b29b-5292b7618411.png",
+    image: "", // Removed image
     link: "/egg-rolls"
   },
   {
     id: 2,
     name: "Le Petit Dejeuner",
     description: "Delicious French-inspired pastries with savory filling and herb garnish.",
-    image: "/lovable-uploads/f7513407-4838-4c9e-8b28-34d620a447a1.png",
+    image: "", // Removed image
     link: "/petit-dejeuner"
   },
   {
     id: 3,
     name: "GERT'S COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS",
     description: "PRE-FRIED GERTS COLLARD GREENS WITH SMOKED TURKEY EGG ROLLS (4 PIECES) PAIRED WITH DIPPING SAUCE.",
-    image: "/lovable-uploads/50a943e2-acde-40de-8857-84c2a4261c4d.png",
+    image: "", // Removed image
     link: "/egg-rolls"
   }
 ];
 
 const Index = () => {
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(true); // Set to true since we don't need to load images
   
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Preload the featured product images
-    const imageUrls = featuredProducts.map(product => product.image);
-    ImageLoader.preloadImages(imageUrls).then(() => {
-      setImagesLoaded(true);
-    });
   }, []);
 
   return (
@@ -85,23 +79,6 @@ const Index = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-xl">
-                  <div className="h-64 overflow-hidden relative">
-                    {!imagesLoaded && (
-                      <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
-                    )}
-                    <img 
-                      src={product.image}
-                      alt={product.name} 
-                      className={`w-full h-full object-cover transition-transform hover:scale-105 ${imagesLoaded ? 'opacity-100' : 'opacity-0'}`}
-                      style={{ transition: "opacity 0.3s ease-in-out" }}
-                      loading="eager"
-                      onLoad={(e) => {
-                        // Ensure image is visible when loaded individually
-                        e.currentTarget.classList.remove('opacity-0');
-                        e.currentTarget.classList.add('opacity-100');
-                      }}
-                    />
-                  </div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-2">{product.name}</h3>
                     <p className="text-flavour-gray mb-4">
