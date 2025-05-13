@@ -1,49 +1,89 @@
-
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import ProductImageCarousel from '@/components/product/ProductImageCarousel';
 
 const PetitDejeuner = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const products = [
+  // New products with images
+  const newProducts = [
+    {
+      name: "Breakfast Sandwich with Bacon and Egg",
+      image: "/lovable-uploads/d8d73a25-60ae-456a-818a-fe271e5229a5.png"
+    },
+    {
+      name: "Breakfast Sausage Rolls",
+      image: "/lovable-uploads/092c5bb4-3f74-4db3-ae57-e372f3de4e07.png"
+    },
+    {
+      name: "Cinnamon Rolls",
+      image: "/lovable-uploads/1ebf8b4e-f749-419e-9ca5-edc12a01c76d.png"
+    },
+    {
+      name: "Breakfast Empanadas",
+      image: "/lovable-uploads/8e02ccf5-f7fd-4f5b-b87e-0f0d4cc109d2.png"
+    },
+    {
+      name: "Breakfast Pockets",
+      image: "/lovable-uploads/e1e3404b-7e39-4fbd-ab1a-f135b174ee05.png"
+    },
+    {
+      name: "Breakfast Panini",
+      image: "/lovable-uploads/312ae81f-ef1a-45ee-a584-bfca048de129.png"
+    },
+    {
+      name: "French Toast with Sausage",
+      image: "/lovable-uploads/26b9dd30-8fc7-4cca-b7c2-8eb30a3266f4.png"
+    },
+    {
+      name: "Breakfast Egg Cups",
+      image: "/lovable-uploads/1848c6ad-3e50-46cd-8801-08425785b8b5.png"
+    },
+    {
+      name: "Savory Breakfast Muffins",
+      image: "/lovable-uploads/c2ac54af-e364-41e7-b95a-955d7966bd2c.png"
+    },
+    {
+      name: "Breakfast Hash Brown Cups",
+      image: "/lovable-uploads/bad6ee96-6b68-433d-855b-ccb563d8c077.png"
+    },
+    {
+      name: "Chicken Biscuit Sandwich",
+      image: "/lovable-uploads/bec72a7d-4a82-4272-ade5-17e3af0476df.png"
+    },
+    {
+      name: "Breakfast Sandwich",
+      image: "/lovable-uploads/88a4199b-59ab-4e95-bdf9-94c010e89fb9.png"
+    },
+  ];
+
+  // Existing products without images (moved to the end)
+  const existingProducts = [
     {
       name: "Korean Fried Chicken Bao",
-      description: "Savory Korean style fried chicken in a soft bao bun.",
-      image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
     },
     {
       name: "Plant based or Beef Bacon and Egg Biscuit",
-      description: "Choice of plant-based or beef bacon with egg on a fresh biscuit.",
-      image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
     },
     {
       name: "Scallion Pancake sandwich - Plant-based Turkey OR Turkey Ham and Egg Sandwich",
-      description: "Savory scallion pancake with your choice of protein and egg.",
-      image: "https://images.unsplash.com/photo-1565299543923-37dd37887442?ixlib=rb-4.0.3&auto=format&fit=crop&w=828&q=80"
     },
     {
       name: "Spinach Stuffed Pastry",
-      description: "Flaky pastry filled with savory spinach and seasonings.",
-      image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80"
     },
     {
       name: "Spicy Jalepeno Popper Egg Roll",
-      description: "Crispy egg roll filled with spicy jalapeño popper filling.",
-      image: "https://images.unsplash.com/photo-1603903631663-bc41ff9237a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80"
     },
     {
       name: "Turkey Sausage Breakfast Roll",
-      description: "Savory turkey sausage wrapped in a flaky breakfast roll.",
-      image: "https://images.unsplash.com/photo-1600336153113-d66c79de3e91?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
     },
     {
       name: "Southwest Veggie Croissant Sandwich",
-      description: "Buttery croissant filled with southwest style vegetables.",
-      image: "https://images.unsplash.com/photo-1496042399014-dc73c4f2bde1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80"
     },
   ];
 
@@ -57,28 +97,30 @@ const PetitDejeuner = () => {
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Le Petit Déjeuner</h1>
               <p className="text-lg text-gray-600 mb-8">
-                Savory breakfast sandwiches for wholesale are typically protein-packed, easy-to-serve, and come in convenient packaging. 
-                They often feature breakfast meats, eggs, and cheese on a variety of breads or pastries, offering a quick and satisfying 
-                breakfast option for various food service businesses.
+                Le Petit Déjeuner is a breakfast experience that celebrates quality ingredients, cultural identity, 
+                and the art of savoring the moment. We are currently seeking foodservice partnerships. The products 
+                are savory and offered in a variety of options including Plant based. Please note that these products 
+                will exclusively be offered to cafes, coffee shops, hospitals, vending machine owners, food truck operators, 
+                and catering companies. They are only sold by the case, so please inquire about a wholesale partnership 
+                with Le Petit Déjeuner today!
               </p>
               <p className="font-bold text-flavour-red text-xl">*Note: We are a NO Pork company</p>
             </div>
           </div>
         </section>
 
-        {/* Products Section */}
+        {/* New Products Section */}
         <section className="py-16 bg-white">
           <div className="container-wide">
             <div className="text-center mb-12">
-              <h2 className="section-title">Our Products</h2>
+              <h2 className="section-title">Coming Soon</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                We offer these products in a 12 count frozen case - Just thaw, heat and serve. 
-                Heat via an air fryer, toaster or turbo pizza oven.
+                Preview our upcoming product lineup for wholesale partners
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product, index) => (
+              {newProducts.map((product, index) => (
                 <div 
                   key={index}
                   className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2"
@@ -93,20 +135,32 @@ const PetitDejeuner = () => {
                   
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3 text-flavour-black">{product.name}</h3>
-                    <p className="text-flavour-gray mb-4">{product.description}</p>
                   </div>
                 </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            <div className="mt-16 text-center">
-              <h3 className="text-2xl font-bold mb-6">Coming Soon!</h3>
-              <p className="text-lg mb-8">
-                Our products will be available for wholesale orders soon. Contact us for more information.
+        {/* Current Products (no images) */}
+        <section className="py-12 bg-gray-50">
+          <div className="container-wide">
+            <div className="text-center mb-10">
+              <h2 className="section-title">Current Products</h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                These products are available for wholesale orders in a 12-count frozen case
               </p>
-              <Link to="/contact" className="btn-primary">
-                Contact Us
-              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {existingProducts.map((product, index) => (
+                <div 
+                  key={index}
+                  className="bg-white p-6 rounded-lg shadow-md"
+                >
+                  <h3 className="text-xl font-bold text-flavour-black">{product.name}</h3>
+                </div>
+              ))}
             </div>
           </div>
         </section>

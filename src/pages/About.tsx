@@ -161,15 +161,6 @@ const About = () => {
           <div className="container-wide">
             <div className="max-w-4xl mx-auto text-center">
               <h3 className="text-xl font-bold mb-4">Content Protection</h3>
-              <div className="flex justify-center mb-6">
-                <div className="bg-white p-3 rounded-lg shadow-sm">
-                  <img 
-                    src="https://www.dmca.com/img/dmca-badge-w150-5x1-09.png" 
-                    alt="DMCA Protected" 
-                    className="h-10 w-auto"
-                  />
-                </div>
-              </div>
               <p className="text-sm text-gray-600">
                 All content on this website, including text, images, videos, and brand assets, is protected by copyright 
                 law. Duplication, reproduction, or distribution of any content without explicit written permission is 
