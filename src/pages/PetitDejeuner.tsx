@@ -1,23 +1,23 @@
+
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Link } from 'react-router-dom';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import ProductImageCarousel from '@/components/product/ProductImageCarousel';
 
 const PetitDejeuner = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // New products with images
-  const newProducts = [
+  // All products with updated names
+  const allProducts = [
     {
-      name: "Breakfast Sandwich with Bacon and Egg",
+      name: "Chicken Breakfast Sandwich",
       image: "/lovable-uploads/d8d73a25-60ae-456a-818a-fe271e5229a5.png"
     },
     {
-      name: "Breakfast Sausage Rolls",
+      name: "Sandwich Roll Up",
       image: "/lovable-uploads/092c5bb4-3f74-4db3-ae57-e372f3de4e07.png"
     },
     {
@@ -25,19 +25,15 @@ const PetitDejeuner = () => {
       image: "/lovable-uploads/1ebf8b4e-f749-419e-9ca5-edc12a01c76d.png"
     },
     {
-      name: "Breakfast Empanadas",
-      image: "/lovable-uploads/8e02ccf5-f7fd-4f5b-b87e-0f0d4cc109d2.png"
-    },
-    {
-      name: "Breakfast Pockets",
+      name: "Breakfast Sandwich",
       image: "/lovable-uploads/e1e3404b-7e39-4fbd-ab1a-f135b174ee05.png"
     },
     {
-      name: "Breakfast Panini",
+      name: "Waffle Sandwich",
       image: "/lovable-uploads/312ae81f-ef1a-45ee-a584-bfca048de129.png"
     },
     {
-      name: "French Toast with Sausage",
+      name: "Chicken Waffle Sandwich",
       image: "/lovable-uploads/26b9dd30-8fc7-4cca-b7c2-8eb30a3266f4.png"
     },
     {
@@ -53,17 +49,13 @@ const PetitDejeuner = () => {
       image: "/lovable-uploads/bad6ee96-6b68-433d-855b-ccb563d8c077.png"
     },
     {
-      name: "Chicken Biscuit Sandwich",
+      name: "Savory Breakfast Sandwich",
       image: "/lovable-uploads/bec72a7d-4a82-4272-ade5-17e3af0476df.png"
     },
     {
-      name: "Breakfast Sandwich",
+      name: "Cinnamon Roll Breakfast Sandwich",
       image: "/lovable-uploads/88a4199b-59ab-4e95-bdf9-94c010e89fb9.png"
     },
-  ];
-
-  // Existing products without images (moved to the end)
-  const existingProducts = [
     {
       name: "Korean Fried Chicken Bao",
     },
@@ -109,7 +101,7 @@ const PetitDejeuner = () => {
           </div>
         </section>
 
-        {/* New Products Section */}
+        {/* All Products Section */}
         <section className="py-16 bg-white">
           <div className="container-wide">
             <div className="text-center mb-12">
@@ -120,45 +112,24 @@ const PetitDejeuner = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {newProducts.map((product, index) => (
+              {allProducts.map((product, index) => (
                 <div 
                   key={index}
                   className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2"
                 >
-                  <div className="h-56 overflow-hidden">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
-                    />
-                  </div>
+                  {product.image && (
+                    <div className="h-56 overflow-hidden">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
+                      />
+                    </div>
+                  )}
                   
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-3 text-flavour-black">{product.name}</h3>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Current Products (no images) */}
-        <section className="py-12 bg-gray-50">
-          <div className="container-wide">
-            <div className="text-center mb-10">
-              <h2 className="section-title">Current Products</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                These products are available for wholesale orders in a 12-count frozen case
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {existingProducts.map((product, index) => (
-                <div 
-                  key={index}
-                  className="bg-white p-6 rounded-lg shadow-md"
-                >
-                  <h3 className="text-xl font-bold text-flavour-black">{product.name}</h3>
                 </div>
               ))}
             </div>
