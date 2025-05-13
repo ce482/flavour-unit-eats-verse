@@ -85,8 +85,17 @@ const LegacyKitchen = () => {
               </h1>
               <div className="w-32 h-1 bg-flavour-red mx-auto mb-8"></div>
               <h3 className="text-xl md:text-2xl text-flavour-brown font-medium">
-                CULINARY INDUSTRY SOLUTIONS
+                FOOD INDUSTRY SOLUTIONS
               </h3>
+              
+              {/* Added image */}
+              <div className="flex justify-center mt-10">
+                <img 
+                  src="/lovable-uploads/f36f30b4-6800-44bd-8b64-7520e4d883cb.png" 
+                  alt="Legacy Kitchen Solutions" 
+                  className="max-w-full h-auto rounded-lg shadow-lg max-h-96"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -210,7 +219,7 @@ const LegacyKitchen = () => {
                     <div className="flex items-start p-4 bg-gray-50 rounded-lg">
                       <CheckCircle className="text-flavour-gold mr-3 shrink-0 mt-1" size={20} />
                       <p className="text-lg">
-                        Payment- Bi- Weekly via check, Square, Quickbooks payable to The Flavour Unit Corp or Javon McCain Nicholas.
+                        Payment- Bi- Weekly via check, Square, Quickbooks payable to The Flavour Unit Corp or J Nicholas.
                       </p>
                     </div>
                     
@@ -262,7 +271,7 @@ const LegacyKitchen = () => {
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
                   <div>
-                    <p className="font-bold text-lg">Javon Nicholas</p>
+                    <p className="font-bold text-lg">J Nicholas</p>
                     <p className="text-gray-500">Legacy Kitchen Solutions</p>
                   </div>
                   
