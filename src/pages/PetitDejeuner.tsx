@@ -21,10 +21,6 @@ const PetitDejeuner = () => {
       image: "/lovable-uploads/092c5bb4-3f74-4db3-ae57-e372f3de4e07.png"
     },
     {
-      name: "Cinnamon Rolls",
-      image: "/lovable-uploads/1ebf8b4e-f749-419e-9ca5-edc12a01c76d.png"
-    },
-    {
       name: "Breakfast Sandwich",
       image: "/lovable-uploads/e1e3404b-7e39-4fbd-ab1a-f135b174ee05.png"
     },

@@ -183,17 +183,24 @@ const EggRolls = () => {
                 <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow flex flex-col">
                   {product.image && (
                     Array.isArray(product.image) ? (
-                      <ProductImageCarousel 
-                        images={product.image} 
-                        productName={product.name} 
-                        onClick={() => handleProductClick(product)}
-                      />
+                      <div className="h-48 overflow-hidden">
+                        <ProductImageCarousel 
+                          images={product.image} 
+                          productName={product.name} 
+                          onClick={() => handleProductClick(product)}
+                        />
+                      </div>
                     ) : (
                       <div 
-                        className="h-48 bg-center bg-cover cursor-pointer"
-                        style={{ backgroundImage: `url(${product.image})` }}
+                        className="h-48 overflow-hidden"
                         onClick={() => handleProductClick(product)}
-                      />
+                      >
+                        <img 
+                          src={product.image} 
+                          alt={product.name}
+                          className="w-full h-full object-cover cursor-pointer"
+                        />
+                      </div>
                     )
                   )}
                   <div className="p-6 flex flex-col flex-grow">
