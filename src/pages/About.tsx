@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -28,7 +29,7 @@ const About = () => {
       date: "2023"
     },
     {
-      name: "Influential Women in Food: Javon Nicholas",
+      name: "Influential Women in Food: J Nicholas",
       description: "Podcast featuring our founder discussing Egg Rolls Etc.",
       videoUrl: "https://www.youtube.com/watch?v=13zpYEcxwHQ",
       date: "2023"
@@ -47,12 +48,12 @@ const About = () => {
                 <h1 className="text-4xl md:text-5xl font-bold mb-6 text-flavour-black">Our Story</h1>
                 <div className="space-y-6 text-lg text-gray-700">
                   <p>
-                    At The Flavour Unit Corporation, we don't just make food — we make meaning. As the parent company of 
+                    At The Flavour Unit Corporation, we don't just make food — we create food memories. As the parent company of 
                     Egg Rolls Etc. and Legacy Kitchen Solutions, we blend tradition, flavor, and entrepreneurial spirit 
                     to create comfort foods that tell a story and inspire community.
                   </p>
                   <p>
-                    In 2010, founder Javon McCain Nicholas took a leap of faith — or rather, a dare. Grieving the loss 
+                    In 2010, founder J Nicholas took a leap of faith — or rather, a dare. Grieving the loss 
                     of her mother, she enrolled in a two-year language program in Taiwan, despite not speaking a word of 
                     Mandarin. Landing in Kaohsiung City, she was welcomed by a warm, tight-knit community that nurtured 
                     her through the healing process. It was there she was given a Chinese name: Chow On (巧安) — meaning 
@@ -60,7 +61,7 @@ const About = () => {
                   </p>
                   <p>
                     That experience — the kindness, the culture, the food — became the seed for what would become 
-                    Egg Rolls Etc.™, a frozen product line that merges Asian comfort with soulful American roots.
+                    Egg Rolls Etc.™, a frozen product line that merges comfort with American inspiration.
                   </p>
                 </div>
               </div>
@@ -151,6 +152,29 @@ const About = () => {
                   Through Legacy Kitchen Solutions, we provide coaching and consulting to help small food businesses navigate challenges and grow their operations from concept to market.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Content Protection Notice */}
+        <section className="py-12 bg-gray-50">
+          <div className="container-wide">
+            <div className="max-w-4xl mx-auto text-center">
+              <h3 className="text-xl font-bold mb-4">Content Protection</h3>
+              <div className="flex justify-center mb-6">
+                <div className="bg-white p-3 rounded-lg shadow-sm">
+                  <img 
+                    src="https://www.dmca.com/img/dmca-badge-w150-5x1-09.png" 
+                    alt="DMCA Protected" 
+                    className="h-10 w-auto"
+                  />
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">
+                All content on this website, including text, images, videos, and brand assets, is protected by copyright 
+                law. Duplication, reproduction, or distribution of any content without explicit written permission is 
+                strictly prohibited and may result in legal action. For inquiries about using our content, please contact us.
+              </p>
             </div>
           </div>
         </section>
