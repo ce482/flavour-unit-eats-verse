@@ -11,8 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { createSquareCustomer, createSquareOrder } from "@/integrations/square/client";
 
 // Form validation schema
 const formSchema = z.object({
@@ -59,19 +59,41 @@ const Wholesale = () => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      // Insert form data into Supabase - fixed the array wrapping issue
-      const { error } = await supabase
-        .from('wholesale_inquiries')
-        .insert(data);
+      // First, create a customer in Square
+      const customerResult = await createSquareCustomer({
+        businessName: data.business_name,
+        contactEmail: data.contact_email,
+        contactName: data.contact_name,
+        contactPhone: data.contact_phone,
+      });
       
-      if (error) throw error;
+      if (!customerResult.success || !customerResult.customerId) {
+        throw new Error("Failed to create customer in Square");
+      }
+      
+      // Then, create an order with the wholesale inquiry details
+      const orderResult = await createSquareOrder({
+        customerId: customerResult.customerId,
+        businessName: data.business_name,
+        businessType: data.business_type,
+        interestedProductLine: data.interested_product_line,
+        acceptsMinimumOrder: data.accepts_minimum_order,
+        pickupIssue: data.pickup_issue,
+        dailyWeeklyVolume: data.daily_weekly_volume,
+        expectedOrderingVolume: data.expected_ordering_volume,
+        comments: data.comments,
+      });
+      
+      if (!orderResult.success) {
+        throw new Error("Failed to create order in Square");
+      }
       
       // Show success message
       toast.success("Thank you for your interest! We'll be in touch soon with wholesale pricing information.");
       form.reset();
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Failed to submit form. Please try again.");
+      toast.error("Failed to submit form. Please try again or contact us directly.");
     } finally {
       setIsSubmitting(false);
     }
