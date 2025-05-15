@@ -70,7 +70,9 @@ const SquareDashboard = () => {
           locationIds: [LOCATION_ID],
           query: {
             filter: {
-              sourceNames: ["Wholesale Web Form"]
+              sourceFilter: {
+                name: "Wholesale Web Form"
+              }
             }
           }
         });
