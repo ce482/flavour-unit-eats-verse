@@ -3,7 +3,7 @@ import React from 'react';
 import { X, Menu } from 'lucide-react';
 import MobileNavLink from './MobileNavLink';
 import CartButton from './CartButton';
-import { navItems } from './NavConfig';
+import { navItems, adminNavItems } from './NavConfig';
 
 type MobileNavProps = {
   isScrolled: boolean;
@@ -59,6 +59,17 @@ const MobileNav = ({
                 path={item.path}
               />
             ))}
+            
+            <div className="pt-2 border-t border-gray-200">
+              <h3 className="text-xs font-semibold uppercase text-gray-500 mb-2">Admin</h3>
+              {adminNavItems.map((item) => (
+                <MobileNavLink
+                  key={item.name}
+                  name={item.name}
+                  path={item.path}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
