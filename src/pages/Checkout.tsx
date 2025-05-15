@@ -50,7 +50,7 @@ interface OrderDetails {
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, clearCart, calculateTotals } = useCart();
+  const { items, clearCart, calculateTotals } = useCart();
   const cartTotals = calculateTotals();
   const [isSubmitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -79,10 +79,11 @@ const Checkout = () => {
     
     try {
       // Verify cart has items
-      if (cart.items.length === 0) {
+      if (items.length === 0) {
         throw new Error("Your cart is empty");
       }
       
+      console.log("Creating customer in Square...");
       // Create the customer in Square
       const customerResponse = await createSquareCustomer({
         contactName: `${values.firstName} ${values.lastName}`,
@@ -91,15 +92,20 @@ const Checkout = () => {
       });
 
       if (!customerResponse.success || !customerResponse.customerId) {
+        console.error("Failed to create customer:", customerResponse);
         throw new Error("Failed to create customer record");
       }
       
-      // Format items for Square order
-      const orderItems = cart.items.map(item => ({
+      console.log("Customer created successfully with ID:", customerResponse.customerId);
+      
+      // Format items for Square checkout
+      const orderItems = items.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price
       }));
+      
+      console.log("Creating Square checkout link for items:", orderItems);
       
       // Create the checkout link
       const checkoutResponse = await createSquareCheckoutLink(
@@ -116,8 +122,11 @@ const Checkout = () => {
       );
       
       if (!checkoutResponse.success || !checkoutResponse.url) {
+        console.error("Failed to create checkout link:", checkoutResponse);
         throw new Error("Failed to create checkout link");
       }
+      
+      console.log("Checkout link created successfully:", checkoutResponse.url);
       
       // Store order info for confirmation page
       setOrderDetails({
@@ -127,7 +136,7 @@ const Checkout = () => {
         customerPhone: values.phone,
         shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
         shippingMethod: values.shipping,
-        items: cart.items,
+        items: items,
         subtotal: cartTotals.subtotal,
         shipping: cartTotals.shippingCost,
         tax: cartTotals.tax,
@@ -138,6 +147,7 @@ const Checkout = () => {
       clearCart();
       
       // Redirect to Square checkout
+      console.log("Redirecting to Square checkout:", checkoutResponse.url);
       window.location.href = checkoutResponse.url;
       
     } catch (error) {
@@ -313,7 +323,7 @@ const Checkout = () => {
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                 <div className="border rounded-md p-4">
                   <ul>
-                    {cart.items.map((item) => (
+                    {items.map((item) => (
                       <li key={item.id} className="flex justify-between py-2">
                         <span>{item.name} ({item.quantity})</span>
                         <span>${(item.price * item.quantity).toFixed(2)}</span>
@@ -340,7 +350,7 @@ const Checkout = () => {
                 className="w-full md:w-auto bg-red-600 hover:bg-red-700"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Submitting..." : "Place Order"}
+                {isSubmitting ? "Processing..." : "Place Order"}
               </Button>
             </form>
           </Form>
