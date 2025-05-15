@@ -26,6 +26,9 @@ type CartContextType = {
     tax: number;
     total: number;
   };
+  cart: {
+    items: CartItem[];
+  };
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -131,7 +134,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     closeCart,
     totalItems,
     totalPrice,
-    calculateTotals
+    calculateTotals,
+    cart: { items } // Add this to match the expected structure in Checkout.tsx
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
