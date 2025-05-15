@@ -350,3 +350,61 @@ export async function listAllSquareOrders() {
 export function getSquareDashboardUrl() {
   return "https://squareup.com/dashboard/orders";
 }
+
+// Helper function to create a checkout link directly with our edge function
+export async function createCheckout(data: {
+  customerId: string;
+  items: Array<{name: string; quantity: number; price: number;}>;
+  customerInfo: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    phone?: string;
+  };
+  shippingMethod: string;
+}) {
+  try {
+    console.log("Creating checkout with data:", data);
+    
+    // Call our edge function to create the checkout
+    const response = await fetch(`${window.location.origin}/functions/v1/create-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        customerId: data.customerId,
+        items: data.items,
+        customerInfo: data.customerInfo,
+        shippingMethod: data.shippingMethod,
+        metadata: {
+          shippingAddress: `${data.customerInfo.address}, ${data.customerInfo.city}, ${data.customerInfo.state} ${data.customerInfo.zipCode}`,
+          orderSource: "website"
+        }
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!response.ok) {
+      console.error("Error creating checkout:", result);
+      throw new Error(result.error || "Failed to create checkout");
+    }
+    
+    return {
+      success: true,
+      checkoutUrl: result.checkoutUrl,
+      orderId: result.orderId
+    };
+  } catch (error: any) {
+    console.error("Error creating checkout:", error);
+    return {
+      success: false,
+      error: error.message || "Unknown error"
+    };
+  }
+}

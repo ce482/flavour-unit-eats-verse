@@ -10,7 +10,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { createSquareCustomer, createSquareCheckoutLink } from "@/integrations/square/client";
+import { createSquareCustomer, createCheckout } from "@/integrations/square/client";
 import { toast } from "@/components/ui/sonner";
 
 // Define the checkout form schema
@@ -33,27 +33,12 @@ const shippingOptions = [
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
 
-interface OrderDetails {
-  orderId: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  shippingAddress: string;
-  shippingMethod: string;
-  items: any[];
-  subtotal: number;
-  shipping: number;
-  tax: number;
-  total: number;
-}
-
 const Checkout = () => {
   const navigate = useNavigate();
   const { items, clearCart, calculateTotals } = useCart();
   const cartTotals = calculateTotals();
   const [isSubmitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
 
   // Initialize form
   const form = useForm<CheckoutFormValues>({
@@ -72,7 +57,7 @@ const Checkout = () => {
   });
 
   // Modified submitOrder function to use Square checkout
-  const submitOrder = async (values: z.infer<typeof checkoutFormSchema>) => {
+  const submitOrder = async (values: CheckoutFormValues) => {
     setSubmitting(true);
     setSubmitError(null);
     
@@ -82,18 +67,14 @@ const Checkout = () => {
         throw new Error("Your cart is empty");
       }
       
-      console.log("Creating customer in Square...");
-      console.log("Customer data:", {
-        contactName: `${values.firstName} ${values.lastName}`,
-        contactEmail: values.email,
-        contactPhone: values.phone || undefined
-      });
+      console.log("Processing checkout with values:", values);
       
-      // Create the customer in Square with fixed data handling
+      // Step 1: Create the customer in Square
+      console.log("Creating customer in Square...");
       const customerResponse = await createSquareCustomer({
         contactName: `${values.firstName} ${values.lastName}`,
         contactEmail: values.email,
-        contactPhone: values.phone || undefined
+        contactPhone: values.phone
       });
 
       if (!customerResponse.success || !customerResponse.customerId) {
@@ -103,57 +84,44 @@ const Checkout = () => {
       
       console.log("Customer created successfully with ID:", customerResponse.customerId);
       
-      // Format items for Square checkout
+      // Step 2: Format items for checkout
       const orderItems = items.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price
       }));
       
-      console.log("Creating Square checkout link for items:", orderItems);
-      
-      // Create the checkout link
-      const checkoutResponse = await createSquareCheckoutLink(
-        orderItems,
-        {
+      // Step 3: Create checkout via our edge function
+      console.log("Creating checkout for items:", orderItems);
+      const checkoutResponse = await createCheckout({
+        customerId: customerResponse.customerId,
+        items: orderItems,
+        customerInfo: {
           email: values.email,
           firstName: values.firstName,
           lastName: values.lastName,
           address: values.address,
           city: values.city,
           state: values.state,
-          zipCode: values.zipCode
-        }
-      );
+          zipCode: values.zipCode,
+          phone: values.phone
+        },
+        shippingMethod: values.shipping
+      });
       
-      if (!checkoutResponse.success || !checkoutResponse.url) {
-        console.error("Failed to create checkout link:", checkoutResponse);
-        throw new Error(`Failed to create checkout link: ${JSON.stringify(checkoutResponse.error || "Unknown error")}`);
+      if (!checkoutResponse.success || !checkoutResponse.checkoutUrl) {
+        console.error("Failed to create checkout:", checkoutResponse);
+        throw new Error(`Failed to create checkout: ${JSON.stringify(checkoutResponse.error || "Unknown error")}`);
       }
       
-      console.log("Checkout link created successfully:", checkoutResponse.url);
-      
-      // Store order info for confirmation page
-      setOrderDetails({
-        orderId: customerResponse.customerId,
-        customerName: `${values.firstName} ${values.lastName}`,
-        customerEmail: values.email,
-        customerPhone: values.phone,
-        shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
-        shippingMethod: values.shipping,
-        items: items,
-        subtotal: cartTotals.subtotal,
-        shipping: cartTotals.shippingCost,
-        tax: cartTotals.tax,
-        total: cartTotals.total
-      });
+      console.log("Checkout created successfully:", checkoutResponse);
       
       // Clear cart
       clearCart();
       
       // Redirect to Square checkout
-      console.log("Redirecting to Square checkout:", checkoutResponse.url);
-      window.location.href = checkoutResponse.url;
+      console.log("Redirecting to Square checkout:", checkoutResponse.checkoutUrl);
+      window.location.href = checkoutResponse.checkoutUrl;
       
     } catch (error) {
       console.error('Error submitting order:', error);
@@ -165,7 +133,7 @@ const Checkout = () => {
       toast.error("Checkout Error", {
         description: errorMessage
       });
-    } finally {
+      
       setSubmitting(false);
     }
   };
