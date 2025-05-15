@@ -1,11 +1,9 @@
-
 // Square API integration client
 import { Client, Environment } from 'square';
 
-// These should be replaced with your actual Square credentials
-// For security, these would be better stored in environment variables
-const SQUARE_ACCESS_TOKEN = "YOUR_SQUARE_ACCESS_TOKEN";
-const SQUARE_LOCATION_ID = "YOUR_SQUARE_LOCATION_ID";
+// Square credentials from your developer dashboard
+const SQUARE_ACCESS_TOKEN = "EAAAI_K8NORSKj_4gd-Dnk-IIcHHKI2u0NQ36HSfoUaOdU2tMfgc1Xx8m2dzL1tL";
+const SQUARE_LOCATION_ID = "LX4QR03YJRQ76";
 
 // Initialize Square client
 export const squareClient = new Client({

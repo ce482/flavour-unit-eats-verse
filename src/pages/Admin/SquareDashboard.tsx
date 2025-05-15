@@ -71,7 +71,7 @@ const SquareDashboard = () => {
           query: {
             filter: {
               sourceFilter: {
-                name: "Wholesale Web Form"
+                sourceNames: ["Wholesale Web Form"]
               }
             }
           }
