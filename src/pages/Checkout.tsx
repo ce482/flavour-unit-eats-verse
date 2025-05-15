@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
@@ -10,7 +11,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { createSquareCustomer, createRetailOrder } from "@/integrations/square/client";
+import { createSquareCustomer, createSquareCheckoutLink } from "@/integrations/square/client";
+import { toast } from "@/components/ui/sonner";
 
 // Define the checkout form schema
 const checkoutFormSchema = z.object({
@@ -70,12 +72,17 @@ const Checkout = () => {
     },
   });
 
-  // Inside Checkout component, modify the submitOrder function to use Square instead of Supabase
+  // Modified submitOrder function to use Square checkout
   const submitOrder = async (values: z.infer<typeof checkoutFormSchema>) => {
     setSubmitting(true);
     setSubmitError(null);
     
     try {
+      // Verify cart has items
+      if (cart.items.length === 0) {
+        throw new Error("Your cart is empty");
+      }
+      
       // Create the customer in Square
       const customerResponse = await createSquareCustomer({
         contactName: `${values.firstName} ${values.lastName}`,
@@ -94,24 +101,27 @@ const Checkout = () => {
         price: item.price
       }));
       
-      // Create the order in Square
-      const orderResponse = await createRetailOrder({
-        customerId: customerResponse.customerId,
-        customerName: `${values.firstName} ${values.lastName}`,
-        customerEmail: values.email,
-        customerPhone: values.phone,
-        shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
-        shippingMethod: values.shipping,
-        items: orderItems
-      });
+      // Create the checkout link
+      const checkoutResponse = await createSquareCheckoutLink(
+        orderItems,
+        {
+          email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          address: values.address,
+          city: values.city,
+          state: values.state,
+          zipCode: values.zipCode
+        }
+      );
       
-      if (!orderResponse.success) {
-        throw new Error("Failed to create order");
+      if (!checkoutResponse.success || !checkoutResponse.url) {
+        throw new Error("Failed to create checkout link");
       }
       
       // Store order info for confirmation page
       setOrderDetails({
-        orderId: orderResponse.orderId || "unknown",
+        orderId: customerResponse.customerId,
         customerName: `${values.firstName} ${values.lastName}`,
         customerEmail: values.email,
         customerPhone: values.phone,
@@ -127,12 +137,15 @@ const Checkout = () => {
       // Clear cart
       clearCart();
       
-      // Redirect to confirmation
-      navigate('/order-confirmation');
+      // Redirect to Square checkout
+      window.location.href = checkoutResponse.url;
       
     } catch (error) {
       console.error('Error submitting order:', error);
       setSubmitError(error instanceof Error ? error.message : 'An unknown error occurred');
+      toast.error("Error", {
+        description: error instanceof Error ? error.message : 'An unknown error occurred'
+      });
     } finally {
       setSubmitting(false);
     }

@@ -1,4 +1,3 @@
-
 // Square API integration client
 import { Client, Environment } from 'square';
 
@@ -117,6 +116,67 @@ export async function createSquareOrder(data: {
     };
   } catch (error) {
     console.error("Error creating Square order:", error);
+    return {
+      success: false,
+      error
+    };
+  }
+}
+
+// Function to create a checkout payment link with Square
+export async function createSquareCheckoutLink(items: Array<{name: string; quantity: number; price: number;}>, customerInfo: {
+  email: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}) {
+  try {
+    console.log("Creating Square checkout link");
+    
+    // Format line items for Square checkout
+    const lineItems = items.map(item => ({
+      quantity: item.quantity.toString(),
+      basePriceMoney: {
+        amount: BigInt(Math.round(item.price * 100)), // Convert to cents and to BigInt
+        currency: "USD"
+      },
+      name: item.name
+    }));
+    
+    // Create the checkout
+    const response = await squareClient.checkoutApi.createPaymentLink({
+      idempotencyKey: `payment_${Date.now()}`,
+      quickPay: {
+        name: "Flavour Unit Order",
+        priceMoney: {
+          amount: BigInt(Math.round(items.reduce((total, item) => total + (item.price * item.quantity), 0) * 100)),
+          currency: "USD"
+        },
+        locationId: LOCATION_ID
+      },
+      checkoutOptions: {
+        redirectUrl: window.location.origin + "/payment-success",
+        merchantSupportEmail: "support@flavourunit.com",
+        askForShippingAddress: true
+      }
+    });
+
+    console.log("Square checkout response:", response);
+
+    if (!response.result.paymentLink?.url) {
+      throw new Error("Failed to create checkout link");
+    }
+
+    return {
+      success: true,
+      url: response.result.paymentLink.url,
+      data: response.result
+    };
+  } catch (error) {
+    console.error("Error creating Square checkout link:", error);
     return {
       success: false,
       error
