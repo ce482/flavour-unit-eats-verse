@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
@@ -84,16 +83,22 @@ const Checkout = () => {
       }
       
       console.log("Creating customer in Square...");
-      // Create the customer in Square
+      console.log("Customer data:", {
+        contactName: `${values.firstName} ${values.lastName}`,
+        contactEmail: values.email,
+        contactPhone: values.phone || undefined
+      });
+      
+      // Create the customer in Square with fixed data handling
       const customerResponse = await createSquareCustomer({
         contactName: `${values.firstName} ${values.lastName}`,
         contactEmail: values.email,
-        contactPhone: values.phone
+        contactPhone: values.phone || undefined
       });
 
       if (!customerResponse.success || !customerResponse.customerId) {
         console.error("Failed to create customer:", customerResponse);
-        throw new Error("Failed to create customer record");
+        throw new Error(`Failed to create customer record: ${JSON.stringify(customerResponse.error || "Unknown error")}`);
       }
       
       console.log("Customer created successfully with ID:", customerResponse.customerId);
@@ -123,7 +128,7 @@ const Checkout = () => {
       
       if (!checkoutResponse.success || !checkoutResponse.url) {
         console.error("Failed to create checkout link:", checkoutResponse);
-        throw new Error("Failed to create checkout link");
+        throw new Error(`Failed to create checkout link: ${JSON.stringify(checkoutResponse.error || "Unknown error")}`);
       }
       
       console.log("Checkout link created successfully:", checkoutResponse.url);
@@ -152,9 +157,13 @@ const Checkout = () => {
       
     } catch (error) {
       console.error('Error submitting order:', error);
-      setSubmitError(error instanceof Error ? error.message : 'An unknown error occurred');
-      toast.error("Error", {
-        description: error instanceof Error ? error.message : 'An unknown error occurred'
+      
+      // More descriptive error message
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      setSubmitError(errorMessage);
+      
+      toast.error("Checkout Error", {
+        description: errorMessage
       });
     } finally {
       setSubmitting(false);

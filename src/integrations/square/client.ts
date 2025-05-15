@@ -28,12 +28,19 @@ export async function createSquareCustomer(data: {
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
     
+    // Fix: Make sure phone number is formatted correctly or omitted if empty
+    const phoneNumber = data.contactPhone && data.contactPhone.trim() !== '' ? data.contactPhone : undefined;
+    
     const customerData: any = {
       emailAddress: data.contactEmail,
       givenName: firstName,
       familyName: lastName,
-      phoneNumber: data.contactPhone,
     };
+    
+    // Only add phone if it's provided and not empty
+    if (phoneNumber) {
+      customerData.phoneNumber = phoneNumber;
+    }
     
     // Only add company name for wholesale customers
     if (data.businessName) {
@@ -43,6 +50,7 @@ export async function createSquareCustomer(data: {
       customerData.referenceId = `retail_${Date.now()}`;
     }
     
+    console.log("Square customer data being sent:", customerData);
     const response = await squareClient.customersApi.createCustomer(customerData);
 
     console.log("Square customer creation response:", response);
@@ -56,11 +64,14 @@ export async function createSquareCustomer(data: {
       customerId: response.result.customer.id,
       data: response.result
     };
-  } catch (error) {
+  } catch (error: any) {
+    // Enhanced error logging
     console.error("Error creating Square customer:", error);
+    console.error("Error details:", error?.errors || error?.message || "Unknown error");
     return {
       success: false,
-      error
+      error: error?.errors || error?.message || "Unknown error",
+      details: error
     };
   }
 }
@@ -146,13 +157,17 @@ export async function createSquareCheckoutLink(items: Array<{name: string; quant
       name: item.name
     }));
     
+    // Calculate total amount
+    const totalAmount = Math.round(items.reduce((total, item) => total + (item.price * item.quantity), 0) * 100);
+    console.log("Total amount for checkout:", totalAmount);
+    
     // Create the checkout
     const response = await squareClient.checkoutApi.createPaymentLink({
       idempotencyKey: `payment_${Date.now()}`,
       quickPay: {
         name: "Flavour Unit Order",
         priceMoney: {
-          amount: BigInt(Math.round(items.reduce((total, item) => total + (item.price * item.quantity), 0) * 100)),
+          amount: BigInt(totalAmount),
           currency: "USD"
         },
         locationId: LOCATION_ID
@@ -175,11 +190,14 @@ export async function createSquareCheckoutLink(items: Array<{name: string; quant
       url: response.result.paymentLink.url,
       data: response.result
     };
-  } catch (error) {
+  } catch (error: any) {
+    // Enhanced error logging
     console.error("Error creating Square checkout link:", error);
+    console.error("Error details:", error?.errors || error?.message || "Unknown error");
     return {
       success: false,
-      error
+      error: error?.errors || error?.message || "Unknown error",
+      details: error
     };
   }
 }
