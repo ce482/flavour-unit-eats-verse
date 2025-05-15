@@ -1,3 +1,4 @@
+
 // Square API integration client
 import { Client, Environment } from 'square';
 
@@ -84,6 +85,26 @@ export async function createSquareOrder(data: {
     };
   } catch (error) {
     console.error("Error creating Square order:", error);
+    return {
+      success: false,
+      error
+    };
+  }
+}
+
+// Helper function to list all orders from Square
+export async function listAllSquareOrders() {
+  try {
+    const response = await squareClient.ordersApi.searchOrders({
+      locationIds: [LOCATION_ID]
+    });
+    
+    return {
+      success: true,
+      orders: response.result.orders || [],
+    };
+  } catch (error) {
+    console.error("Error listing all Square orders:", error);
     return {
       success: false,
       error
