@@ -1,3 +1,4 @@
+
 // Square API integration client
 import { Client, Environment } from 'square';
 
@@ -123,7 +124,7 @@ export async function createSquareOrder(data: {
   }
 }
 
-// Function to create a retail customer order in Square
+// New function to create a retail customer order in Square
 export async function createRetailOrder(data: {
   customerId: string;
   customerName: string;
@@ -145,7 +146,7 @@ export async function createRetailOrder(data: {
       throw new Error("Customer ID is required");
     }
 
-    // Format line items for Square - create one line item per unique product
+    // Format line items for Square
     const lineItems = data.items.map(item => ({
       quantity: item.quantity.toString(),
       basePriceMoney: {
@@ -164,7 +165,7 @@ export async function createRetailOrder(data: {
         customerId: data.customerId,
         lineItems,
         source: {
-          name: "Flavour Unit Online Store" // Update this to show Flavour Unit instead of Chef Gang
+          name: "Online Store"
         },
         metadata: {
           customer_name: data.customerName,
