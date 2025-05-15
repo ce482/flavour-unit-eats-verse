@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { squareClient, LOCATION_ID } from '@/integrations/square/client';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -14,19 +13,21 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+// Define proper types for Square entities
 type SquareCustomer = {
   id: string;
-  companyName?: string;
-  givenName?: string;
-  familyName?: string;
-  emailAddress?: string;
-  phoneNumber?: string;
+  companyName?: string | null;
+  givenName?: string | null;
+  familyName?: string | null;
+  emailAddress?: string | null;
+  phoneNumber?: string | null;
   createdAt?: string;
+  referenceId?: string | null;
 };
 
 type SquareOrder = {
   id: string;
-  customerId?: string;
+  customerId?: string | null;
   createdAt?: string;
   state?: string;
   metadata?: Record<string, string>;
@@ -46,9 +47,22 @@ const SquareDashboard = () => {
       try {
         // Fetch wholesale customers (with reference ID starting with "wholesale_")
         const customersResponse = await squareClient.customersApi.listCustomers();
-        const wholesaleCustomers = customersResponse.result.customers?.filter(
-          customer => customer.referenceId?.startsWith('wholesale_')
-        ) || [];
+        
+        // Cast and filter customers
+        const allCustomers = customersResponse.result.customers || [];
+        const wholesaleCustomers = allCustomers
+          .filter(customer => customer.referenceId?.startsWith('wholesale_'))
+          .map(customer => ({
+            id: customer.id || '',  // Ensure id is always a string
+            companyName: customer.companyName,
+            givenName: customer.givenName,
+            familyName: customer.familyName,
+            emailAddress: customer.emailAddress,
+            phoneNumber: customer.phoneNumber,
+            createdAt: customer.createdAt,
+            referenceId: customer.referenceId
+          }));
+        
         setCustomers(wholesaleCustomers);
         
         // Fetch orders with the source name "Wholesale Web Form"
@@ -56,19 +70,26 @@ const SquareDashboard = () => {
           locationIds: [LOCATION_ID],
           query: {
             filter: {
-              sourceNames: ["Wholesale Web Form"]
+              sourceFilter: {
+                name: "Wholesale Web Form"
+              }
             }
           }
         });
         
-        // Map customers to orders
-        const ordersWithCustomers = ordersResponse.result.orders?.map(order => {
+        // Map customers to orders and ensure they match our type
+        const squareOrders = ordersResponse.result.orders || [];
+        const ordersWithCustomers = squareOrders.map(order => {
           const customer = wholesaleCustomers.find(c => c.id === order.customerId);
           return {
-            ...order,
-            customer
+            id: order.id || '',  // Ensure id is always a string
+            customerId: order.customerId,
+            createdAt: order.createdAt,
+            state: order.state,
+            metadata: order.metadata,
+            customer: customer
           };
-        }) || [];
+        });
         
         setOrders(ordersWithCustomers);
       } catch (err) {

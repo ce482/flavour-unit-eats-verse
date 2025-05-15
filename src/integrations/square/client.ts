@@ -29,7 +29,7 @@ export async function createSquareCustomer(data: {
       givenName: data.contactName.split(' ')[0] || '',
       familyName: data.contactName.split(' ').slice(1).join(' ') || '',
       phoneNumber: data.contactPhone,
-      reference_id: `wholesale_${Date.now()}`,
+      referenceId: `wholesale_${Date.now()}`, // Fixed: referenceId not reference_id
     });
 
     return {
