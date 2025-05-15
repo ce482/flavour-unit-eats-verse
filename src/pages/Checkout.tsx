@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
@@ -11,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { createSquareCustomer, createRetailOrder } from "@/integrations/square/client";
+import { SHIPPING_METHODS } from "@/utils/shippingUtils";
 
 // Define the checkout form schema
 const checkoutFormSchema = z.object({
@@ -25,9 +27,10 @@ const checkoutFormSchema = z.object({
   shipping: z.string().min(1, { message: "Please select a shipping option." }),
 });
 
+// Use the shipping options from shippingUtils
 const shippingOptions = [
-  { value: "standard", label: "Standard Shipping" },
-  { value: "express", label: "Express Shipping" },
+  { value: "standard", label: SHIPPING_METHODS.standard.description },
+  { value: "fedex_2day", label: SHIPPING_METHODS.fedex_2day.description },
 ];
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
@@ -49,13 +52,16 @@ interface OrderDetails {
 const Checkout = () => {
   const navigate = useNavigate();
   const { items, clearCart, totalPrice } = useCart();
-  const shippingCost = 0; // Default shipping cost
-  const taxRate = 0.0625; // Example tax rate (6.25%)
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   
-  // Calculate order totals
+  // Calculate order totals with the proper shipping cost
   const calculateTotals = () => {
     const subtotal = totalPrice || 0;
-    const shipping = shippingCost;
+    const selectedShippingMethod = form.watch("shipping") || "standard";
+    const shipping = SHIPPING_METHODS[selectedShippingMethod as keyof typeof SHIPPING_METHODS]?.price || SHIPPING_METHODS.standard.price;
+    const taxRate = 0.0625; // Example tax rate (6.25%)
     const tax = subtotal * taxRate;
     const total = subtotal + shipping + tax;
     
@@ -66,11 +72,6 @@ const Checkout = () => {
       total
     };
   };
-  
-  const cartTotals = calculateTotals();
-  const [isSubmitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
 
   // Initialize form
   const form = useForm<CheckoutFormValues>({
@@ -84,11 +85,13 @@ const Checkout = () => {
       city: "",
       state: "",
       zipCode: "",
-      shipping: "",
+      shipping: "standard", // Default to standard shipping
     },
   });
+  
+  const cartTotals = calculateTotals();
 
-  // Inside Checkout component, modify the submitOrder function to use Square instead of Supabase
+  // Submit order function using Square
   const submitOrder = async (values: z.infer<typeof checkoutFormSchema>) => {
     setSubmitting(true);
     setSubmitError(null);
@@ -105,6 +108,10 @@ const Checkout = () => {
         throw new Error("Failed to create customer record");
       }
       
+      // Get the selected shipping method data
+      const shippingMethodKey = values.shipping as keyof typeof SHIPPING_METHODS;
+      const shippingMethodName = SHIPPING_METHODS[shippingMethodKey]?.name || SHIPPING_METHODS.standard.name;
+      
       // Create the order in Square
       const orderResponse = await createRetailOrder({
         customerId: customerResponse.customerId,
@@ -112,7 +119,7 @@ const Checkout = () => {
         customerEmail: values.email,
         customerPhone: values.phone,
         shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
-        shippingMethod: values.shipping,
+        shippingMethod: shippingMethodName,
         items: items
       });
       
@@ -127,7 +134,7 @@ const Checkout = () => {
         customerEmail: values.email,
         customerPhone: values.phone,
         shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
-        shippingMethod: values.shipping,
+        shippingMethod: shippingMethodName,
         items: items,
         subtotal: cartTotals.subtotal,
         shipping: cartTotals.shippingCost,
@@ -322,11 +329,15 @@ const Checkout = () => {
                     <span>Subtotal</span>
                     <span>${cartTotals.subtotal.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between font-semibold py-2 border-b">
+                  <div className="flex justify-between font-semibold py-2">
                     <span>Shipping</span>
                     <span>${cartTotals.shippingCost.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between font-bold py-2">
+                  <div className="flex justify-between font-semibold py-2">
+                    <span>Tax</span>
+                    <span>${cartTotals.tax.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-bold py-2 border-t">
                     <span>Total</span>
                     <span>${cartTotals.total.toFixed(2)}</span>
                   </div>

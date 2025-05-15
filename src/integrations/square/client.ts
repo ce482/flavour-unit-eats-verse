@@ -1,4 +1,3 @@
-
 // Square API integration client
 import { Client, Environment } from 'square';
 
@@ -124,7 +123,7 @@ export async function createSquareOrder(data: {
   }
 }
 
-// New function to create a retail customer order in Square
+// Function to create a retail customer order in Square
 export async function createRetailOrder(data: {
   customerId: string;
   customerName: string;
@@ -165,7 +164,7 @@ export async function createRetailOrder(data: {
         customerId: data.customerId,
         lineItems,
         source: {
-          name: "Online Store"
+          name: "Flavour Unit Online Store" // Update this to show Flavour Unit instead of Chef Gang
         },
         metadata: {
           customer_name: data.customerName,
