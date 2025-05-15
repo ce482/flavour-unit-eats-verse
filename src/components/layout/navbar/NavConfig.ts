@@ -9,6 +9,7 @@ export const navItems = [
   { name: 'Wholesale', path: '/wholesale' },
   { name: 'FAQ', path: '/faq' },
   { name: 'Contact', path: '/contact' },
+  { name: 'Admin', path: '/admin/square' },
 ];
 
 export const darkTextRoutes = [
@@ -19,5 +20,6 @@ export const darkTextRoutes = [
   '/contact', 
   '/petit-dejeuner',
   '/checkout',
-  '/wholesale'
+  '/wholesale',
+  '/admin/square'
 ];
