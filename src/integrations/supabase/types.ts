@@ -104,6 +104,57 @@ export type Database = {
         }
         Relationships: []
       }
+      wholesale_inquiries: {
+        Row: {
+          accepts_minimum_order: boolean
+          business_name: string
+          business_type: string
+          comments: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          daily_weekly_volume: string
+          expected_ordering_volume: string
+          id: string
+          interested_product_line: string
+          pickup_issue: boolean
+          status: string
+        }
+        Insert: {
+          accepts_minimum_order: boolean
+          business_name: string
+          business_type: string
+          comments?: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          daily_weekly_volume: string
+          expected_ordering_volume: string
+          id?: string
+          interested_product_line: string
+          pickup_issue: boolean
+          status?: string
+        }
+        Update: {
+          accepts_minimum_order?: boolean
+          business_name?: string
+          business_type?: string
+          comments?: string | null
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          daily_weekly_volume?: string
+          expected_ordering_volume?: string
+          id?: string
+          interested_product_line?: string
+          pickup_issue?: boolean
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
