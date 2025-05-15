@@ -1,128 +1,16 @@
 
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
-import { createSquareCustomer, createSquareOrder, getSquareDashboardUrl } from "@/integrations/square/client";
-import { logger } from "@/utils/logger";
-
-// Form validation schema
-const formSchema = z.object({
-  business_name: z.string().min(2, { message: "Business name must be at least 2 characters." }),
-  business_type: z.string().min(2, { message: "Please specify your business type." }),
-  contact_name: z.string().min(2, { message: "Contact name must be at least 2 characters." }),
-  contact_email: z.string().email({ message: "Please enter a valid email address." }),
-  contact_phone: z.string().optional(),
-  daily_weekly_volume: z.string().min(1, { message: "Please specify your volume." }),
-  expected_ordering_volume: z.string().min(1, { message: "Please specify your expected ordering volume." }),
-  interested_product_line: z.string().min(1, { message: "Please specify which product line you're interested in." }),
-  accepts_minimum_order: z.boolean(),
-  pickup_issue: z.boolean(),
-  comments: z.string().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { ExternalLink } from "lucide-react";
 
 const Wholesale = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeSIsjSjhLzRsAkc9ZE8ko6w6_Ov9D-FWTBK1EGDO96HvevOQ/viewform?usp=dialog";
   
-  // Initialize form
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      business_name: "",
-      business_type: "",
-      contact_name: "",
-      contact_email: "",
-      contact_phone: "",
-      daily_weekly_volume: "",
-      expected_ordering_volume: "",
-      interested_product_line: "",
-      accepts_minimum_order: false,
-      pickup_issue: false,
-      comments: "",
-    },
-  });
-
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    setSubmitError(null);
-    logger.form.start("Wholesale Inquiry", data);
-    
-    try {
-      // First, create a customer in Square
-      logger.form.step("Creating customer in Square");
-      const customerResult = await createSquareCustomer({
-        businessName: data.business_name,
-        contactEmail: data.contact_email,
-        contactName: data.contact_name,
-        contactPhone: data.contact_phone || undefined,
-      });
-      
-      if (!customerResult.success || !customerResult.customerId) {
-        logger.form.error("Customer creation", customerResult.error);
-        throw new Error(customerResult.error instanceof Error ? customerResult.error.message : "Failed to create customer in Square");
-      }
-      
-      logger.form.step("Customer created successfully", { customerId: customerResult.customerId });
-      
-      // Then, create an order with the wholesale inquiry details
-      logger.form.step("Creating order in Square");
-      const orderResult = await createSquareOrder({
-        customerId: customerResult.customerId,
-        businessName: data.business_name,
-        businessType: data.business_type,
-        interestedProductLine: data.interested_product_line,
-        acceptsMinimumOrder: data.accepts_minimum_order,
-        pickupIssue: data.pickup_issue,
-        dailyWeeklyVolume: data.daily_weekly_volume,
-        expectedOrderingVolume: data.expected_ordering_volume,
-        comments: data.comments || "",
-      });
-      
-      if (!orderResult.success) {
-        logger.form.error("Order creation", orderResult.error);
-        throw new Error(orderResult.error instanceof Error ? orderResult.error.message : "Failed to create order in Square");
-      }
-      
-      logger.form.step("Order created successfully", { orderId: orderResult.orderId });
-      
-      // Show success message
-      toast.success("Thank you for your wholesale inquiry! Your submission has been received.", {
-        duration: 5000,
-      });
-      
-      // Redirect to Square Dashboard
-      setFormSubmitted(true);
-      
-      // Reset form
-      form.reset();
-      
-      logger.form.end(true, "Wholesale form submitted successfully");
-      
-      // Open Square Dashboard in a new tab
-      window.open(getSquareDashboardUrl(), '_blank');
-      
-    } catch (error) {
-      logger.form.error("Form submission", error);
-      setSubmitError(error instanceof Error ? error.message : "Failed to submit form. Please try again or contact us directly.");
-      toast.error("There was a problem submitting your form. Please try again or contact us directly.", {
-        duration: 5000,
-      });
-      logger.form.end(false, "Wholesale form submission failed");
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Function to open Google Form in new tab
+  const openGoogleForm = () => {
+    window.open(googleFormUrl, '_blank');
   };
 
   return (
@@ -135,252 +23,41 @@ const Wholesale = () => {
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Wholesale Partnership</h1>
               <p className="text-lg text-gray-600">
-                Interested in carrying our products in your business? Fill out the form below to receive 
-                wholesale pricing and partnership information.
+                Interested in carrying our products in your business? Fill out our wholesale inquiry form 
+                to receive wholesale pricing and partnership information.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Form Section */}
+        {/* Google Form Section */}
         <section className="py-16 bg-white">
           <div className="container-wide">
             <div className="max-w-3xl mx-auto">
-              {formSubmitted ? (
-                <div className="bg-green-50 p-8 rounded-lg text-center shadow-sm">
-                  <h2 className="text-2xl font-bold text-green-700 mb-4">Submission Successful!</h2>
-                  <p className="text-lg mb-6">
-                    Thank you for your wholesale inquiry. Your information has been sent to our team.
-                    We'll review your request and be in touch with you soon.
-                  </p>
-                  <p className="mb-6">
-                    Your submission has been added to our Square Dashboard for processing.
-                  </p>
-                  <div className="flex justify-center space-x-4">
-                    <Button 
-                      onClick={() => window.open(getSquareDashboardUrl(), '_blank')}
-                      className="bg-blue-600 hover:bg-blue-700"
-                    >
-                      View in Square Dashboard
-                    </Button>
-                    <Button 
-                      onClick={() => setFormSubmitted(false)}
-                      variant="outline"
-                    >
-                      Submit Another Inquiry
-                    </Button>
-                  </div>
+              <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
+                <h2 className="text-2xl font-bold mb-6">Wholesale Inquiry Form</h2>
+                <p className="text-lg mb-8">
+                  Please click the button below to access our wholesale inquiry form. 
+                  The form will open in a new tab.
+                </p>
+                <div className="flex justify-center space-y-0">
+                  <Button 
+                    onClick={openGoogleForm}
+                    className="bg-red-600 hover:bg-red-700 text-lg px-8 py-6 flex items-center gap-2"
+                  >
+                    Open Wholesale Form <ExternalLink className="h-5 w-5" />
+                  </Button>
                 </div>
-              ) : (
-                <div className="bg-gray-50 rounded-lg p-8 shadow-sm">
-                  {submitError && (
-                    <div className="mb-6 p-4 border border-red-300 bg-red-50 text-red-800 rounded-md">
-                      <p className="font-medium">Error submitting form</p>
-                      <p>{submitError}</p>
-                      <p className="mt-2">If this error persists, please contact us directly at <a href="mailto:info@yourcompany.com" className="underline">info@yourcompany.com</a>.</p>
-                    </div>
-                  )}
-                  
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="business_name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Business Name*</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Your business name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="business_type"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Business Type*</FormLabel>
-                              <FormControl>
-                                <Input placeholder="e.g. Restaurant, Retail, Catering" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="contact_name"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Contact Person Name*</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Full name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="contact_email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email Address*</FormLabel>
-                              <FormControl>
-                                <Input placeholder="email@example.com" type="email" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <FormField
-                        control={form.control}
-                        name="contact_phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone Number</FormLabel>
-                            <FormControl>
-                              <Input placeholder="(123) 456-7890" {...field} />
-                            </FormControl>
-                            <FormDescription>Optional</FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="daily_weekly_volume"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Daily or Weekly Volume*</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g. 50 units daily" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="expected_ordering_volume"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Expected Ordering Volume*</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g. 10 cases per week" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="interested_product_line"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Product Line Interested In*</FormLabel>
-                            <FormControl>
-                              <Input placeholder="e.g. Egg Rolls, Le Petit Déjeuner" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="accepts_minimum_order"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                There is a 4 case minimum order, would that be ok?*
-                              </FormLabel>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="pickup_issue"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                We do not deliver, our location is at 5801 W Dickens Ave, would pickup be an issue?*
-                              </FormLabel>
-                              <FormDescription>
-                                Check if pickup would be an issue for your business
-                              </FormDescription>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="comments"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Additional Comments</FormLabel>
-                            <FormControl>
-                              <Textarea 
-                                placeholder="Any additional information or questions" 
-                                className="min-h-[100px]"
-                                {...field} 
-                              />
-                            </FormControl>
-                            <FormDescription>Optional</FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-2">
-                        <p>* All wholesale orders must be placed at least 48 hours prior to pickup, late order fees could be applied.</p>
-                        <p>* All flavors/product names are trademarked and cannot be altered.</p>
-                        <p>* We reserve the right to end or not operate a wholesale partnership at any time.</p>
-                        <p>* Prices are subject to change without prior or further notice.</p>
-                        <p>* Wholesale partnerships are intended for approved vendors only.</p>
-                      </div>
-
-                      <Button 
-                        type="submit" 
-                        className="w-full md:w-auto bg-red-600 hover:bg-red-700"
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? "Submitting..." : "Submit Wholesale Inquiry"}
-                      </Button>
-                    </form>
-                  </Form>
+                
+                <div className="mt-12 bg-gray-100 p-4 rounded-md text-sm text-gray-700 space-y-2">
+                  <p className="font-medium text-center">Important Wholesale Information:</p>
+                  <p>* All wholesale orders must be placed at least 48 hours prior to pickup, late order fees could be applied.</p>
+                  <p>* All flavors/product names are trademarked and cannot be altered.</p>
+                  <p>* We reserve the right to end or not operate a wholesale partnership at any time.</p>
+                  <p>* Prices are subject to change without prior or further notice.</p>
+                  <p>* Wholesale partnerships are intended for approved vendors only.</p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </section>
