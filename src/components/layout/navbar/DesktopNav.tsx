@@ -2,7 +2,7 @@
 import React from 'react';
 import NavLink from './NavLink';
 import CartButton from './CartButton';
-import { navItems, adminNavItems } from './NavConfig';
+import { navItems } from './NavConfig';
 
 type DesktopNavProps = {
   isScrolled: boolean;
@@ -31,16 +31,6 @@ const DesktopNav = ({
         ))}
         
         <div className="pl-6 flex items-center space-x-6">
-          {adminNavItems.map((item) => (
-            <NavLink
-              key={item.name}
-              name={item.name}
-              path={item.path}
-              isScrolled={isScrolled}
-              shouldUseDarkText={shouldUseDarkText}
-            />
-          ))}
-          
           <CartButton
             totalItems={totalItems}
             onClick={openCart}

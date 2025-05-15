@@ -11,10 +11,6 @@ export const navItems = [
   { name: 'Contact', path: '/contact' },
 ];
 
-export const adminNavItems = [
-  { name: 'Square Dashboard', path: '/admin/square' },
-];
-
 export const darkTextRoutes = [
   '/about', 
   '/faq', 
@@ -23,6 +19,5 @@ export const darkTextRoutes = [
   '/contact', 
   '/petit-dejeuner',
   '/checkout',
-  '/wholesale',
-  '/admin/square'
+  '/wholesale'
 ];
