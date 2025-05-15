@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -10,7 +9,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { supabase } from '@/integrations/supabase/client';
+import { createSquareCustomer, createRetailOrder } from '@/integrations/square/client';
 import {
   Form,
   FormControl,
@@ -169,9 +168,42 @@ const Checkout = () => {
     }
 
     try {
-      toast.info('Preparing payment session...', {
+      toast.info('Processing your order...', {
         duration: 5000
       });
+      
+      // Format the full address
+      const fullAddress = `${values.shippingAddress}, ${values.city}, ${values.state} ${values.zipCode}`;
+      
+      // 1. Create Square customer
+      const customerResponse = await createSquareCustomer({
+        contactName: values.customerName,
+        contactEmail: values.customerEmail,
+        contactPhone: values.customerPhone
+      });
+      
+      if (!customerResponse.success || !customerResponse.customerId) {
+        throw new Error("Failed to create customer in Square");
+      }
+      
+      // 2. Create Square order with the customer ID
+      const orderResponse = await createRetailOrder({
+        customerId: customerResponse.customerId,
+        customerName: values.customerName,
+        customerEmail: values.customerEmail,
+        customerPhone: values.customerPhone,
+        shippingAddress: fullAddress,
+        shippingMethod: SHIPPING_METHODS[values.shippingMethod].name,
+        items: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      });
+      
+      if (!orderResponse.success) {
+        throw new Error("Failed to create order in Square");
+      }
       
       // Store checkout data in session storage for success page
       sessionStorage.setItem('checkout_details', JSON.stringify({
@@ -180,10 +212,11 @@ const Checkout = () => {
         shippingMethod: values.shippingMethod,
         customerName: values.customerName,
         customerEmail: values.customerEmail,
-        shippingAddress: `${values.shippingAddress}, ${values.city}, ${values.state} ${values.zipCode}`
+        shippingAddress: fullAddress,
+        orderId: orderResponse.orderId
       }));
       
-      // Create order details for Square
+      // Create payment session
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: {
           service: 'Chef Gang Food Products',
@@ -193,7 +226,9 @@ const Checkout = () => {
           amount: Math.round(orderTotal * 100),
           // Include shipping method details
           shippingMethod: values.shippingMethod,
-          shippingCost: shippingCost
+          shippingCost: shippingCost,
+          // Include order ID to link payment to order
+          orderId: orderResponse.orderId
         }
       });
 
@@ -220,8 +255,10 @@ const Checkout = () => {
       // Redirect to Square Checkout
       window.location.href = data.url;
     } catch (error) {
-      console.error('Error processing payment:', error);
-      toast.error('Failed to process payment');
+      console.error('Error processing order:', error);
+      toast.error('Failed to process order', {
+        description: 'Please try again or contact support'
+      });
       setIsSubmitting(false);
     }
   };

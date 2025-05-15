@@ -16,7 +16,7 @@ export const LOCATION_ID = SQUARE_LOCATION_ID;
 
 // Helper function to create a customer in Square
 export async function createSquareCustomer(data: {
-  businessName: string;
+  businessName?: string;
   contactEmail: string;
   contactName: string;
   contactPhone?: string;
@@ -24,14 +24,27 @@ export async function createSquareCustomer(data: {
   try {
     console.log("Creating Square customer with data:", data);
     
-    const response = await squareClient.customersApi.createCustomer({
-      companyName: data.businessName,
+    // Extract first and last name
+    const nameParts = data.contactName.split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+    
+    const customerData: any = {
       emailAddress: data.contactEmail,
-      givenName: data.contactName.split(' ')[0] || '',
-      familyName: data.contactName.split(' ').slice(1).join(' ') || '',
+      givenName: firstName,
+      familyName: lastName,
       phoneNumber: data.contactPhone,
-      referenceId: `wholesale_${Date.now()}`,
-    });
+    };
+    
+    // Only add company name for wholesale customers
+    if (data.businessName) {
+      customerData.companyName = data.businessName;
+      customerData.referenceId = `wholesale_${Date.now()}`;
+    } else {
+      customerData.referenceId = `retail_${Date.now()}`;
+    }
+    
+    const response = await squareClient.customersApi.createCustomer(customerData);
 
     console.log("Square customer creation response:", response);
 
@@ -111,6 +124,79 @@ export async function createSquareOrder(data: {
   }
 }
 
+// New function to create a retail customer order in Square
+export async function createRetailOrder(data: {
+  customerId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  shippingAddress: string;
+  shippingMethod: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
+}) {
+  try {
+    console.log("Creating retail Square order with data:", data);
+    
+    // Ensure all required fields are present
+    if (!data.customerId) {
+      throw new Error("Customer ID is required");
+    }
+
+    // Format line items for Square
+    const lineItems = data.items.map(item => ({
+      quantity: item.quantity.toString(),
+      basePriceMoney: {
+        amount: Math.round(item.price * 100), // Convert to cents
+        currency: "USD"
+      },
+      name: item.name
+    }));
+    
+    // Calculate the total
+    const total = data.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    const response = await squareClient.ordersApi.createOrder({
+      order: {
+        locationId: LOCATION_ID,
+        customerId: data.customerId,
+        lineItems,
+        source: {
+          name: "Online Store"
+        },
+        metadata: {
+          customer_name: data.customerName,
+          customer_email: data.customerEmail,
+          customer_phone: data.customerPhone || "Not provided",
+          shipping_address: data.shippingAddress,
+          shipping_method: data.shippingMethod,
+          total_amount: total.toFixed(2),
+          order_date: new Date().toISOString(),
+          order_type: "retail_order"
+        },
+        state: "OPEN"
+      }
+    });
+
+    console.log("Square retail order creation response:", response);
+
+    return {
+      success: true,
+      orderId: response.result.order?.id,
+      data: response.result
+    };
+  } catch (error) {
+    console.error("Error creating Square retail order:", error);
+    return {
+      success: false,
+      error
+    };
+  }
+}
+
 // Create a test order with fake data for demo purposes
 export async function createTestOrder() {
   try {
@@ -163,7 +249,7 @@ export async function listAllSquareOrders() {
       query: {
         filter: {
           sourceFilter: {
-            sourceNames: ["Wholesale Web Form"]
+            sourceNames: ["Wholesale Web Form", "Online Store"]
           }
         }
       }
