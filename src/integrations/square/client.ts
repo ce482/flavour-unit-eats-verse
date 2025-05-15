@@ -35,9 +35,13 @@ export async function createSquareCustomer(data: {
 
     console.log("Square customer creation response:", response);
 
+    if (!response.result.customer?.id) {
+      throw new Error("Failed to create customer: No customer ID returned");
+    }
+
     return {
       success: true,
-      customerId: response.result.customer?.id,
+      customerId: response.result.customer.id,
       data: response.result
     };
   } catch (error) {
@@ -64,6 +68,11 @@ export async function createSquareOrder(data: {
   try {
     console.log("Creating Square order with data:", data);
     
+    // Ensure all required fields are present
+    if (!data.customerId) {
+      throw new Error("Customer ID is required");
+    }
+    
     const response = await squareClient.ordersApi.createOrder({
       order: {
         locationId: LOCATION_ID,
@@ -72,6 +81,7 @@ export async function createSquareOrder(data: {
           name: "Wholesale Web Form"
         },
         metadata: {
+          business_name: data.businessName,
           business_type: data.businessType,
           interested_product_line: data.interestedProductLine,
           accepts_minimum_order: data.acceptsMinimumOrder ? "Yes" : "No",
@@ -80,6 +90,7 @@ export async function createSquareOrder(data: {
           expected_ordering_volume: data.expectedOrderingVolume,
           comments: data.comments || "None",
           form_submission_date: new Date().toISOString(),
+          form_type: "wholesale_inquiry"
         }
       }
     });
@@ -104,7 +115,14 @@ export async function createSquareOrder(data: {
 export async function listAllSquareOrders() {
   try {
     const response = await squareClient.ordersApi.searchOrders({
-      locationIds: [LOCATION_ID]
+      locationIds: [LOCATION_ID],
+      query: {
+        filter: {
+          sourceFilter: {
+            sourceNames: ["Wholesale Web Form"]
+          }
+        }
+      }
     });
     
     return {
@@ -118,4 +136,9 @@ export async function listAllSquareOrders() {
       error
     };
   }
+}
+
+// Function to get the Square dashboard URL
+export function getSquareDashboardUrl() {
+  return "https://squareup.com/dashboard/orders";
 }
