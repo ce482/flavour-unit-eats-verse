@@ -53,6 +53,59 @@ serve(async (req) => {
       environment: Environment.Production, // Use Environment.Sandbox for testing
     });
     
+    // First, create or retrieve the customer
+    let customerId_to_use = customerId;
+    
+    if (!customerId_to_use) {
+      console.log("No customer ID provided, creating new customer");
+      try {
+        // Extract first and last name
+        const nameParts = customerInfo.firstName && customerInfo.lastName ? 
+          [customerInfo.firstName, customerInfo.lastName] : 
+          (customerInfo.name ? customerInfo.name.split(' ') : ['Guest']);
+        
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+        
+        // Fix: Make sure phone number is formatted correctly or omitted if empty
+        const phoneNumber = customerInfo.phone && customerInfo.phone.trim() !== '' ? 
+          customerInfo.phone : undefined;
+        
+        const customerData = {
+          emailAddress: customerInfo.email,
+          givenName: firstName,
+          familyName: lastName,
+          ...(phoneNumber && { phoneNumber }),
+          referenceId: `retail_${Date.now()}`
+        };
+        
+        console.log("Creating Square customer with data:", customerData);
+        
+        const response = await squareClient.customersApi.createCustomer(customerData);
+        console.log("Square customer creation response:", response);
+        
+        if (!response.result.customer?.id) {
+          throw new Error("Failed to create customer: No customer ID returned");
+        }
+        
+        customerId_to_use = response.result.customer.id;
+        console.log("New customer created with ID:", customerId_to_use);
+      } catch (error) {
+        console.error("Error creating Square customer:", error);
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: "Failed to create customer record",
+            details: error instanceof Error ? error.message : "Unknown error"
+          }),
+          {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+            status: 500
+          }
+        );
+      }
+    }
+    
     // Generate idempotency key
     const idempotencyKey = crypto.randomUUID();
     
@@ -76,7 +129,7 @@ serve(async (req) => {
     const orderInput = {
       order: {
         locationId,
-        customerId,
+        customerId: customerId_to_use,
         lineItems,
         metadata: {
           ...metadata,

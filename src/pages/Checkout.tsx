@@ -10,7 +10,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { createSquareCustomer, createCheckout } from "@/integrations/square/client";
+import { createCheckout } from "@/integrations/square/client";
 import { toast } from "@/components/ui/sonner";
 
 // Define the checkout form schema
@@ -56,7 +56,7 @@ const Checkout = () => {
     },
   });
 
-  // Modified submitOrder function to use Square checkout
+  // Submit order function using our edge function directly
   const submitOrder = async (values: CheckoutFormValues) => {
     setSubmitting(true);
     setSubmitError(null);
@@ -69,32 +69,18 @@ const Checkout = () => {
       
       console.log("Processing checkout with values:", values);
       
-      // Step 1: Create the customer in Square
-      console.log("Creating customer in Square...");
-      const customerResponse = await createSquareCustomer({
-        contactName: `${values.firstName} ${values.lastName}`,
-        contactEmail: values.email,
-        contactPhone: values.phone
-      });
-
-      if (!customerResponse.success || !customerResponse.customerId) {
-        console.error("Failed to create customer:", customerResponse);
-        throw new Error(`Failed to create customer record: ${JSON.stringify(customerResponse.error || "Unknown error")}`);
-      }
-      
-      console.log("Customer created successfully with ID:", customerResponse.customerId);
-      
-      // Step 2: Format items for checkout
+      // Format items for checkout
       const orderItems = items.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price
       }));
       
-      // Step 3: Create checkout via our edge function
+      // Create checkout via our edge function
+      // Note: We're not creating a customer first, letting the edge function handle it
       console.log("Creating checkout for items:", orderItems);
       const checkoutResponse = await createCheckout({
-        customerId: customerResponse.customerId,
+        // We don't pass customerId - the edge function will create one
         items: orderItems,
         customerInfo: {
           email: values.email,
