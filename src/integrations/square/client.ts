@@ -111,6 +111,50 @@ export async function createSquareOrder(data: {
   }
 }
 
+// Create a test order with fake data for demo purposes
+export async function createTestOrder() {
+  try {
+    // First create a test customer
+    const customerResponse = await createSquareCustomer({
+      businessName: "Test Bakery",
+      contactEmail: "test@example.com",
+      contactName: "John Doe",
+      contactPhone: "555-555-5555"
+    });
+
+    if (!customerResponse.success || !customerResponse.customerId) {
+      throw new Error("Failed to create test customer");
+    }
+
+    // Then create a test order
+    const orderResponse = await createSquareOrder({
+      customerId: customerResponse.customerId,
+      businessName: "Test Bakery",
+      businessType: "Bakery",
+      interestedProductLine: "Egg Rolls",
+      acceptsMinimumOrder: true,
+      pickupIssue: false,
+      dailyWeeklyVolume: "50 units weekly",
+      expectedOrderingVolume: "200 units monthly",
+      comments: "This is a test order created from the admin dashboard"
+    });
+
+    return {
+      success: orderResponse.success,
+      orderId: orderResponse.orderId,
+      customerId: customerResponse.customerId,
+      message: "Test order created successfully",
+      data: orderResponse.data
+    };
+  } catch (error) {
+    console.error("Error creating test order:", error);
+    return {
+      success: false,
+      error
+    };
+  }
+}
+
 // Helper function to list all orders from Square
 export async function listAllSquareOrders() {
   try {

@@ -1,6 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { squareClient, LOCATION_ID, listAllSquareOrders } from '@/integrations/square/client';
+import { 
+  squareClient, 
+  LOCATION_ID, 
+  listAllSquareOrders, 
+  createTestOrder 
+} from '@/integrations/square/client';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import {
@@ -13,6 +18,9 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { toast } from '@/hooks/use-toast';
+import { Link } from 'react-router-dom';
+import { ArrowRight, FilePlus, RefreshCw, ShoppingCart } from 'lucide-react';
 
 // Define proper types for Square entities
 type SquareCustomer = {
@@ -40,6 +48,7 @@ const SquareDashboard = () => {
   const [customers, setCustomers] = useState<SquareCustomer[]>([]);
   const [orders, setOrders] = useState<SquareOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [creatingTestOrder, setCreatingTestOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showAllOrders, setShowAllOrders] = useState(false);
 
@@ -123,6 +132,36 @@ const SquareDashboard = () => {
       new Date(dateString).toLocaleTimeString();
   };
 
+  const handleCreateTestOrder = async () => {
+    setCreatingTestOrder(true);
+    try {
+      const result = await createTestOrder();
+      if (result.success) {
+        toast({
+          title: "Test Order Created",
+          description: `Order ID: ${result.orderId}`,
+        });
+        // Refresh the data to show the new order
+        fetchData();
+      } else {
+        toast({
+          title: "Error Creating Test Order",
+          description: "See console for details",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error creating test order:", error);
+      toast({
+        title: "Error Creating Test Order",
+        description: "Something went wrong. See console for details.",
+        variant: "destructive",
+      });
+    } finally {
+      setCreatingTestOrder(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -131,6 +170,15 @@ const SquareDashboard = () => {
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-4">Square Dashboard</h1>
             <p className="text-gray-600">View and manage your wholesale inquiries and orders.</p>
+            <div className="mt-4">
+              <Link 
+                to="https://squareup.com/dashboard/orders" 
+                target="_blank" 
+                className="text-primary flex items-center hover:underline"
+              >
+                Open Square Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
           </div>
 
           {error && (
@@ -141,20 +189,36 @@ const SquareDashboard = () => {
           )}
           
           <div className="flex justify-between items-center mb-6">
-            <div>
+            <div className="flex items-center gap-2">
               <Button 
                 onClick={() => setShowAllOrders(!showAllOrders)}
                 variant={showAllOrders ? "default" : "outline"}
-                className="mr-2"
+                size="sm"
+                className="flex items-center gap-1"
               >
+                <ShoppingCart className="h-4 w-4" />
                 {showAllOrders ? "Show Only Wholesale Orders" : "Show All Orders"}
               </Button>
               
               <Button 
                 onClick={fetchData}
                 variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
               >
+                <RefreshCw className="h-4 w-4" />
                 Refresh Data
+              </Button>
+              
+              <Button
+                onClick={handleCreateTestOrder}
+                disabled={creatingTestOrder}
+                variant="secondary"
+                size="sm"
+                className="flex items-center gap-1"
+              >
+                <FilePlus className="h-4 w-4" />
+                {creatingTestOrder ? "Creating..." : "Create Test Order"}
               </Button>
             </div>
           </div>
@@ -216,7 +280,17 @@ const SquareDashboard = () => {
                   </Table>
                 </div>
               ) : (
-                <p>No orders found. {!showAllOrders && "Try clicking 'Show All Orders' to see if there are any non-wholesale orders."}</p>
+                <div className="text-center py-12">
+                  <p className="mb-4">No orders found. You can create a test order to see how it works.</p>
+                  <Button 
+                    onClick={handleCreateTestOrder}
+                    disabled={creatingTestOrder}
+                    className="flex items-center gap-1"
+                  >
+                    <FilePlus className="h-4 w-4" />
+                    {creatingTestOrder ? "Creating..." : "Create Test Order"}
+                  </Button>
+                </div>
               )}
             </TabsContent>
             
@@ -253,7 +327,17 @@ const SquareDashboard = () => {
                   </Table>
                 </div>
               ) : (
-                <p>No wholesale customers found.</p>
+                <div className="text-center py-12">
+                  <p className="mb-4">No wholesale customers found. You can create a test order to see how it works.</p>
+                  <Button 
+                    onClick={handleCreateTestOrder}
+                    disabled={creatingTestOrder}
+                    className="flex items-center gap-1"
+                  >
+                    <FilePlus className="h-4 w-4" />
+                    {creatingTestOrder ? "Creating..." : "Create Test Order"}
+                  </Button>
+                </div>
               )}
             </TabsContent>
           </Tabs>

@@ -19,6 +19,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Cart from "./components/cart/Cart";
 import Wholesale from "./pages/Wholesale";
+import SquareDashboard from "./pages/Admin/SquareDashboard";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/wholesale" element={<Wholesale />} />
+            <Route path="/admin/square" element={<SquareDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
