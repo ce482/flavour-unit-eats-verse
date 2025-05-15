@@ -9,7 +9,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { createSquareCustomer, createSquareOrder } from "@/integrations/square/client";
@@ -24,12 +23,8 @@ const formSchema = z.object({
   daily_weekly_volume: z.string().min(1, { message: "Please specify your volume." }),
   expected_ordering_volume: z.string().min(1, { message: "Please specify your expected ordering volume." }),
   interested_product_line: z.string().min(1, { message: "Please specify which product line you're interested in." }),
-  accepts_minimum_order: z.boolean({
-    required_error: "Please indicate if the minimum order requirement is acceptable.",
-  }),
-  pickup_issue: z.boolean({
-    required_error: "Please indicate if pickup would be an issue.",
-  }),
+  accepts_minimum_order: z.boolean(),
+  pickup_issue: z.boolean(),
   comments: z.string().optional(),
 });
 
@@ -37,6 +32,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const Wholesale = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   
   // Initialize form
   const form = useForm<FormValues>({
@@ -58,18 +54,25 @@ const Wholesale = () => {
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
+    setSubmitError(null);
+    
     try {
+      console.log("Submitting form data:", data);
+      
       // First, create a customer in Square
       const customerResult = await createSquareCustomer({
         businessName: data.business_name,
         contactEmail: data.contact_email,
         contactName: data.contact_name,
-        contactPhone: data.contact_phone,
+        contactPhone: data.contact_phone || undefined,
       });
       
       if (!customerResult.success || !customerResult.customerId) {
-        throw new Error("Failed to create customer in Square");
+        console.error("Customer creation failed:", customerResult);
+        throw new Error(customerResult.error?.message || "Failed to create customer in Square");
       }
+      
+      console.log("Customer created successfully:", customerResult);
       
       // Then, create an order with the wholesale inquiry details
       const orderResult = await createSquareOrder({
@@ -81,18 +84,22 @@ const Wholesale = () => {
         pickupIssue: data.pickup_issue,
         dailyWeeklyVolume: data.daily_weekly_volume,
         expectedOrderingVolume: data.expected_ordering_volume,
-        comments: data.comments,
+        comments: data.comments || "",
       });
       
       if (!orderResult.success) {
-        throw new Error("Failed to create order in Square");
+        console.error("Order creation failed:", orderResult);
+        throw new Error(orderResult.error?.message || "Failed to create order in Square");
       }
+      
+      console.log("Order created successfully:", orderResult);
       
       // Show success message
       toast.success("Thank you for your interest! We'll be in touch soon with wholesale pricing information.");
       form.reset();
     } catch (error) {
       console.error("Error submitting form:", error);
+      setSubmitError(error instanceof Error ? error.message : "Failed to submit form. Please try again or contact us directly.");
       toast.error("Failed to submit form. Please try again or contact us directly.");
     } finally {
       setIsSubmitting(false);
@@ -121,6 +128,14 @@ const Wholesale = () => {
           <div className="container-wide">
             <div className="max-w-3xl mx-auto">
               <div className="bg-gray-50 rounded-lg p-8 shadow-sm">
+                {submitError && (
+                  <div className="mb-6 p-4 border border-red-300 bg-red-50 text-red-800 rounded-md">
+                    <p className="font-medium">Error submitting form</p>
+                    <p>{submitError}</p>
+                    <p className="mt-2">If this error persists, please contact us directly at <a href="mailto:info@yourcompany.com" className="underline">info@yourcompany.com</a>.</p>
+                  </div>
+                )}
+                
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -312,7 +327,7 @@ const Wholesale = () => {
 
                     <Button 
                       type="submit" 
-                      className="w-full md:w-auto" 
+                      className="w-full md:w-auto bg-red-600 hover:bg-red-700"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Submitting..." : "Submit Wholesale Inquiry"}

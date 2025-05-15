@@ -22,14 +22,18 @@ export async function createSquareCustomer(data: {
   contactPhone?: string;
 }) {
   try {
+    console.log("Creating Square customer with data:", data);
+    
     const response = await squareClient.customersApi.createCustomer({
       companyName: data.businessName,
       emailAddress: data.contactEmail,
       givenName: data.contactName.split(' ')[0] || '',
       familyName: data.contactName.split(' ').slice(1).join(' ') || '',
       phoneNumber: data.contactPhone,
-      referenceId: `wholesale_${Date.now()}`, // Fixed: referenceId not reference_id
+      referenceId: `wholesale_${Date.now()}`,
     });
+
+    console.log("Square customer creation response:", response);
 
     return {
       success: true,
@@ -55,9 +59,11 @@ export async function createSquareOrder(data: {
   pickupIssue: boolean;
   dailyWeeklyVolume: string;
   expectedOrderingVolume: string;
-  comments?: string;
+  comments: string;
 }) {
   try {
+    console.log("Creating Square order with data:", data);
+    
     const response = await squareClient.ordersApi.createOrder({
       order: {
         locationId: LOCATION_ID,
@@ -77,6 +83,8 @@ export async function createSquareOrder(data: {
         }
       }
     });
+
+    console.log("Square order creation response:", response);
 
     return {
       success: true,
