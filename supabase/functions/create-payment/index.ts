@@ -67,17 +67,18 @@ serve(async (req) => {
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(' ') || '';
         
-        // Fix: Make sure phone number is formatted correctly or omitted if empty
-        const phoneNumber = customerInfo.phone && customerInfo.phone.trim() !== '' ? 
-          customerInfo.phone : undefined;
-        
+        // Only include phone if it's not empty
         const customerData = {
           emailAddress: customerInfo.email,
           givenName: firstName,
           familyName: lastName,
-          ...(phoneNumber && { phoneNumber }),
           referenceId: `retail_${Date.now()}`
         };
+        
+        // Add phone only if it exists and is not empty
+        if (customerInfo.phone && customerInfo.phone.trim() !== '') {
+          customerData.phoneNumber = customerInfo.phone;
+        }
         
         console.log("Creating Square customer with data:", customerData);
         
@@ -146,6 +147,7 @@ serve(async (req) => {
       console.error("Failed to create Square order:", orderResponse);
       return new Response(
         JSON.stringify({
+          success: false,
           error: "Failed to create order",
           details: orderResponse
         }),
@@ -173,7 +175,10 @@ serve(async (req) => {
       },
       prePopulatedData: {
         buyerEmail: customerInfo.email,
-        buyerName: `${customerInfo.firstName} ${customerInfo.lastName}`
+        // Only include name if both firstName and lastName are provided
+        ...(customerInfo.firstName && customerInfo.lastName ? {
+          buyerName: `${customerInfo.firstName} ${customerInfo.lastName}`
+        } : {})
       }
     });
 
@@ -183,6 +188,7 @@ serve(async (req) => {
       console.error("Failed to create checkout link:", checkoutResponse);
       return new Response(
         JSON.stringify({
+          success: false,
           error: "Failed to create checkout link",
           details: checkoutResponse
         }),

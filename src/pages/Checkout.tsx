@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { createCheckout } from "@/integrations/square/client";
 import { toast } from "@/components/ui/sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from 'lucide-react';
 
 // Define the checkout form schema
 const checkoutFormSchema = z.object({
@@ -77,7 +79,6 @@ const Checkout = () => {
       }));
       
       // Create checkout via our edge function
-      // Note: We're not creating a customer first, letting the edge function handle it
       console.log("Creating checkout for items:", orderItems);
       const checkoutResponse = await createCheckout({
         // We don't pass customerId - the edge function will create one
@@ -97,7 +98,7 @@ const Checkout = () => {
       
       if (!checkoutResponse.success || !checkoutResponse.checkoutUrl) {
         console.error("Failed to create checkout:", checkoutResponse);
-        throw new Error(`Failed to create checkout: ${JSON.stringify(checkoutResponse.error || "Unknown error")}`);
+        throw new Error(checkoutResponse.error || "Unknown error occurred during checkout");
       }
       
       console.log("Checkout created successfully:", checkoutResponse);
@@ -132,10 +133,11 @@ const Checkout = () => {
           <h1 className="text-3xl font-bold mb-6">Checkout</h1>
           
           {submitError && (
-            <div className="mb-6 p-4 border border-red-300 bg-red-50 text-red-800 rounded-md">
-              <p className="font-medium">Error submitting order</p>
-              <p>{submitError}</p>
-            </div>
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{submitError}</AlertDescription>
+            </Alert>
           )}
 
           <Form {...form}>

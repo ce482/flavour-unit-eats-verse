@@ -171,12 +171,24 @@ export async function createCheckout(data: {
       })
     });
     
-    const result = await response.json();
-    
     if (!response.ok) {
-      console.error("Error creating checkout:", result);
-      throw new Error(result.error || "Failed to create checkout");
+      const contentType = response.headers.get("content-type");
+      let errorData;
+      
+      // Properly handle different response types
+      if (contentType && contentType.includes("application/json")) {
+        errorData = await response.json();
+      } else {
+        // Handle non-JSON responses (like HTML error pages)
+        const text = await response.text();
+        errorData = { error: `Server returned non-JSON response: ${text.substring(0, 100)}...` };
+      }
+      
+      console.error("Error creating checkout:", errorData);
+      throw new Error(errorData.error || "Failed to create checkout");
     }
+    
+    const result = await response.json();
     
     return {
       success: true,
