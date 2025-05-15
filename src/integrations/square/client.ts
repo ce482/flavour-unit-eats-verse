@@ -150,7 +150,7 @@ export async function createRetailOrder(data: {
     const lineItems = data.items.map(item => ({
       quantity: item.quantity.toString(),
       basePriceMoney: {
-        amount: Math.round(item.price * 100), // Convert to cents
+        amount: BigInt(Math.round(item.price * 100)), // Convert to cents and to BigInt
         currency: "USD"
       },
       name: item.name

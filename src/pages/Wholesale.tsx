@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { createSquareCustomer, createSquareOrder, getSquareDashboardUrl } from "@/integrations/square/client";
+import { logger } from "@/utils/logger";
 
 // Form validation schema
 const formSchema = z.object({
@@ -55,11 +57,11 @@ const Wholesale = () => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     setSubmitError(null);
+    logger.form.start("Wholesale Inquiry", data);
     
     try {
-      console.log("Submitting wholesale form data:", data);
-      
       // First, create a customer in Square
+      logger.form.step("Creating customer in Square");
       const customerResult = await createSquareCustomer({
         businessName: data.business_name,
         contactEmail: data.contact_email,
@@ -68,13 +70,14 @@ const Wholesale = () => {
       });
       
       if (!customerResult.success || !customerResult.customerId) {
-        console.error("Customer creation failed:", customerResult);
+        logger.form.error("Customer creation", customerResult.error);
         throw new Error(customerResult.error instanceof Error ? customerResult.error.message : "Failed to create customer in Square");
       }
       
-      console.log("Customer created successfully, ID:", customerResult.customerId);
+      logger.form.step("Customer created successfully", { customerId: customerResult.customerId });
       
       // Then, create an order with the wholesale inquiry details
+      logger.form.step("Creating order in Square");
       const orderResult = await createSquareOrder({
         customerId: customerResult.customerId,
         businessName: data.business_name,
@@ -88,11 +91,11 @@ const Wholesale = () => {
       });
       
       if (!orderResult.success) {
-        console.error("Order creation failed:", orderResult);
+        logger.form.error("Order creation", orderResult.error);
         throw new Error(orderResult.error instanceof Error ? orderResult.error.message : "Failed to create order in Square");
       }
       
-      console.log("Order created successfully, ID:", orderResult.orderId);
+      logger.form.step("Order created successfully", { orderId: orderResult.orderId });
       
       // Show success message
       toast.success("Thank you for your wholesale inquiry! Your submission has been received.", {
@@ -105,15 +108,18 @@ const Wholesale = () => {
       // Reset form
       form.reset();
       
+      logger.form.end(true, "Wholesale form submitted successfully");
+      
       // Open Square Dashboard in a new tab
       window.open(getSquareDashboardUrl(), '_blank');
       
     } catch (error) {
-      console.error("Error submitting form:", error);
+      logger.form.error("Form submission", error);
       setSubmitError(error instanceof Error ? error.message : "Failed to submit form. Please try again or contact us directly.");
       toast.error("There was a problem submitting your form. Please try again or contact us directly.", {
         duration: 5000,
       });
+      logger.form.end(false, "Wholesale form submission failed");
     } finally {
       setIsSubmitting(false);
     }
