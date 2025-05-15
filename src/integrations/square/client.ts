@@ -146,7 +146,7 @@ export async function createRetailOrder(data: {
       throw new Error("Customer ID is required");
     }
 
-    // Format line items for Square
+    // Format line items for Square - create one line item per unique product
     const lineItems = data.items.map(item => ({
       quantity: item.quantity.toString(),
       basePriceMoney: {

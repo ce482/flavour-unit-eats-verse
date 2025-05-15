@@ -48,7 +48,25 @@ interface OrderDetails {
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, clearCart, calculateTotals } = useCart();
+  const { items, clearCart, totalPrice } = useCart();
+  const shippingCost = 0; // Default shipping cost
+  const taxRate = 0.0625; // Example tax rate (6.25%)
+  
+  // Calculate order totals
+  const calculateTotals = () => {
+    const subtotal = totalPrice || 0;
+    const shipping = shippingCost;
+    const tax = subtotal * taxRate;
+    const total = subtotal + shipping + tax;
+    
+    return {
+      subtotal,
+      shippingCost: shipping,
+      tax,
+      total
+    };
+  };
+  
   const cartTotals = calculateTotals();
   const [isSubmitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -87,13 +105,6 @@ const Checkout = () => {
         throw new Error("Failed to create customer record");
       }
       
-      // Format items for Square order
-      const orderItems = cart.items.map(item => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-      }));
-      
       // Create the order in Square
       const orderResponse = await createRetailOrder({
         customerId: customerResponse.customerId,
@@ -102,7 +113,7 @@ const Checkout = () => {
         customerPhone: values.phone,
         shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
         shippingMethod: values.shipping,
-        items: orderItems
+        items: items
       });
       
       if (!orderResponse.success) {
@@ -117,7 +128,7 @@ const Checkout = () => {
         customerPhone: values.phone,
         shippingAddress: `${values.address}, ${values.city}, ${values.state} ${values.zipCode}`,
         shippingMethod: values.shipping,
-        items: cart.items,
+        items: items,
         subtotal: cartTotals.subtotal,
         shipping: cartTotals.shippingCost,
         tax: cartTotals.tax,
@@ -300,7 +311,7 @@ const Checkout = () => {
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                 <div className="border rounded-md p-4">
                   <ul>
-                    {cart.items.map((item) => (
+                    {items.map((item) => (
                       <li key={item.id} className="flex justify-between py-2">
                         <span>{item.name} ({item.quantity})</span>
                         <span>${(item.price * item.quantity).toFixed(2)}</span>
