@@ -132,29 +132,15 @@ const PetitDejeuner = () => {
           </div>
         </section>
 
-        {/* Wholesale Info */}
+        {/* Wholesale CTA (Call to Action) */}
         <section className="py-16 bg-flavour-cream">
           <div className="container-wide">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="section-title mb-8">Wholesale Information</h2>
-              <p className="text-lg mb-6">
-                Our savory breakfast options are perfect for:
+              <h2 className="section-title mb-6">Interested in Wholesale?</h2>
+              <p className="text-lg mb-8">
+                For wholesale inquiries and pricing information, please visit our wholesale page to submit an inquiry form.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-                <div className="p-6 bg-white rounded-lg shadow-sm">
-                  <h3 className="text-xl font-bold mb-3">Cafés</h3>
-                  <p>Offer our delicious breakfast items to your morning customers.</p>
-                </div>
-                <div className="p-6 bg-white rounded-lg shadow-sm">
-                  <h3 className="text-xl font-bold mb-3">Food Service</h3>
-                  <p>Quick and easy breakfast options for any food service operation.</p>
-                </div>
-                <div className="p-6 bg-white rounded-lg shadow-sm">
-                  <h3 className="text-xl font-bold mb-3">Retailers</h3>
-                  <p>Stock our frozen breakfast items for your customers to enjoy at home.</p>
-                </div>
-              </div>
-              <Link to="/contact" className="btn-primary">
+              <Link to="/wholesale" className="btn-primary">
                 Request Wholesale Information
               </Link>
             </div>

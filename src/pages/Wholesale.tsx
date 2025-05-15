@@ -59,10 +59,10 @@ const Wholesale = () => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      // Insert form data into Supabase
+      // Insert form data into Supabase - fixed the array wrapping issue
       const { error } = await supabase
         .from('wholesale_inquiries')
-        .insert([data]);
+        .insert(data);
       
       if (error) throw error;
       
