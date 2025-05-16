@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import OrdersTable from '@/components/orders/OrdersTable';
@@ -25,13 +25,18 @@ const AdminOrders = () => {
 
   const handleMarkCompleted = async (orderId: string) => {
     try {
+      console.log(`Attempting to mark order ${orderId} as completed...`);
+      
       await updateOrderStatus.mutateAsync({ 
         orderId, 
         status: 'completed' 
       });
       
+      console.log('Update mutation completed successfully');
       toast.success('Order marked as completed');
-      setRefreshKey(prev => prev + 1); // Force refresh of the table
+      
+      // Force refresh of the data
+      setRefreshKey(prev => prev + 1);
       
       // If the details modal for this order is open, close it
       if (selectedOrder && selectedOrder.id === orderId) {
