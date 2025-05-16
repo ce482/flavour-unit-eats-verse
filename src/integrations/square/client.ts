@@ -32,41 +32,58 @@ export async function createCheckout(data: {
   try {
     console.log("Creating Square checkout with data:", data);
     
-    // Format line items for Square
-    const lineItems = data.items.map(item => ({
-      quantity: item.quantity.toString(),
-      basePriceMoney: {
-        amount: BigInt(Math.round(item.price * 100)), // Convert to cents and then to BigInt
-        currency: 'USD'
-      },
-      name: item.name
-    }));
-
-    // Calculate total amount in cents and convert to BigInt
-    const totalAmount = BigInt(
-      data.items.reduce((acc, item) => acc + Math.round(item.price * item.quantity * 100), 0)
+    // Calculate total amount in cents (Square requires integer amounts in the smallest unit)
+    const totalAmountCents = Math.round(
+      data.items.reduce((acc, item) => acc + (item.price * item.quantity * 100), 0)
     );
-
-    // Create checkout request
+    
+    // Create a unique idempotency key to prevent duplicate checkouts
+    const idempotencyKey = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+    
+    console.log("Calculated total amount (cents):", totalAmountCents);
+    console.log("Using idempotency key:", idempotencyKey);
+    
+    // Create checkout request using quickPay for simplicity
     const checkoutResponse = await squareClient.checkoutApi.createPaymentLink({
-      idempotencyKey: `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
+      idempotencyKey: idempotencyKey,
       quickPay: {
         name: "The Flavour Unit Order",
         priceMoney: {
-          amount: totalAmount,
+          amount: BigInt(totalAmountCents), // Square requires BigInt for amount
           currency: 'USD'
         },
         locationId: LOCATION_ID
       },
       checkoutOptions: {
         redirectUrl: `${window.location.origin}/payment-success`,
-        merchantSupportEmail: "orders@flavouregg.com"
+        merchantSupportEmail: "orders@flavouregg.com",
+        askForShippingAddress: true
+      },
+      prePopulatedData: {
+        buyerEmail: data.customerInfo.email,
+        buyerAddress: {
+          firstName: data.customerInfo.firstName,
+          lastName: data.customerInfo.lastName
+        }
       }
     });
 
     console.log("Square checkout response:", checkoutResponse.result);
 
     if (checkoutResponse.result.paymentLink?.url) {
+      // Store checkout details in session for the success page
+      try {
+        const checkoutDetails = {
+          customerEmail: data.customerInfo.email,
+          items: data.items,
+          shippingMethod: data.shippingOption,
+          orderTotal: data.items.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+        };
+        sessionStorage.setItem('checkout_details', JSON.stringify(checkoutDetails));
+      } catch (e) {
+        console.warn("Failed to save checkout details to session storage:", e);
+      }
+      
       return {
         success: true,
         checkoutUrl: checkoutResponse.result.paymentLink.url
