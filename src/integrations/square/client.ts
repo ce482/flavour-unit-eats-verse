@@ -36,11 +36,16 @@ export async function createCheckout(data: {
     const lineItems = data.items.map(item => ({
       quantity: item.quantity.toString(),
       basePriceMoney: {
-        amount: Math.round(item.price * 100), // Convert to cents
+        amount: BigInt(Math.round(item.price * 100)), // Convert to cents and then to BigInt
         currency: 'USD'
       },
       name: item.name
     }));
+
+    // Calculate total amount in cents and convert to BigInt
+    const totalAmount = BigInt(
+      data.items.reduce((acc, item) => acc + Math.round(item.price * item.quantity * 100), 0)
+    );
 
     // Create checkout request
     const checkoutResponse = await squareClient.checkoutApi.createPaymentLink({
@@ -48,7 +53,7 @@ export async function createCheckout(data: {
       quickPay: {
         name: "The Flavour Unit Order",
         priceMoney: {
-          amount: data.items.reduce((acc, item) => acc + Math.round(item.price * item.quantity * 100), 0),
+          amount: totalAmount,
           currency: 'USD'
         },
         locationId: LOCATION_ID
