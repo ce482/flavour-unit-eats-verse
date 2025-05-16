@@ -15,15 +15,9 @@ serve(async (req) => {
 
   try {
     // Parse request body
-    const { 
-      customerId,
-      items,
-      customerInfo,
-      shippingMethod,
-      metadata = {}
-    } = await req.json();
+    const { items, customerInfo } = await req.json();
     
-    console.log("Payment request received:", { customerId, items, customerInfo, shippingMethod });
+    console.log("Payment request received:", { items, customerInfo });
     
     // Square API credentials
     const accessToken = Deno.env.get("SQUARE_ACCESS_TOKEN");
@@ -38,6 +32,7 @@ serve(async (req) => {
       console.error("Missing Square API credentials");
       return new Response(
         JSON.stringify({ 
+          success: false,
           error: "Missing payment processor credentials" 
         }),
         {
@@ -53,59 +48,33 @@ serve(async (req) => {
       environment: Environment.Production, // Use Environment.Sandbox for testing
     });
     
-    // First, create or retrieve the customer
-    let customerId_to_use = customerId;
+    // Create a new customer in Square
+    console.log("Creating new customer");
+    const customerResponse = await squareClient.customersApi.createCustomer({
+      emailAddress: customerInfo.email,
+      givenName: customerInfo.firstName || "",
+      familyName: customerInfo.lastName || "",
+      phoneNumber: customerInfo.phone || undefined,
+      referenceId: `order_${Date.now()}`,
+    });
     
-    if (!customerId_to_use) {
-      console.log("No customer ID provided, creating new customer");
-      try {
-        // Extract first and last name
-        const nameParts = customerInfo.firstName && customerInfo.lastName ? 
-          [customerInfo.firstName, customerInfo.lastName] : 
-          (customerInfo.name ? customerInfo.name.split(' ') : ['Guest']);
-        
-        const firstName = nameParts[0] || '';
-        const lastName = nameParts.slice(1).join(' ') || '';
-        
-        // Only include phone if it's not empty
-        const customerData = {
-          emailAddress: customerInfo.email,
-          givenName: firstName,
-          familyName: lastName,
-          referenceId: `retail_${Date.now()}`
-        };
-        
-        // Add phone only if it exists and is not empty
-        if (customerInfo.phone && customerInfo.phone.trim() !== '') {
-          customerData.phoneNumber = customerInfo.phone;
+    if (customerResponse.statusCode !== 200) {
+      console.error("Error creating Square customer:", customerResponse);
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Failed to create customer record",
+          details: customerResponse
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 500
         }
-        
-        console.log("Creating Square customer with data:", customerData);
-        
-        const response = await squareClient.customersApi.createCustomer(customerData);
-        console.log("Square customer creation response:", response);
-        
-        if (!response.result.customer?.id) {
-          throw new Error("Failed to create customer: No customer ID returned");
-        }
-        
-        customerId_to_use = response.result.customer.id;
-        console.log("New customer created with ID:", customerId_to_use);
-      } catch (error) {
-        console.error("Error creating Square customer:", error);
-        return new Response(
-          JSON.stringify({
-            success: false,
-            error: "Failed to create customer record",
-            details: error instanceof Error ? error.message : "Unknown error"
-          }),
-          {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 500
-          }
-        );
-      }
+      );
     }
+    
+    const customerId = customerResponse.result.customer?.id;
+    console.log("Customer created with ID:", customerId);
     
     // Generate idempotency key
     const idempotencyKey = crypto.randomUUID();
@@ -126,16 +95,12 @@ serve(async (req) => {
     const origin = req.headers.get("origin") || "http://localhost:5173";
     console.log(`- Origin for redirect URL: ${origin}`);
     
-    // Create order input for the API
+    // Create order
     const orderInput = {
       order: {
         locationId,
-        customerId: customerId_to_use,
+        customerId,
         lineItems,
-        metadata: {
-          ...metadata,
-          origin: origin
-        }
       },
       idempotencyKey
     };
@@ -161,7 +126,7 @@ serve(async (req) => {
     const orderId = orderResponse.result.order.id;
     console.log("Order created successfully with ID:", orderId);
     
-    // Create checkout link with the order
+    // Create checkout link
     console.log("Creating checkout link for order:", orderId);
     const checkoutResponse = await squareClient.checkoutApi.createPaymentLink({
       idempotencyKey: `checkout_${idempotencyKey}`,
@@ -172,13 +137,6 @@ serve(async (req) => {
         redirectUrl: `${origin}/payment-success?order_id=${orderId}`,
         merchantSupportEmail: "info@flavourunit.com",
         askForShippingAddress: true
-      },
-      prePopulatedData: {
-        buyerEmail: customerInfo.email,
-        // Only include name if both firstName and lastName are provided
-        ...(customerInfo.firstName && customerInfo.lastName ? {
-          buyerName: `${customerInfo.firstName} ${customerInfo.lastName}`
-        } : {})
       }
     });
 

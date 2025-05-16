@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { createCheckout } from "@/integrations/square/client";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from 'lucide-react';
 
@@ -58,7 +58,7 @@ const Checkout = () => {
     },
   });
 
-  // Submit order function using our edge function directly
+  // Submit order function
   const submitOrder = async (values: CheckoutFormValues) => {
     setSubmitting(true);
     setSubmitError(null);
@@ -78,22 +78,16 @@ const Checkout = () => {
         price: item.price
       }));
       
-      // Create checkout via our edge function
+      // Create checkout
       console.log("Creating checkout for items:", orderItems);
       const checkoutResponse = await createCheckout({
-        // We don't pass customerId - the edge function will create one
         items: orderItems,
         customerInfo: {
           email: values.email,
           firstName: values.firstName,
           lastName: values.lastName,
-          address: values.address,
-          city: values.city,
-          state: values.state,
-          zipCode: values.zipCode,
           phone: values.phone
-        },
-        shippingMethod: values.shipping
+        }
       });
       
       if (!checkoutResponse.success || !checkoutResponse.checkoutUrl) {
