@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
@@ -14,6 +15,7 @@ import { createCheckout } from "@/integrations/square/client";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from 'lucide-react';
+import { SHIPPING_METHODS } from "@/utils/shippingUtils";
 
 // Define the checkout form schema
 const checkoutFormSchema = z.object({
@@ -28,9 +30,10 @@ const checkoutFormSchema = z.object({
   shipping: z.string().min(1, { message: "Please select a shipping option." }),
 });
 
+// Updated shipping options based on the SHIPPING_METHODS from utils
 const shippingOptions = [
-  { value: "standard", label: "Standard Shipping" },
-  { value: "express", label: "Express Shipping" },
+  { value: "standard", label: `${SHIPPING_METHODS.standard.name} - ${SHIPPING_METHODS.standard.description}` },
+  { value: "fedex_2day", label: `${SHIPPING_METHODS.fedex_2day.name} - ${SHIPPING_METHODS.fedex_2day.description}` },
 ];
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
@@ -71,26 +74,10 @@ const Checkout = () => {
       
       console.log("Processing checkout with values:", values);
       
-      // Format items for checkout
-      const orderItems = items.map(item => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-      }));
+      // Create checkout - note the call to createCheckout with no arguments
+      const checkoutResponse = await createCheckout();
       
-      // Create checkout
-      console.log("Creating checkout for items:", orderItems);
-      const checkoutResponse = await createCheckout({
-        items: orderItems,
-        customerInfo: {
-          email: values.email,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          phone: values.phone
-        }
-      });
-      
-      if (!checkoutResponse.success || !checkoutResponse.checkoutUrl) {
+      if (!checkoutResponse.success) {
         console.error("Failed to create checkout:", checkoutResponse);
         throw new Error(checkoutResponse.error || "Unknown error occurred during checkout");
       }
@@ -100,9 +87,13 @@ const Checkout = () => {
       // Clear cart
       clearCart();
       
-      // Redirect to Square checkout
-      console.log("Redirecting to Square checkout:", checkoutResponse.checkoutUrl);
-      window.location.href = checkoutResponse.checkoutUrl;
+      // Show message instead of redirecting since checkout is disabled
+      toast.success("Order submitted", { 
+        description: "Order processing is currently disabled."
+      });
+      
+      // Redirect to confirmation page
+      navigate("/order-confirmation");
       
     } catch (error) {
       console.error('Error submitting order:', error);
