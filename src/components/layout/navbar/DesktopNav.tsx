@@ -2,7 +2,8 @@
 import React from 'react';
 import NavLink from './NavLink';
 import CartButton from './CartButton';
-import { navItems } from './NavConfig';
+import { getNavItems } from './NavConfig';
+import { useAuth } from '@/contexts/AuthContext';
 
 type DesktopNavProps = {
   isScrolled: boolean;
@@ -17,6 +18,9 @@ const DesktopNav = ({
   openCart,
   totalItems
 }: DesktopNavProps) => {
+  const { isAdmin } = useAuth();
+  const navItems = getNavItems(isAdmin);
+  
   return (
     <div className="hidden lg:flex items-center">
       <div className="flex items-center space-x-6">

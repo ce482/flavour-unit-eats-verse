@@ -3,7 +3,8 @@ import React from 'react';
 import { X, Menu } from 'lucide-react';
 import MobileNavLink from './MobileNavLink';
 import CartButton from './CartButton';
-import { navItems } from './NavConfig';
+import { getNavItems } from './NavConfig';
+import { useAuth } from '@/contexts/AuthContext';
 
 type MobileNavProps = {
   isScrolled: boolean;
@@ -24,6 +25,9 @@ const MobileNav = ({
   totalItems,
   location
 }: MobileNavProps) => {
+  const { isAdmin } = useAuth();
+  const navItems = getNavItems(isAdmin);
+  
   return (
     <>
       <div className="lg:hidden flex items-center space-x-4">
