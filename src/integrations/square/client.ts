@@ -1,4 +1,3 @@
-
 // Square API integration client
 import { Client, Environment } from 'square';
 
@@ -14,64 +13,11 @@ export const squareClient = new Client({
 
 export const LOCATION_ID = SQUARE_LOCATION_ID;
 
-// Helper function to create a checkout link directly with our edge function
-export async function createCheckout(data: {
-  items: Array<{name: string; quantity: number; price: number;}>;
-  customerInfo: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    address?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    phone?: string;
+// Basic placeholder function - this will be rebuilt later
+export async function createCheckout() {
+  // Placeholder - to be implemented later
+  return {
+    success: false,
+    error: "Checkout functionality is currently disabled"
   };
-}) {
-  try {
-    console.log("Creating checkout with data:", data);
-    
-    // Call our edge function to create the checkout
-    const response = await fetch(`${window.location.origin}/functions/v1/create-payment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        items: data.items,
-        customerInfo: data.customerInfo
-      })
-    });
-    
-    if (!response.ok) {
-      const contentType = response.headers.get("content-type");
-      let errorData;
-      
-      // Properly handle different response types
-      if (contentType && contentType.includes("application/json")) {
-        errorData = await response.json();
-      } else {
-        // Handle non-JSON responses (like HTML error pages)
-        const text = await response.text();
-        errorData = { error: `Server returned non-JSON response: ${text.substring(0, 100)}...` };
-      }
-      
-      console.error("Error creating checkout:", errorData);
-      throw new Error(errorData.error || "Failed to create checkout");
-    }
-    
-    const result = await response.json();
-    
-    return {
-      success: true,
-      checkoutUrl: result.checkoutUrl,
-      orderId: result.orderId
-    };
-  } catch (error: any) {
-    console.error("Error creating checkout:", error);
-    return {
-      success: false,
-      error: error.message || "Unknown error"
-    };
-  }
 }
