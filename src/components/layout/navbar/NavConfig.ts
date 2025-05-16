@@ -6,7 +6,6 @@ export const navItems = [
   { name: 'Le Petit Déjeuner', path: '/petit-dejeuner' },
   { name: 'Legacy Kitchen', path: '/legacy-kitchen' },
   { name: 'Cookbook', path: '/cookbook' },
-  { name: 'Wholesale', path: '/wholesale' },
   { name: 'FAQ', path: '/faq' },
   { name: 'Contact', path: '/contact' },
 ];
@@ -18,7 +17,5 @@ export const darkTextRoutes = [
   '/legacy-kitchen', 
   '/contact', 
   '/petit-dejeuner',
-  '/checkout',
-  '/wholesale',
-  '/admin/square'
+  '/checkout'
 ];

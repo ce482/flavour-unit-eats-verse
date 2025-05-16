@@ -20,15 +20,6 @@ type CartContextType = {
   closeCart: () => void;
   totalItems: number;
   totalPrice: number;
-  calculateTotals: () => {
-    subtotal: number;
-    shippingCost: number;
-    tax: number;
-    total: number;
-  };
-  cart: {
-    items: CartItem[];
-  };
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -107,21 +98,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
-  
-  // Calculate order totals for checkout
-  const calculateTotals = () => {
-    const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const shippingCost = subtotal > 0 ? 5.99 : 0; // Basic shipping cost
-    const tax = subtotal * 0.08; // 8% tax
-    const total = subtotal + shippingCost + tax;
-    
-    return {
-      subtotal,
-      shippingCost,
-      tax,
-      total
-    };
-  };
 
   const value = {
     items,
@@ -133,9 +109,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     openCart,
     closeCart,
     totalItems,
-    totalPrice,
-    calculateTotals,
-    cart: { items } // Add this to match the expected structure in Checkout.tsx
+    totalPrice
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
