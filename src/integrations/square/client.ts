@@ -1,3 +1,4 @@
+
 // Square API integration client
 import { Client, Environment } from 'square';
 
@@ -13,11 +14,66 @@ export const squareClient = new Client({
 
 export const LOCATION_ID = SQUARE_LOCATION_ID;
 
-// Basic placeholder function - this will be rebuilt later
-export async function createCheckout() {
-  // Placeholder - to be implemented later
-  return {
-    success: false,
-    error: "Checkout functionality is currently disabled"
+// Function to create Square checkout session
+export async function createCheckout(data: {
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
+  customerInfo: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
   };
+  shippingOption?: string;
+}) {
+  try {
+    console.log("Creating Square checkout with data:", data);
+    
+    // Format line items for Square
+    const lineItems = data.items.map(item => ({
+      quantity: item.quantity.toString(),
+      basePriceMoney: {
+        amount: Math.round(item.price * 100), // Convert to cents
+        currency: 'USD'
+      },
+      name: item.name
+    }));
+
+    // Create checkout request
+    const checkoutResponse = await squareClient.checkoutApi.createPaymentLink({
+      idempotencyKey: `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
+      quickPay: {
+        name: "The Flavour Unit Order",
+        priceMoney: {
+          amount: data.items.reduce((acc, item) => acc + Math.round(item.price * item.quantity * 100), 0),
+          currency: 'USD'
+        },
+        locationId: LOCATION_ID
+      },
+      checkoutOptions: {
+        redirectUrl: `${window.location.origin}/payment-success`,
+        merchantSupportEmail: "orders@flavouregg.com"
+      }
+    });
+
+    console.log("Square checkout response:", checkoutResponse.result);
+
+    if (checkoutResponse.result.paymentLink?.url) {
+      return {
+        success: true,
+        checkoutUrl: checkoutResponse.result.paymentLink.url
+      };
+    } else {
+      throw new Error("Failed to create checkout URL");
+    }
+  } catch (error) {
+    console.error("Square checkout error:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error creating checkout"
+    };
+  }
 }

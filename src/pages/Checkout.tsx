@@ -74,10 +74,27 @@ const Checkout = () => {
       
       console.log("Processing checkout with values:", values);
       
-      // Create checkout - note the call to createCheckout with no arguments
-      const checkoutResponse = await createCheckout();
+      // Format items for checkout
+      const orderItems = items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      }));
       
-      if (!checkoutResponse.success) {
+      // Create checkout
+      console.log("Creating checkout for items:", orderItems);
+      const checkoutResponse = await createCheckout({
+        items: orderItems,
+        customerInfo: {
+          email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phone: values.phone
+        },
+        shippingOption: values.shipping
+      });
+      
+      if (!checkoutResponse.success || !checkoutResponse.checkoutUrl) {
         console.error("Failed to create checkout:", checkoutResponse);
         throw new Error(checkoutResponse.error || "Unknown error occurred during checkout");
       }
@@ -87,13 +104,9 @@ const Checkout = () => {
       // Clear cart
       clearCart();
       
-      // Show message instead of redirecting since checkout is disabled
-      toast.success("Order submitted", { 
-        description: "Order processing is currently disabled."
-      });
-      
-      // Redirect to confirmation page
-      navigate("/order-confirmation");
+      // Redirect to Square checkout
+      console.log("Redirecting to Square checkout:", checkoutResponse.checkoutUrl);
+      window.location.href = checkoutResponse.checkoutUrl;
       
     } catch (error) {
       console.error('Error submitting order:', error);
