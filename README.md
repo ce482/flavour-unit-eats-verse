@@ -1,7 +1,7 @@
 
 # The Flavour Unit Corp
 
-This repository contains the official website for The Flavour Unit Corporation.
+This repository contains the official website for The Flavour Unit Corporation. This project was built using the Loveable platform. I led the product design, UX flows, and contributed to custom logic, authentication, and styling post-export using React and Supabase.
 
 ## Deployment Instructions
 
