@@ -25,18 +25,7 @@ After cloning this repository, follow these steps to deploy to GitHub Pages:
 
 3. Run the deployment command:
    ```
-   npm run deploy
+   npm run dev
    ```
 
-4. After deployment, go to your GitHub repository:
-   - Navigate to Settings > Pages
-   - Ensure the "Source" is set to "Deploy from a branch"
-   - Set the branch to "gh-pages" and folder to "/ (root)"
-   - Click Save
 
-5. Your site will be available at: https://[your-username].github.io/flavour-unit-eats-verse/
-
-## Development
-
-- Run `npm run dev` to start the development server
-- Run `npm run build` to build the project for production
